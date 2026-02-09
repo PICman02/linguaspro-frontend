@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin - Serviços</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-100">
+<header class="bg-blue-700 text-white p-4 flex justify-between">
+  <h1 class="text-2xl font-bold">Admin - Gerenciar Serviços</h1>
+  <a href="dashboard-admin.html" class="bg-white text-blue-700 px-4 py-2 rounded hover:bg-gray-200">Voltar</a>
+</header>
+
+<main class="p-6">
+  <table class="min-w-full bg-white rounded shadow" id="serviceTable">
+    <thead>
+      <tr>
+        <th class="border px-4 py-2">Nome</th>
+        <th class="border px-4 py-2">Email</th>
+        <th class="border px-4 py-2">Serviço</th>
+        <th class="border px-4 py-2">Status</th>
+        <th class="border px-4 py-2">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- JS popula aqui -->
+    </tbody>
+  </table>
+</main>
+
+<script type="module" src="js/admin-services.js"></script>
+</body>
+</html>
+
+

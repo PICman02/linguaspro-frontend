@@ -1,0 +1,1960 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - LinguaPro</title>
+    
+    <!-- CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+    <style>
+        :root {
+            --primary: #4A90E2;
+            --success: #50E3C2;
+            --warning: #FF6B6B;
+            --danger: #E04E4E;
+            --dark: #2C3E50;
+            --light: #F8F9FA;
+        }
+        .dashboard-page { background-color: #f5f7fb; min-height: 100vh; }
+        .header { position: sticky; top: 0; z-index: 1000; }
+        .sidebar {
+            background: white; border-right: 1px solid #eaeaea;
+            min-height: calc(100vh - 73px); position: sticky; top: 73px;
+        }
+        .sidebar-link {
+            display: flex; align-items: center; padding: 12px 20px;
+            color: #333; text-decoration: none; transition: all 0.3s;
+            border-left: 3px solid transparent;
+        }
+        .sidebar-link:hover { background-color: #f8f9fa; color: var(--primary); }
+        .sidebar-link.active {
+            background-color: rgba(74, 144, 226, 0.1);
+            color: var(--primary); border-left-color: var(--primary); font-weight: 500;
+        }
+        .main-content { padding: 30px; min-height: calc(100vh - 73px); }
+        .tab-content { display: none; animation: fadeIn 0.3s ease-in; }
+        .tab-content.active { display: block; }
+        .stat-card { border: none; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05); transition: transform 0.3s; }
+        .stat-card:hover { transform: translateY(-5px); }
+        .course-card, .material-card { border: none; border-radius: 10px; box-shadow: 0 2px 15px rgba(0,0,0,0.08); transition: all 0.3s; }
+        .course-card:hover, .material-card:hover { transform: translateY(-3px); box-shadow: 0 5px 20px rgba(0,0,0,0.12); }
+        .empty-state { text-align: center; padding: 60px 20px; color: #6c757d; }
+        .empty-state i { font-size: 4rem; margin-bottom: 20px; opacity: 0.5; }
+        .message-item { padding: 15px; border-bottom: 1px solid #f0f0f0; cursor: pointer; transition: background-color 0.2s; }
+        .message-item:hover { background-color: #f8f9fa; }
+        .message-item.unread { background-color: rgba(74, 144, 226, 0.05); }
+        .badge-card.earned { border: 2px solid var(--primary); }
+        .badge-card.locked { opacity: 0.6; }
+        .quiz-option.correct { background-color: var(--success) !important; color: white !important; }
+        .quiz-option.wrong { background-color: var(--danger) !important; color: white !important; }
+        .ranking-item.current-user { background: rgba(74, 144, 226, 0.1); border: 1px solid var(--primary); }
+        .chat-box { background: #fff; }
+        .chat-messages { max-height: 320px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .chat-message { padding: 10px 12px; border-radius: 10px; background: #f1f3f5; }
+        .chat-message.me { background: rgba(74, 144, 226, 0.12); align-self: flex-end; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .loading { display: inline-block; width: 20px; height: 20px; border: 3px solid #f3f3f3; border-top: 3px solid var(--primary); border-radius: 50%; animation: spin 1s linear infinite; margin-left: 10px; }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        .btn-primary { background-color: var(--primary); border-color: var(--primary); }
+        .btn-primary:hover { background-color: #357ABD; border-color: #357ABD; }
+        .footer { background-color: var(--dark); color: white; padding: 20px 0; }
+        @media (max-width: 992px) {
+            .sidebar { position: fixed; left: -280px; top: 73px; width: 280px; z-index: 999; transition: left 0.3s; }
+            .sidebar.show { left: 0; }
+            .main-content { padding: 15px; }
+        }
+        .bg-primary-light { background-color: rgba(74, 144, 226, 0.1); }
+        .bg-success-light { background-color: rgba(80, 227, 194, 0.1); }
+        .bg-warning-light { background-color: rgba(255, 107, 107, 0.1); }
+        .bg-danger-light { background-color: rgba(224, 78, 78, 0.1); }
+    </style>
+</head>
+<body class="dashboard-page">
+    <!-- Header -->
+    <header class="header">
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" href="index.html">
+                    <i class="fas fa-language me-2"></i>
+                    <span class="fw-bold text-primary">LinguaPro</span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto align-items-center gap-3">
+                        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="courses.html">Cursos</a></li>
+                        <li class="nav-item"><a class="nav-link" href="library.html">Biblioteca</a></li>
+                        <li class="nav-item"><a class="nav-link" href="live-classes.html">Aulas Ao Vivo</a></li>
+                        <li class="nav-item"><a class="nav-link" href="mini-game.html">Mini-Jogo</a></li>
+                        <li class="nav-item">
+                            <button class="btn btn-outline-danger" id="logoutBtn">
+                                <i class="bi bi-box-arrow-right me-2"></i>Sair
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <main class="dashboard-main">
+        <div class="container-fluid">
+            <div class="row">
+                <!-- Sidebar -->
+                <div class="col-lg-3 col-xl-2 sidebar" id="sidebar">
+                    <div class="sidebar-header">
+                        <div class="user-info text-center p-3 border-bottom">
+                            <div class="avatar-lg mb-3 mx-auto">
+                                <img src="https://ui-avatars.com/api/?name=Aluno&background=4A90E2&color=fff" 
+                                     alt="Aluno" class="rounded-circle w-100" id="userAvatar">
+                            </div>
+                            <h5 class="fw-bold mb-1" id="userName">Carregando...</h5>
+                            <p class="text-muted small" id="userLevel">Nível: Carregando...</p>
+                            <div class="user-stats d-flex justify-content-center gap-4 mt-3">
+                                <div class="stat-item">
+                                    <span class="stat-value d-block fs-4 fw-bold text-primary" id="userCoursesCount">0</span>
+                                    <span class="stat-label">Cursos</span>
+                                </div>
+                                <div class="stat-item">
+                                    <span class="stat-value d-block fs-4 fw-bold text-primary" id="userPoints">0</span>
+                                    <span class="stat-label">Pontos</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <nav class="sidebar-nav p-3">
+                        <a href="#" class="sidebar-link active" data-tab="tab-overview"><i class="bi bi-house-door me-3"></i>Visão Geral</a>
+                        <a href="#" class="sidebar-link" data-tab="tab-courses"><i class="bi bi-book me-3"></i>Meus Cursos</a>
+                        <a href="#" class="sidebar-link" data-tab="tab-library"><i class="bi bi-journal-text me-3"></i>Biblioteca</a>
+                        <a href="#" class="sidebar-link" data-tab="tab-notifications"><i class="bi bi-bell me-3"></i>Notificações <span class="badge bg-danger ms-auto" id="unreadNotificationsCount">0</span></a>
+                        <a href="#" class="sidebar-link" data-tab="tab-messages"><i class="bi bi-chat-dots me-3"></i>Mensagens <span class="badge bg-primary ms-auto" id="unreadMessagesCount">0</span></a>
+                        <a href="#" class="sidebar-link" data-tab="tab-certificates"><i class="bi bi-award me-3"></i>Certificados</a>
+                        <a href="#" class="sidebar-link" data-tab="tab-quiz"><i class="bi bi-trophy me-3"></i>Quiz</a>
+                        <a href="#" class="sidebar-link" data-tab="tab-badges"><i class="bi bi-patch-check me-3"></i>Conquistas</a>
+                        <a href="#" class="sidebar-link" data-tab="tab-settings"><i class="bi bi-gear me-3"></i>Configurações</a>
+                    </nav>
+                </div>
+
+                <!-- Tabs Content -->
+                <div class="col-lg-9 col-xl-10 main-content">
+                    <!-- Visão Geral -->
+                    <section id="tab-overview" class="tab-content active">
+                        <div class="row mb-4">
+                            <div class="col-12">
+                                <h1 class="fw-bold mb-2" id="welcomeMessage">Bem-vindo de volta!</h1>
+                                <p class="text-muted" id="motivationalMessage">Continue seu aprendizado de idiomas</p>
+                            </div>
+                        </div>
+                        <div class="row g-4 mb-5" id="statsCards"></div>
+                        <div class="row mb-5">
+                            <div class="col-lg-8">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title mb-4">Progresso dos Cursos</h5>
+                                        <div class="chart-container"><canvas id="progressChart"></canvas></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title mb-4">Próximas Aulas</h5>
+                                        <div class="upcoming-classes" id="upcomingClasses"></div>
+                                        <button class="btn btn-outline-primary w-100 mt-3" data-bs-toggle="modal" data-bs-target="#calendarModal">
+                                            <i class="bi bi-calendar-plus me-2"></i>Ver Calendário
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center mb-4">
+                                            <h5 class="card-title mb-0">Atividades Recentes</h5>
+                                            <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#activitiesModal">Ver Todas</button>
+                                        </div>
+                                        <div class="activities-list" id="recentActivities"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Meus Cursos -->
+                    <section id="tab-courses" class="tab-content">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2 class="fw-bold mb-0">Meus Cursos</h2>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCourseModal">
+                                <i class="bi bi-plus-circle me-2"></i>Adicionar Curso
+                            </button>
+                        </div>
+                        <div class="row g-4" id="coursesContainer"></div>
+                    </section>
+
+                    <!-- Biblioteca -->
+                    <section id="tab-library" class="tab-content">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2 class="fw-bold mb-0">Minha Biblioteca</h2>
+                            <div class="d-flex gap-2">
+                                <div class="input-group" style="width: 300px;">
+                                    <input type="text" class="form-control" placeholder="Pesquisar material..." id="librarySearch">
+                                    <button class="btn btn-outline-secondary" type="button" id="librarySearchBtn"><i class="bi bi-search"></i></button>
+                                </div>
+                                <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMaterialModal">
+                                    <i class="bi bi-plus-circle me-2"></i>Adicionar Material
+                                </button>
+                            </div>
+                        </div>
+                        <div class="row g-4" id="libraryContainer"></div>
+                    </section>
+
+                    <!-- Notificações -->
+                    <section id="tab-notifications" class="tab-content">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2 class="fw-bold mb-0">Notificações</h2>
+                            <div class="d-flex gap-2">
+                                <button class="btn btn-sm btn-outline-secondary" id="clearAllNotificationsBtn">
+                                    <i class="bi bi-trash me-2"></i>Limpar Todas
+                                </button>
+                                <button class="btn btn-sm btn-outline-primary" id="markAllReadBtn">
+                                    <i class="bi bi-check-all me-2"></i>Marcar como lidas
+                                </button>
+                            </div>
+                        </div>
+                        <div class="card">
+                            <div class="card-body p-0">
+                                <ul class="list-group list-group-flush" id="notificationsList"></ul>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Mensagens -->
+                    <section id="tab-messages" class="tab-content">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2 class="fw-bold mb-0">Mensagens</h2>
+                            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#newMessageModal">
+                                <i class="bi bi-plus-circle me-2"></i>Nova Mensagem
+                            </button>
+                        </div>
+                        <div class="card">
+                            <div class="card-body p-0">
+                                <div id="messagesList"></div>
+                            </div>
+                        </div>
+                        <div class="card mt-4">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <h5 class="card-title mb-0">Grupos de chat</h5>
+                                    <small class="text-muted" id="chatGroupCount">0 grupos</small>
+                                </div>
+                                <div class="row g-3">
+                                    <div class="col-lg-4">
+                                        <div class="list-group" id="chatGroupsList"></div>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <div class="chat-box border rounded p-3">
+                                            <div class="chat-messages" id="chatMessagesArea"></div>
+                                            <div class="input-group mt-3">
+                                                <input type="text" class="form-control" id="chatMessageInput" placeholder="Escreva uma mensagem">
+                                                <button class="btn btn-primary" type="button" id="sendChatMessageBtn">
+                                                    <i class="bi bi-send me-1"></i>Enviar
+                                                </button>
+                                            </div>
+                                            <small class="text-muted d-block mt-2" id="chatHint">Selecione um grupo para conversar.</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Certificados -->
+                    <section id="tab-certificates" class="tab-content">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h2 class="fw-bold mb-0">Meus Certificados</h2>
+                            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addCertificateModal">
+                                <i class="bi bi-plus-circle me-2"></i>Adicionar Certificado
+                            </button>
+                        </div>
+                        <div class="row g-4" id="certificatesList"></div>
+                    </section>
+
+                    <!-- Quiz -->
+                    <section id="tab-quiz" class="tab-content">
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h2 class="fw-bold mb-4">Quiz de Idiomas</h2>
+                                        <div id="quizGame">
+                                            <div class="quiz-intro text-center py-5">
+                                                <h4>Teste seus conhecimentos!</h4>
+                                                <p class="text-muted mb-4">Responda perguntas e ganhe pontos</p>
+                                                <button class="btn btn-primary btn-lg" id="startQuizBtn"><i class="bi bi-play-circle me-2"></i>Iniciar Quiz</button>
+                                            </div>
+                                            <div id="quizArea" class="d-none">
+                                                <div class="quiz-progress mb-4">
+                                                    <div class="d-flex justify-content-between mb-2">
+                                                        <span>Questão <span id="currentQuestion">1</span>/<span id="totalQuestions">5</span></span>
+                                                        <span>Tempo: <span id="quizTimer">30</span>s</span>
+                                                    </div>
+                                                    <div class="progress"><div class="progress-bar" id="quizProgress"></div></div>
+                                                </div>
+                                                <h4 id="quizQuestion" class="mb-4"></h4>
+                                                <div class="quiz-options mb-4" id="quizOptions"></div>
+                                                <div class="d-flex justify-content-between align-items-center">
+                                                    <div><span class="fw-bold">Pontuação: </span><span id="quizScore" class="h5 text-primary">0</span></div>
+                                                    <button class="btn btn-outline-primary" id="nextQuestionBtn">Próxima <i class="bi bi-arrow-right ms-2"></i></button>
+                                                </div>
+                                            </div>
+                                            <div id="quizResults" class="d-none text-center py-5">
+                                                <h4 class="mb-3">Quiz Concluído!</h4>
+                                                <div class="display-4 fw-bold text-primary mb-3" id="finalScore">0</div>
+                                                <p class="text-muted mb-4">Pontos conquistados</p>
+                                                <div class="d-flex justify-content-center gap-3">
+                                                    <button class="btn btn-primary" id="restartQuizBtn"><i class="bi bi-arrow-repeat me-2"></i>Jogar Novamente</button>
+                                                    <button class="btn btn-outline-primary" id="shareResultsBtn"><i class="bi bi-share me-2"></i>Compartilhar</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title mb-4">Ranking do Quiz</h5>
+                                        <div class="ranking-list" id="quizRanking"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- Conquistas -->
+                    <section id="tab-badges" class="tab-content">
+                        <h2 class="fw-bold mb-4">Minhas Conquistas</h2>
+                        <div class="row g-4" id="badgesContainer"></div>
+                    </section>
+
+                    <!-- Configurações -->
+                    <section id="tab-settings" class="tab-content">
+                        <h2 class="fw-bold mb-4">Configurações</h2>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title mb-4">Perfil</h5>
+                                        <form id="profileForm">
+                                            <div class="mb-3">
+                                                <label class="form-label">Nome Completo</label>
+                                                <input type="text" class="form-control" id="profileName" required>
+                                                <div class="invalid-feedback">Por favor, digite seu nome</div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Email</label>
+                                                <input type="email" class="form-control" id="profileEmail" required>
+                                                <div class="invalid-feedback">Por favor, digite um email válido</div>
+                                            </div>
+                                            <div class="mb-3">
+                                                <label class="form-label">Idioma Preferido</label>
+                                                <select class="form-select" id="profileLanguage" required>
+                                                    <option value="">Selecione</option>
+                                                    <option value="pt">Português</option>
+                                                    <option value="en">Inglês</option>
+                                                    <option value="es">Espanhol</option>
+                                                    <option value="fr">Francês</option>
+                                                </select>
+                                            </div>
+                                            <button type="submit" class="btn btn-primary">
+                                                <span id="saveProfileText">Salvar</span>
+                                                <span id="saveProfileLoading" class="d-none"><span class="loading"></span> Salvando...</span>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5 class="card-title mb-4">Notificações</h5>
+                                        <form id="notificationsForm">
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input" type="checkbox" id="notifyCourses" checked>
+                                                <label class="form-check-label">Notificações de cursos</label>
+                                            </div>
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input" type="checkbox" id="notifyReminders" checked>
+                                                <label class="form-check-label">Lembretes de estudo</label>
+                                            </div>
+                                            <div class="form-check mb-3">
+                                                <input class="form-check-input" type="checkbox" id="notifyPromotions">
+                                                <label class="form-check-label">Promoções</label>
+                                            </div>
+                                            <hr>
+                                            <button type="button" class="btn btn-outline-danger w-100" data-bs-toggle="modal" data-bs-target="#deleteAccountModal">
+                                                <i class="bi bi-trash me-2"></i>Excluir Conta
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer bg-dark text-white py-4">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <p class="mb-0">&copy; 2025 LinguaPro. Todos os direitos reservados.</p>
+                    <p class="mb-0 small">Contacto: +258 83 495 7798 | Email: escoladelinguasdemaputo@gmail.com</p>
+                </div>
+                <div class="col-md-6 text-md-end">
+                    <div class="social-links">
+                        <a href="#" class="text-white me-3"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-linkedin"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modals -->
+    <div class="modal fade" id="addCourseModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Adicionar Curso</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addCourseForm">
+                        <div class="mb-3">
+                            <label class="form-label">Cursos disponíveis</label>
+                            <select class="form-select" id="courseSelect" required>
+                                <option value="">Selecione um curso</option>
+                            </select>
+                        </div>
+                        <div class="alert alert-light border small mb-0" id="coursePreview">
+                            Selecione um curso para ver detalhes.
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="saveCourseBtn">Salvar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addMaterialModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Adicionar Material</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addMaterialForm">
+                        <div class="mb-3">
+                            <label class="form-label">Materiais disponíveis</label>
+                            <select class="form-select" id="materialSelect" required>
+                                <option value="">Selecione um material</option>
+                            </select>
+                        </div>
+                        <div class="alert alert-light border small mb-0" id="materialPreview">
+                            Selecione um material para ver detalhes.
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="saveMaterialBtn">Adicionar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="materialDetailModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Detalhes do Material</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p><strong>Título:</strong> <span id="materialDetailTitle">-</span></p>
+                    <p><strong>Curso:</strong> <span id="materialDetailCourse">-</span></p>
+                    <p><strong>Professor:</strong> <span id="materialDetailProfessor">-</span></p>
+                    <p><strong>Tipo:</strong> <span id="materialDetailType">-</span></p>
+                    <p><strong>Arquivo:</strong> <span id="materialDetailFile">-</span></p>
+                    <p><strong>Visibilidade:</strong> <span id="materialDetailVisibility">-</span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                    <button type="button" class="btn btn-primary" id="materialDetailDownloadBtn">Baixar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="newMessageModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Nova Mensagem</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="newMessageForm">
+                        <div class="mb-3"><label class="form-label">Para</label><select class="form-select" id="messageTo" required>
+                            <option value="">Selecione</option><option value="suporte">Suporte</option>
+                        </select></div>
+                        <div class="mb-3"><label class="form-label">Assunto</label><input type="text" class="form-control" id="messageSubject" required></div>
+                        <div class="mb-3"><label class="form-label">Mensagem</label><textarea class="form-control" id="messageContent" rows="5" required></textarea></div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="sendMessageBtn"><i class="bi bi-send me-2"></i>Enviar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="addCertificateModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Solicitar Certificado</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="addCertificateForm">
+                        <div class="mb-3"><label class="form-label">Curso</label><select class="form-select" id="certificateCourse" required>
+                            <option value="">Selecione</option>
+                        </select></div>
+                        <div class="mb-3"><label class="form-label">Motivo do pedido</label><textarea class="form-control" id="certificateReason" rows="4" placeholder="Descreva por que precisa do certificado"></textarea></div>
+                        <div class="alert alert-light border small mb-0">
+                            O pedido será enviado para análise do administrador.
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-primary" id="saveCertificateBtn">Solicitar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="activitiesModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header"><h5 class="modal-title">Todas Atividades</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+                <div class="modal-body"><div id="allActivitiesList"></div></div>
+                <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="calendarModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content">
+                <div class="modal-header"><h5 class="modal-title">Calendário</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div>
+                <div class="modal-body text-center py-5">
+                    <i class="bi bi-calendar-date display-1 text-primary mb-3"></i>
+                    <h4>Calendário em Desenvolvimento</h4>
+                    <p class="text-muted">Em breve você poderá visualizar todas as suas aulas agendadas aqui.</p>
+                </div>
+                <div class="modal-footer"><button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="deleteAccountModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title">Excluir Conta</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="alert alert-danger"><i class="bi bi-exclamation-triangle-fill me-2"></i><strong>Atenção!</strong> Esta ação não pode ser desfeita.</div>
+                    <p>Todos os seus dados serão permanentemente excluídos.</p>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="confirmDelete">
+                        <label class="form-check-label" for="confirmDelete">Eu entendo que esta ação ? irreversível</label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="confirmDeleteAccountBtn" disabled><i class="bi bi-trash me-2"></i>Excluir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    
+    <script>
+        // Configurações
+        toastr.options = { "closeButton": true, "progressBar": true, "positionClass": "toast-top-right", "timeOut": "3000" };
+        const API_CONFIG = { useLocalStorage: true };
+        const AppState = { user: null, courses: [], availableCourses: [], library: [], notifications: [], messages: [], certificates: [], certificateRequests: [], badges: [], quizRanking: [], activities: [], librarySearchTerm: '', liveClasses: [], chatGroups: [], chatMessages: [], currentChatGroupId: null };
+
+        // Serviço de Dados
+        class DataService {
+            constructor() {
+                this.apiBase = window.__API_URL__ || window.API_URL || "http://localhost:5001/api";
+                this.local = { library: [], messages: [], quizRanking: [], notifications: [] };
+                this.savedMaterials = new Set(JSON.parse(localStorage.getItem("aluno_saved_materials") || "[]"));
+                this.readNotifications = new Set(JSON.parse(localStorage.getItem("aluno_read_notifications") || "[]"));
+                this.readMessages = new Set(JSON.parse(localStorage.getItem("aluno_read_messages") || "[]"));
+            }
+
+            saveReadState() {
+                localStorage.setItem("aluno_read_notifications", JSON.stringify(Array.from(this.readNotifications)));
+                localStorage.setItem("aluno_read_messages", JSON.stringify(Array.from(this.readMessages)));
+            }
+
+            saveSavedMaterials() {
+                localStorage.setItem("aluno_saved_materials", JSON.stringify(Array.from(this.savedMaterials)));
+            }
+
+            getToken() {
+                return localStorage.getItem("token") || sessionStorage.getItem("token") || null;
+            }
+
+            async request(path, options = {}) {
+                const headers = { "Content-Type": "application/json", ...(options.headers || {}) };
+                const token = this.getToken();
+                if (token) headers.Authorization = `Bearer ${token}`;
+
+                const res = await fetch(`${this.apiBase}${path}`, { ...options, headers });
+                const data = await res.json().catch(() => ({}));
+                if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+                return data;
+            }
+
+            mapEnrollmentsToCourses(enrollments) {
+                return (enrollments || []).map((e) => {
+                    const rawProgress = Number(e.progress);
+                    const baseProgress = Number.isNaN(rawProgress) ? 10 : rawProgress;
+                    const progress = Math.max(10, Math.min(100, baseProgress));
+                    const status = e.status || "pending";
+                    const statusLabel = status === "approved" ? "Aprovado" : status === "pending" ? "Pendente" : "Cancelado";
+                    const nextClass =
+                        status === "approved"
+                            ? progress >= 100
+                                ? "Curso concluido"
+                                : "Cronograma em breve"
+                            : status === "pending"
+                            ? "Aguardando aprovacao"
+                            : "Curso cancelado";
+                    return {
+                        id: e.id,
+                        courseId: e.course_id,
+                        name: e.course_title || e.course_id,
+                        progress,
+                        type: "Idioma",
+                        instructor: "Equipe LinguaPro",
+                        nextClass,
+                        description: `Inscricao: ${statusLabel}`,
+                        color: status === "approved" ? "success" : status === "pending" ? "warning" : "danger",
+                        language: "n/a",
+                        level: "n/a",
+                        status,
+                        statusLabel,
+                        payment_status: e.payment_status
+                    };
+                });
+            }
+
+            mapMaterials(materials) {
+                return (materials || []).map((m) => {
+                    const type = String(m.type || "doc").toLowerCase();
+                    const iconMap = { pdf: "bi-file-earmark-pdf", video: "bi-camera-video", audio: "bi-mic", link: "bi-link", doc: "bi-file-earmark" };
+                    const colorMap = { pdf: "danger", video: "primary", audio: "success", link: "warning", doc: "secondary" };
+                    const saved = this.savedMaterials.has(String(m.id));
+                    return {
+                        id: m.id,
+                        title: m.title,
+                        description: `${m.course_title || "Geral"} • ${m.professor_name || "Professor"}`,
+                        language: (m.course_title || "pt").toString().slice(0, 2).toLowerCase(),
+                        type,
+                        courseId: m.course_id,
+                        courseTitle: m.course_title,
+                        professorName: m.professor_name,
+                        fileName: m.file_name,
+                        visibility: m.visibility || "public",
+                        icon: iconMap[type] || iconMap.doc,
+                        color: colorMap[type] || colorMap.doc,
+                        tags: [],
+                        saved
+                    };
+                });
+            }
+
+            async get(collection) {
+                if (!this.getToken()) throw new Error("Nao autenticado");
+
+                if (collection === "user") {
+                    const me = await this.request("/auth/me");
+                    if (me.user?.role !== "aluno") throw new Error("Acesso apenas para aluno");
+
+                    const enroll = await this.request("/enrollments/my");
+                    const courses = this.mapEnrollmentsToCourses(enroll.enrollments || []);
+                    const points = courses.reduce((acc, item) => acc + Number(item.progress || 0), 0);
+
+                    return {
+                        success: true,
+                        data: {
+                            id: me.user.id,
+                            name: me.user.name,
+                            email: me.user.email,
+                            level: "Aluno",
+                            points,
+                            streak: 0,
+                            studyHours: 0,
+                            avgProgress: courses.length ? Math.round(points / courses.length) : 0,
+                            quizzesDone: 0,
+                            quizAverage: 0,
+                            preferredLanguage: "pt",
+                            avatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(me.user.name)}&background=4A90E2&color=fff`
+                        }
+                    };
+                }
+
+                if (collection === "courses") {
+                    const enroll = await this.request("/enrollments/my");
+                    return { success: true, data: this.mapEnrollmentsToCourses(enroll.enrollments || []) };
+                }
+
+                if (collection === "availableCourses") {
+                    const courses = await this.request("/courses");
+                    const active = (courses.courses || []).filter((c) => Number(c.active) === 1);
+                    return { success: true, data: active };
+                }
+
+                if (collection === "notifications") {
+                    const inbox = await this.request("/notifications/my");
+                    const notifications = (inbox.notifications || []).map((n) => ({
+                        id: n.id,
+                        message: n.message || n.title || "Nova notificação",
+                        time: n.created_at || "-",
+                        read: this.readNotifications.has(String(n.id)),
+                        type: n.type === "enrollment" ? "info" : "warning"
+                    }));
+                    this.local.notifications = notifications;
+                    return { success: true, data: notifications };
+                }
+
+                if (collection === "certificates") {
+                    const enroll = await this.request("/enrollments/my");
+                    const certs = (enroll.enrollments || [])
+                        .filter((e) => e.status === "approved" && Number(e.progress || 0) >= 100)
+                        .map((e) => ({
+                            id: e.id,
+                            title: `Certificado - ${e.course_title || e.course_id}`,
+                            course: e.course_title || e.course_id,
+                            date: (e.created_at || "").slice(0, 10),
+                            institution: "LinguaPro",
+                            url: null
+                        }));
+                    return { success: true, data: certs };
+                }
+
+                if (collection === "badges") {
+                    const courses = (await this.get("courses")).data || [];
+                    return {
+                        success: true,
+                        data: [
+                            { id: 1, name: "Primeira Inscricao", description: "Fez a primeira inscricao", earned: courses.length > 0, icon: "bi-star" },
+                            { id: 2, name: "Curso Aprovado", description: "Tem pelo menos 1 curso aprovado", earned: courses.some((c) => c.progress === 100), icon: "bi-award" }
+                        ]
+                    };
+                }
+
+                if (collection === "activities") {
+                    const enroll = await this.request("/enrollments/my");
+                    const activities = (enroll.enrollments || []).slice(0, 10).map((e) => ({
+                        icon: "bi-check-circle-fill",
+                        color: e.status === "approved" ? "success" : "warning",
+                        text: `Curso ${e.course_title || e.course_id}: ${e.status}`,
+                        time: e.created_at || "-"
+                    }));
+                    return { success: true, data: activities };
+                }
+
+                if (collection === "messages") {
+                    const inbox = await this.request("/notifications/my");
+                    const messages = (inbox.messages || []).map((m) => ({
+                        id: m.id,
+                        from: m.from || "Sistema",
+                        fromAvatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(m.from || "Sistema")}&background=4A90E2&color=fff`,
+                        subject: m.subject || "Mensagem",
+                        content: m.content || "",
+                        date: m.created_at ? new Date(m.created_at).toLocaleDateString("pt-BR") : "-",
+                        time: m.created_at ? new Date(m.created_at).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) : "-",
+                        unread: !this.readMessages.has(String(m.id))
+                    }));
+                    this.local.messages = messages;
+                    return { success: true, data: messages };
+                }
+
+                if (collection === "library") {
+                    const lib = await this.request("/library/materials");
+                    const materials = this.mapMaterials(lib.materials || []);
+                    this.local.library = materials;
+                    return { success: true, data: materials };
+                }
+
+                if (collection === "liveClasses") {
+                    const classes = await this.request("/live-classes");
+                    return { success: true, data: classes.classes || [] };
+                }
+
+                if (collection === "chatGroups") {
+                    const groups = await this.request("/chat/groups");
+                    return { success: true, data: groups.groups || [] };
+                }
+
+                if (collection === "certificateRequests") {
+                    const reqs = await this.request("/certificates/my");
+                    return { success: true, data: reqs.requests || [] };
+                }
+
+                if (collection === "quizRanking") {
+                    return { success: true, data: this.local.quizRanking || [] };
+                }
+
+                return { success: true, data: [] };
+            }
+
+            async add(collection, item) {
+                if (collection === "courses") {
+                    if (!item.course_id || !item.student_name || !item.student_email) {
+                        return { success: false, error: "Selecione um curso e confirme os dados do aluno." };
+                    }
+                    const enrollment = await this.request("/enrollments", {
+                        method: "POST",
+                        body: JSON.stringify(item)
+                    });
+                    return { success: true, data: enrollment.enrollment };
+                }
+                if (collection === "library") {
+                    if (!item.material_id) return { success: false, error: "Selecione um material." };
+                    this.savedMaterials.add(String(item.material_id));
+                    this.saveSavedMaterials();
+                    return { success: true };
+                }
+                if (collection === "certificates") {
+                    if (!item.course_id) return { success: false, error: "Selecione o curso." };
+                    const req = await this.request("/certificates/requests", {
+                        method: "POST",
+                        body: JSON.stringify({ course_id: item.course_id, reason: item.reason || "" })
+                    });
+                    return { success: true, data: req.request };
+                }
+                return { success: false, error: "Funcionalidade sem backend nesta secao." };
+            }
+
+            async getChatMessages(groupId) {
+                const data = await this.request(`/chat/groups/${groupId}/messages`);
+                return data.messages || [];
+            }
+
+            async sendChatMessage(groupId, content) {
+                const data = await this.request(`/chat/groups/${groupId}/messages`, {
+                    method: "POST",
+                    body: JSON.stringify({ content })
+                });
+                return data.message;
+            }
+
+            async update(collection, id, updates) {
+                if (collection === "user") return { success: true, data: updates };
+
+                if (collection === "notifications") {
+                    this.local.notifications = (this.local.notifications || []).map((item) =>
+                        id === "all" || item.id == id ? { ...item, ...updates } : item
+                    );
+                    if (id === "all") {
+                        this.local.notifications.forEach((item) => this.readNotifications.add(String(item.id)));
+                    } else {
+                        this.readNotifications.add(String(id));
+                    }
+                    this.saveReadState();
+                    return { success: true };
+                }
+
+                if (collection === "messages") {
+                    this.local.messages = (this.local.messages || []).map((item) =>
+                        item.id == id ? { ...item, ...updates } : item
+                    );
+                    this.readMessages.add(String(id));
+                    this.saveReadState();
+                    return { success: true };
+                }
+
+                return { success: false, error: "Atualizacao indisponivel." };
+            }
+
+            async deleteAll(collection) {
+                if (collection === "notifications") {
+                    this.local.notifications = [];
+                    this.readNotifications = new Set();
+                    localStorage.removeItem("aluno_read_notifications");
+                    return { success: true };
+                }
+                return { success: false, error: "Operacao indisponivel." };
+            }
+        }
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', function() {
+            const dataService = new DataService();
+            Dashboard.init(dataService);
+        });
+
+        // Dashboard Controller
+        const Dashboard = {
+            dataService: null,
+            quiz: { currentQuestion: 0, score: 0, timeLeft: 30, timer: null, selectedAnswer: null },
+            refreshTimer: null,
+            chatTimer: null,
+            realtimeInitialized: false,
+            knownNotificationIds: new Set(),
+            knownMessageIds: new Set(),
+            init(dataService) {
+                this.dataService = dataService;
+                this.loadData();
+                this.setupNavigation();
+                this.setupEventListeners();
+                this.setupQuiz();
+                this.setupResponsive();
+                this.startRealtimeUpdates();
+            },
+            startRealtimeUpdates() {
+                if (this.refreshTimer) clearInterval(this.refreshTimer);
+                this.refreshTimer = setInterval(async () => {
+                    try {
+                        const [notifications, messages, liveClasses, chatGroups] = await Promise.all([
+                            this.dataService.get("notifications"),
+                            this.dataService.get("messages"),
+                            this.dataService.get("liveClasses"),
+                            this.dataService.get("chatGroups")
+                        ]);
+                        AppState.notifications = notifications.data;
+                        AppState.messages = messages.data;
+                        AppState.liveClasses = liveClasses.data;
+                        AppState.chatGroups = chatGroups.data;
+                        this.raiseRealtimePopups();
+                        this.loadNotifications();
+                        this.loadMessages();
+                        this.loadUpcomingClasses();
+                        this.loadChatGroups();
+                    } catch (_) {}
+                }, 10000);
+            },
+            raiseRealtimePopups() {
+                const currentNotifIds = new Set((AppState.notifications || []).map((item) => String(item.id)));
+                const currentMsgIds = new Set((AppState.messages || []).map((item) => String(item.id)));
+                const unreadNotifsNow = (AppState.notifications || []).filter((item) => !item.read);
+                const unreadMsgsNow = (AppState.messages || []).filter((item) => item.unread);
+
+                if (!this.realtimeInitialized) {
+                    this.knownNotificationIds = currentNotifIds;
+                    this.knownMessageIds = currentMsgIds;
+                    this.realtimeInitialized = true;
+                    if (unreadNotifsNow.length > 0) {
+                        toastr.info(`${unreadNotifsNow.length} notificações pendente(s).`);
+                    }
+                    if (unreadMsgsNow.length > 0) {
+                        toastr.info(`${unreadMsgsNow.length} mensagem(s) não lida(s).`);
+                    }
+                    return;
+                }
+
+                const newNotifs = (AppState.notifications || []).filter((item) => !this.knownNotificationIds.has(String(item.id)));
+                const newMsgs = (AppState.messages || []).filter((item) => !this.knownMessageIds.has(String(item.id)));
+
+                if (newNotifs.length > 0) {
+                    toastr.info(`${newNotifs.length} nova(s) notificações recebida(s).`);
+                }
+                if (newMsgs.length > 0) {
+                    toastr.info(`${newMsgs.length} nova(s) mensagem(s) recebida(s).`);
+                }
+
+                this.knownNotificationIds = currentNotifIds;
+                this.knownMessageIds = currentMsgIds;
+            },
+            async loadData() {
+                try {
+                    const [user, courses, availableCourses, library, notifications, messages, certificates, certificateRequests, badges, activities, ranking, liveClasses, chatGroups] = await Promise.all([
+                        this.dataService.get('user'),
+                        this.dataService.get('courses'),
+                        this.dataService.get('availableCourses'),
+                        this.dataService.get('library'),
+                        this.dataService.get('notifications'),
+                        this.dataService.get('messages'),
+                        this.dataService.get('certificates'),
+                        this.dataService.get('certificateRequests'),
+                        this.dataService.get('badges'),
+                        this.dataService.get('activities'),
+                        this.dataService.get('quizRanking'),
+                        this.dataService.get('liveClasses'),
+                        this.dataService.get('chatGroups')
+                    ]);
+                    
+                    AppState.user = user.data;
+                    AppState.courses = courses.data;
+                    AppState.availableCourses = availableCourses.data;
+                    AppState.library = library.data;
+                    AppState.notifications = notifications.data;
+                    AppState.messages = messages.data;
+                    AppState.certificates = certificates.data;
+                    AppState.certificateRequests = certificateRequests.data;
+                    AppState.badges = badges.data;
+                    AppState.activities = activities.data;
+                    AppState.quizRanking = ranking.data;
+                    AppState.liveClasses = liveClasses.data;
+                    AppState.chatGroups = chatGroups.data;
+                    
+                    this.updateUI();
+                    toastr.success('Dashboard carregado!');
+                } catch (error) {
+                    console.error('Erro ao carregar dados:', error);
+                    toastr.error(error.message || 'Erro ao carregar dados');
+                    if (/autenticado|acesso/i.test(String(error.message || ''))) {
+                        setTimeout(() => { window.location.href = 'login.html'; }, 900);
+                    }
+                }
+            },
+            updateUI() {
+                if (AppState.user) {
+                    document.getElementById('userName').textContent = AppState.user.name;
+                    document.getElementById('userLevel').textContent = `Nível: ${AppState.user.level}`;
+                    document.getElementById('userAvatar').src = AppState.user.avatar;
+                    document.getElementById('userAvatar').alt = AppState.user.name;
+                    document.getElementById('userPoints').textContent = AppState.user.points;
+                    document.getElementById('userCoursesCount').textContent = AppState.courses.length;
+                    document.getElementById('welcomeMessage').textContent = `Bem-vindo, ${AppState.user.name.split(' ')[0]}!`;
+                    document.getElementById('profileName').value = AppState.user.name;
+                    document.getElementById('profileEmail').value = AppState.user.email;
+                    document.getElementById('profileLanguage').value = AppState.user.preferredLanguage || 'en';
+                }
+                this.loadCourses();
+                this.loadAvailableCourses();
+                this.loadLibrary();
+                this.loadAvailableMaterials();
+                this.loadNotifications();
+                this.loadMessages();
+                this.loadChatGroups();
+                this.loadCertificates();
+                this.loadBadges();
+                this.loadStatsCards();
+                this.loadUpcomingClasses();
+                this.loadRecentActivities();
+                this.loadQuizRanking();
+                this.initCharts();
+            },
+            loadCourses() {
+                const container = document.getElementById('coursesContainer');
+                if (!container) return;
+                
+                if (AppState.courses.length === 0) {
+                    container.innerHTML = `<div class="col-12"><div class="empty-state"><i class="bi bi-book"></i><h4>Nenhum curso</h4><p class="text-muted">Você ainda não está matriculado em nenhum curso.</p><button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCourseModal"><i class="bi bi-plus-circle me-2"></i>Adicionar Curso</button></div></div>`;
+                    return;
+                }
+                
+                container.innerHTML = AppState.courses.map(course => `
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card course-card h-100">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-start mb-3">
+                                    <span class="badge bg-${course.color}">${course.type}</span>
+                                    <span class="text-muted small">${course.progress}%</span>
+                                </div>
+                                <h5 class="card-title mb-3">${course.name}</h5>
+                                <p class="card-text text-muted small mb-2">${course.description}</p>
+                                <p class="card-text text-muted small mb-4"><strong>Nível:</strong> ${course.level || 'iniciante'}</p>
+                                <div class="d-flex justify-content-between align-items-center mb-3">
+                                    <small class="text-muted">Status:</small>
+                                    <span class="badge bg-${course.status === 'approved' ? 'success' : course.status === 'pending' ? 'warning' : 'danger'}">${course.status === 'approved' ? 'Aprovado' : course.status === 'pending' ? 'Pendente' : 'Rejeitado'}</span>
+                                </div>
+                                <div class="mb-4">
+                                    <div class="d-flex justify-content-between mb-1">
+                                        <small>Progresso</small>
+                                        <small>${course.progress}%</small>
+                                    </div>
+                                    <div class="progress">
+                                        <div class="progress-bar bg-${course.color}" style="width: ${course.progress}%"></div>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <small class="text-muted"><i class="bi bi-person me-1"></i>${course.instructor}</small>
+                                    ${course.status === 'approved'
+                                        ? `<button class="btn btn-sm btn-outline-${course.color}" onclick="toastr.info('Continuando curso: ${course.name}')">Continuar</button>`
+                                        : `<a class="btn btn-sm btn-outline-secondary" href="contact.html">Contactar suporte</a>`
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            },
+            loadAvailableCourses() {
+                const select = document.getElementById('courseSelect');
+                const certSelect = document.getElementById('certificateCourse');
+                const preview = document.getElementById('coursePreview');
+                if (!select || !certSelect) return;
+
+                const options = AppState.availableCourses.map(c => `<option value="${c.id}">${c.title}</option>`).join('');
+                select.innerHTML = `<option value="">Selecione um curso</option>${options}`;
+                certSelect.innerHTML = `<option value="">Selecione</option>${options}`;
+
+                const updatePreview = () => {
+                    const course = AppState.availableCourses.find(c => c.id === select.value);
+                    if (!preview) return;
+                    if (!course) {
+                        preview.textContent = 'Selecione um curso para ver detalhes.';
+                        return;
+                    }
+                    preview.innerHTML = `<strong>${course.title}</strong><br>${course.description}<br><small class="text-muted">Modo: ${course.mode || '-'} • Duração: ${course.duration || '-'}</small>`;
+                };
+                select.onchange = updatePreview;
+                updatePreview();
+            },
+            loadLibrary() {
+                const container = document.getElementById('libraryContainer');
+                if (!container) return;
+                
+                const enrolledCourseIds = new Set((AppState.courses || []).map(c => c.courseId));
+                let materials = AppState.library.filter(m => {
+                    if (m.saved) return true;
+                    if (m.visibility === "enrolled" && m.courseId && enrolledCourseIds.has(m.courseId)) return true;
+                    return false;
+                });
+                if (AppState.librarySearchTerm) {
+                    materials = materials.filter(item =>
+                        item.title.toLowerCase().includes(AppState.librarySearchTerm.toLowerCase()) ||
+                        item.description.toLowerCase().includes(AppState.librarySearchTerm.toLowerCase()) ||
+                        (item.tags && item.tags.some(tag => tag.toLowerCase().includes(AppState.librarySearchTerm.toLowerCase())))
+                    );
+                }
+                
+                if (materials.length === 0) {
+                    container.innerHTML = `<div class="col-12"><div class="empty-state"><i class="bi bi-journal-text"></i><h4>${AppState.librarySearchTerm ? 'Nenhum material encontrado' : 'Nenhum material'}</h4><p class="text-muted">${AppState.librarySearchTerm ? 'Tente outros termos.' : 'Adicione materiais para estudar.'}</p>${!AppState.librarySearchTerm ? '<button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addMaterialModal"><i class="bi bi-plus-circle me-2"></i>Adicionar Material</button>' : ''}</div></div>`;
+                    return;
+                }
+                
+                container.innerHTML = materials.map(material => `
+                    <div class="col-md-6 col-lg-4 col-xl-3">
+                        <div class="card material-card h-100">
+                            <div class="card-body">
+                                <div class="material-icon bg-${material.color} text-white mb-3">
+                                    <i class="bi ${material.icon}"></i>
+                                </div>
+                                <h6 class="card-title mb-2">${material.title}</h6>
+                                <p class="card-text text-muted small mb-3">${material.description}</p>
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="badge bg-secondary">${material.language.toUpperCase()}</span>
+                                    <div class="btn-group">
+                                        <button class="btn btn-sm btn-outline-${material.color}" onclick="Dashboard.openMaterial('${material.id}')"><i class="bi bi-eye"></i></button>
+                                        <button class="btn btn-sm btn-outline-${material.color}" onclick="Dashboard.downloadMaterial('${material.id}')" ${material.fileName ? '' : 'disabled'}><i class="bi bi-download"></i></button>
+                                    </div>
+                                </div>
+                                ${material.saved ? '<span class="badge bg-primary mt-2">Guardado</span>' : ''}
+                                ${material.tags && material.tags.length > 0 ? `<div class="mt-3">${material.tags.map(tag => `<span class="badge bg-light text-dark me-1">${tag}</span>`).join('')}</div>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            },
+            openMaterial(materialId) {
+                const material = AppState.library.find(m => String(m.id) === String(materialId));
+                if (!material) return;
+                const modalEl = document.getElementById('materialDetailModal');
+                document.getElementById('materialDetailTitle').textContent = material.title || '-';
+                document.getElementById('materialDetailCourse').textContent = material.courseTitle || 'Geral';
+                document.getElementById('materialDetailProfessor').textContent = material.professorName || 'Professor';
+                document.getElementById('materialDetailType').textContent = (material.type || '').toUpperCase();
+                document.getElementById('materialDetailFile').textContent = material.fileName || 'Indisponível';
+                document.getElementById('materialDetailVisibility').textContent = material.visibility === 'enrolled' ? 'Somente inscritos' : 'Todos';
+                const btn = document.getElementById('materialDetailDownloadBtn');
+                if (btn) {
+                    btn.onclick = () => this.downloadMaterial(material.id);
+                    btn.disabled = !material.fileName;
+                }
+                if (modalEl && window.bootstrap) {
+                    const modal = window.bootstrap.Modal.getOrCreateInstance(modalEl);
+                    modal.show();
+                } else {
+                    toastr.info(`Material: ${material.title}`);
+                }
+            },
+            downloadMaterial(materialId) {
+                const material = AppState.library.find(m => String(m.id) === String(materialId));
+                if (!material || !material.fileName) {
+                    toastr.warning('Ficheiro indisponível para download.');
+                    return;
+                }
+                const fileName = String(material.fileName || "");
+                if (/^https?:\/\//i.test(fileName)) {
+                    window.open(fileName, "_blank");
+                    return;
+                }
+                toastr.info(`Ficheiro registado: ${material.fileName}`);
+            },
+            loadAvailableMaterials() {
+                const select = document.getElementById('materialSelect');
+                const preview = document.getElementById('materialPreview');
+                if (!select) return;
+                const options = AppState.library.map(m => `<option value="${m.id}">${m.title}</option>`).join('');
+                select.innerHTML = `<option value="">Selecione um material</option>${options}`;
+                const updatePreview = () => {
+                    const material = AppState.library.find(m => m.id === select.value);
+                    if (!preview) return;
+                    if (!material) {
+                        preview.textContent = 'Selecione um material para ver detalhes.';
+                        return;
+                    }
+                    preview.innerHTML = `<strong>${material.title}</strong><br>${material.description}<br><small class="text-muted">Tipo: ${material.type.toUpperCase()} • Curso: ${material.courseTitle || 'Geral'}</small>`;
+                };
+                select.onchange = updatePreview;
+                updatePreview();
+            },
+            loadNotifications() {
+                const container = document.getElementById('notificationsList');
+                const countElement = document.getElementById('unreadNotificationsCount');
+                if (!container) return;
+                
+                const unreadCount = AppState.notifications.filter(n => !n.read).length;
+                if (countElement) {
+                    countElement.textContent = unreadCount;
+                    countElement.style.display = unreadCount > 0 ? 'inline-flex' : 'none';
+                }
+                
+                if (AppState.notifications.length === 0) {
+                    container.innerHTML = `<li class="list-group-item text-center py-5"><i class="bi bi-bell display-6 text-muted mb-3"></i><h5 class="text-muted">Nenhuma notificação</h5><p class="text-muted small">Você está em dia com tudo!</p></li>`;
+                    return;
+                }
+                
+                container.innerHTML = AppState.notifications.map(notif => `
+                    <li class="list-group-item ${!notif.read ? 'bg-light' : ''}" onclick="Dashboard.markNotificationRead(${notif.id})">
+                        <div class="d-flex align-items-center">
+                            <div class="flex-1">
+                                <p class="mb-1">${notif.message}</p>
+                                <small class="text-muted">${notif.time}</small>
+                            </div>
+                            ${!notif.read ? '<span class="badge bg-danger">Nova</span>' : ''}
+                        </div>
+                    </li>
+                `).join('');
+            },
+            loadMessages() {
+                const container = document.getElementById('messagesList');
+                const countElement = document.getElementById('unreadMessagesCount');
+                if (!container) return;
+                
+                const unreadCount = AppState.messages.filter(m => m.unread).length;
+                if (countElement) {
+                    countElement.textContent = unreadCount;
+                    countElement.style.display = unreadCount > 0 ? 'inline-flex' : 'none';
+                }
+                
+                if (AppState.messages.length === 0) {
+                    container.innerHTML = `<div class="text-center py-5"><i class="bi bi-chat-dots display-6 text-muted mb-3"></i><h5 class="text-muted">Nenhuma mensagem</h5><p class="text-muted small">Envie uma mensagem para seus professores.</p><button class="btn btn-primary mt-2" data-bs-toggle="modal" data-bs-target="#newMessageModal"><i class="bi bi-plus-circle me-2"></i>Enviar Mensagem</button></div>`;
+                    return;
+                }
+                
+                container.innerHTML = AppState.messages.map(msg => `
+                    <div class="message-item ${msg.unread ? 'unread' : ''}" onclick="Dashboard.markMessageRead(${msg.id})">
+                        <div class="d-flex">
+                            <img src="${msg.fromAvatar}" alt="${msg.from}" class="rounded-circle me-3" width="40" height="40">
+                            <div class="flex-1">
+                                <div class="d-flex justify-content-between align-items-start">
+                                    <h6 class="mb-1">${msg.from}</h6>
+                                    <small class="text-muted">${msg.time}</small>
+                                </div>
+                                <h6 class="mb-1 text-primary">${msg.subject}</h6>
+                                <p class="mb-1 text-truncate">${msg.content}</p>
+                                <small class="text-muted">${msg.date}</small>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            },
+            loadChatGroups() {
+                const list = document.getElementById('chatGroupsList');
+                const count = document.getElementById('chatGroupCount');
+                if (!list) return;
+                const groups = AppState.chatGroups || [];
+                if (count) count.textContent = `${groups.length} grupos`;
+                if (!groups.length) {
+                    list.innerHTML = `<div class="text-center text-muted py-3">Nenhum grupo disponível</div>`;
+                    return;
+                }
+                list.innerHTML = groups.map(g => `
+                    <button type="button" class="list-group-item list-group-item-action ${String(AppState.currentChatGroupId)===String(g.id) ? 'active' : ''}" onclick="Dashboard.openChatGroup('${g.id}')">
+                        <div class="fw-semibold">${g.name}</div>
+                        <small>${g.course_title || 'Grupo livre'}</small>
+                    </button>
+                `).join('');
+            },
+            async openChatGroup(groupId) {
+                AppState.currentChatGroupId = groupId;
+                this.loadChatGroups();
+                await this.loadChatMessages();
+                this.startChatPolling();
+                const hint = document.getElementById('chatHint');
+                if (hint) hint.textContent = 'Mensagens carregadas.';
+            },
+            async loadChatMessages() {
+                const area = document.getElementById('chatMessagesArea');
+                if (!area || !AppState.currentChatGroupId) return;
+                try {
+                    const messages = await this.dataService.getChatMessages(AppState.currentChatGroupId);
+                    AppState.chatMessages = messages || [];
+                } catch {
+                    AppState.chatMessages = [];
+                }
+                const me = AppState.user?.id;
+                area.innerHTML = AppState.chatMessages.length ? AppState.chatMessages.map(m => `
+                    <div class="chat-message ${String(m.sender_id) === String(me) ? 'me' : ''}">
+                        <strong>${m.sender_name || 'Utilizador'}</strong><br>
+                        <span>${m.content}</span><br>
+                        <small class="text-muted">${m.created_at ? new Date(m.created_at).toLocaleString('pt-BR') : ''}</small>
+                    </div>
+                `).join('') : `<div class="text-muted">Sem mensagens neste grupo.</div>`;
+                area.scrollTop = area.scrollHeight;
+            },
+            async sendChatMessage() {
+                const input = document.getElementById('chatMessageInput');
+                const content = (input?.value || '').trim();
+                if (!AppState.currentChatGroupId) {
+                    toastr.warning('Selecione um grupo');
+                    return;
+                }
+                if (!content) return;
+                try {
+                    await this.dataService.sendChatMessage(AppState.currentChatGroupId, content);
+                    if (input) input.value = '';
+                    await this.loadChatMessages();
+                } catch (error) {
+                    toastr.error(error.message || 'Erro ao enviar mensagem');
+                }
+            },
+            startChatPolling() {
+                if (this.chatTimer) clearInterval(this.chatTimer);
+                this.chatTimer = setInterval(() => {
+                    if (AppState.currentChatGroupId) {
+                        this.loadChatMessages();
+                    }
+                }, 8000);
+            },
+            loadCertificates() {
+                const container = document.getElementById('certificatesList');
+                if (!container) return;
+                const requests = AppState.certificateRequests || [];
+                if (AppState.certificates.length === 0 && requests.length === 0) {
+                    container.innerHTML = `<div class="col-12"><div class="empty-state"><i class="bi bi-award"></i><h4>Nenhum certificado</h4><p class="text-muted">Complete cursos para ganhar certificados.</p><button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addCertificateModal"><i class="bi bi-plus-circle me-2"></i>Solicitar Certificado</button></div></div>`;
+                    return;
+                }
+                
+                const certCards = AppState.certificates.map(cert => `
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card certificate-card h-100">
+                            <div class="certificate-header text-white p-3 text-center" style="background: linear-gradient(135deg, #4A90E2 0%, #357ABD 100%);">
+                                <i class="bi bi-award display-4 mb-3"></i>
+                                <h5 class="mb-0">Certificado</h5>
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">${cert.title}</h5>
+                                <p class="card-text">
+                                    <strong>Curso:</strong> ${cert.course}<br>
+                                    <strong>Emitido por:</strong> ${cert.institution}<br>
+                                    <strong>Data:</strong> ${new Date(cert.date).toLocaleDateString('pt-BR')}
+                                </p>
+                                <div class="d-flex gap-2">
+                                    ${cert.url ? `<a href="${cert.url}" class="btn btn-primary btn-sm" target="_blank"><i class="bi bi-download me-1"></i>Baixar</a>` : ''}
+                                    <button class="btn btn-outline-primary btn-sm" onclick="toastr.info('Certificado: ${cert.title}')"><i class="bi bi-eye me-1"></i>Visualizar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `);
+
+                const pendingCourses = (AppState.courses || []).filter(c => Number(c.progress || 0) < 100);
+                const pendingCards = pendingCourses.map(course => `
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card certificate-card h-100 border-warning">
+                            <div class="card-body">
+                                <h6 class="text-muted mb-2">Certificado pendente</h6>
+                                <h5 class="card-title">${course.name}</h5>
+                                <p class="card-text small text-muted mb-2">Progresso atual: ${course.progress}%</p>
+                                <small class="text-muted">Disponível quando o curso for concluído.</small>
+                            </div>
+                        </div>
+                    </div>
+                `);
+
+                const reqCards = requests.map(req => `
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card certificate-card h-100 border-warning">
+                            <div class="card-body">
+                                <h6 class="text-muted mb-2">Pedido de certificado</h6>
+                                <h5 class="card-title">${req.course_title || 'Curso'}</h5>
+                                <p class="card-text small text-muted mb-3">Status: ${req.status || 'pending'}</p>
+                                <small class="text-muted">Enviado em: ${req.created_at ? new Date(req.created_at).toLocaleDateString('pt-BR') : '-'}</small>
+                            </div>
+                        </div>
+                    </div>
+                `);
+
+                container.innerHTML = [...certCards, ...pendingCards, ...reqCards].join('');
+            },
+            loadBadges() {
+                const container = document.getElementById('badgesContainer');
+                if (!container) return;
+                
+                container.innerHTML = AppState.badges.map(badge => `
+                    <div class="col-md-6 col-lg-4">
+                        <div class="card badge-card ${badge.earned ? 'earned' : 'locked'}">
+                            <div class="card-body text-center">
+                                <div class="badge-icon mb-3 ${badge.earned ? 'bg-primary' : 'bg-secondary'}">
+                                    <i class="bi ${badge.icon}"></i>
+                                </div>
+                                <h5 class="card-title mb-2">${badge.name}</h5>
+                                <p class="card-text text-muted small mb-3">${badge.description}</p>
+                                <span class="badge ${badge.earned ? 'bg-success' : 'bg-secondary'}">${badge.earned ? 'Conquistado' : 'Bloqueado'}</span>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            },
+            loadStatsCards() {
+                const user = AppState.user;
+                if (!user) return;
+                
+                const stats = [
+                    { title: "Progresso Médio", value: `${user.avgProgress}%`, icon: "bi-graph-up", color: "primary", progress: user.avgProgress },
+                    { title: "Horas de Estudo", value: `${user.studyHours}h`, icon: "bi-clock", color: "success", subtitle: "+2h esta semana" },
+                    { title: "Quizzes Feitos", value: user.quizzesDone, icon: "bi-check-circle", color: "warning", subtitle: `Média: ${user.quizAverage}%` },
+                    { title: "Streak Atual", value: `${user.streak} dias`, icon: "bi-fire", color: "danger", subtitle: "Mantenha a sequência!" }
+                ];
+                
+                document.getElementById('statsCards').innerHTML = stats.map(stat => `
+                    <div class="col-md-6 col-lg-3">
+                        <div class="card stat-card">
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h6 class="text-muted mb-2">${stat.title}</h6>
+                                        <h3 class="fw-bold mb-0">${stat.value}</h3>
+                                    </div>
+                                    <div class="icon-circle bg-${stat.color}-light">
+                                        <i class="bi ${stat.icon} text-${stat.color}"></i>
+                                    </div>
+                                </div>
+                                ${stat.progress ? `<div class="progress mt-3"><div class="progress-bar" style="width: ${stat.progress}%"></div></div>` : ''}
+                                ${stat.subtitle ? `<small class="text-muted">${stat.subtitle}</small>` : ''}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            },
+            loadUpcomingClasses() {
+                const enrolledCourseIds = new Set((AppState.courses || []).map(c => c.courseId));
+                const upcoming = (AppState.liveClasses || [])
+                    .filter(c => !c.course_id || enrolledCourseIds.has(c.course_id))
+                    .sort((a, b) => new Date(a.scheduled_at || a.created_at) - new Date(b.scheduled_at || b.created_at))
+                    .slice(0, 2);
+                if (!upcoming.length) {
+                    document.getElementById('upcomingClasses').innerHTML = `<div class="text-center py-3"><p class="text-muted mb-0">Sem aulas agendadas</p></div>`;
+                    return;
+                }
+
+                document.getElementById('upcomingClasses').innerHTML = upcoming.map((cls, idx) => `
+                    <div class="class-item mb-3">
+                        <div class="d-flex align-items-center">
+                            <div class="class-time bg-${idx % 2 === 0 ? 'primary' : 'success'} text-white rounded p-2 me-3">
+                                <div class="fw-bold">${cls.scheduled_at ? new Date(cls.scheduled_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '--:--'}</div>
+                                <small>${idx === 0 ? 'Proxima' : 'Em breve'}</small>
+                            </div>
+                            <div>
+                                <h6 class="mb-1">${cls.title}</h6>
+                                <small class="text-muted">${cls.course_title || 'Aula aberta'}</small>
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            },
+            loadRecentActivities() {
+                const recent = AppState.activities.slice(0, 3);
+                document.getElementById('recentActivities').innerHTML = recent.length === 0 ? 
+                    `<div class="text-center py-3"><p class="text-muted mb-0">Nenhuma atividade recente</p></div>` :
+                    recent.map(activity => `
+                        <div class="activity-item">
+                            <i class="bi ${activity.icon} text-${activity.color} me-3"></i>
+                            <div class="flex-1">
+                                <p class="mb-1">${activity.text}</p>
+                                <small class="text-muted">${activity.time}</small>
+                            </div>
+                        </div>
+                    `).join('');
+            },
+            loadAllActivities() {
+                document.getElementById('allActivitiesList').innerHTML = AppState.activities.length === 0 ?
+                    `<div class="text-center py-5"><i class="bi bi-activity display-6 text-muted mb-3"></i><h5 class="text-muted">Nenhuma atividade</h5><p class="text-muted small">Comece a estudar para ver suas atividades aqui.</p></div>` :
+                    AppState.activities.map(activity => `
+                        <div class="activity-item">
+                            <i class="bi ${activity.icon} text-${activity.color} me-3"></i>
+                            <div class="flex-1">
+                                <p class="mb-1">${activity.text}</p>
+                                <small class="text-muted">${activity.time}</small>
+                            </div>
+                        </div>
+                    `).join('');
+            },
+            loadQuizRanking() {
+                document.getElementById('quizRanking').innerHTML = AppState.quizRanking.map((player, index) => `
+                    <div class="ranking-item ${player.name === AppState.user?.name ? 'current-user' : ''}">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <span class="ranking-position me-3">${index + 1}</span>
+                                <div>
+                                    <h6 class="mb-0">${player.name}</h6>
+                                    <small class="text-muted">${player.score} pontos</small>
+                                </div>
+                            </div>
+                            ${index === 0 ? '<i class="bi bi-trophy-fill text-warning"></i>' : ''}
+                        </div>
+                    </div>
+                `).join('');
+            },
+            initCharts() {
+                const ctx = document.getElementById('progressChart');
+                if (!ctx || AppState.courses.length === 0) return;
+                
+                new Chart(ctx.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: AppState.courses.map(c => c.name),
+                        datasets: [{
+                            label: 'Progresso (%)',
+                            data: AppState.courses.map(c => c.progress),
+                            backgroundColor: AppState.courses.map(c => ({primary: '#4A90E2', success: '#50E3C2', warning: '#FF6B6B'}[c.color] || '#4A90E2')),
+                            borderColor: AppState.courses.map(c => ({primary: '#357ABD', success: '#3DAF94', warning: '#E04E4E'}[c.color] || '#357ABD')),
+                            borderWidth: 2,
+                            borderRadius: 8
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: { legend: { display: false } },
+                        scales: {
+                            y: { beginAtZero: true, max: 100, ticks: { callback: v => v + '%' } },
+                            x: { grid: { display: false } }
+                        }
+                    }
+                });
+            },
+            setupNavigation() {
+                document.querySelectorAll('.sidebar-link').forEach(link => {
+                    link.addEventListener('click', (e) => {
+                        e.preventDefault();
+                        document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
+                        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+                        link.classList.add('active');
+                        document.getElementById(link.dataset.tab).classList.add('active');
+                        if (window.innerWidth < 992) document.getElementById('sidebar').classList.remove('show');
+                    });
+                });
+            },
+            setupEventListeners() {
+                // Logout
+                document.getElementById('logoutBtn').addEventListener('click', () => {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    sessionStorage.removeItem('token');
+                    sessionStorage.removeItem('user');
+                    localStorage.removeItem('admin_token');
+                    window.location.href = 'login.html';
+                });
+
+                // Perfil
+                document.getElementById('profileForm').addEventListener('submit', async (e) => {
+                    e.preventDefault();
+                    if (!e.target.checkValidity()) {
+                        e.target.classList.add('was-validated');
+                        return;
+                    }
+                    const btn = e.target.querySelector('button[type="submit"]');
+                    const text = document.getElementById('saveProfileText');
+                    const loading = document.getElementById('saveProfileLoading');
+                    text.classList.add('d-none');
+                    loading.classList.remove('d-none');
+                    btn.disabled = true;
+                    try {
+                        const response = await this.dataService.update('user', AppState.user.id, {
+                            name: document.getElementById('profileName').value,
+                            email: document.getElementById('profileEmail').value,
+                            preferredLanguage: document.getElementById('profileLanguage').value
+                        });
+                        if (response.success) {
+                            AppState.user = { ...AppState.user, ...response.data };
+                            this.updateUI();
+                            toastr.success('Perfil atualizado!');
+                        }
+                    } catch (error) {
+                        toastr.error('Erro ao salvar');
+                    } finally {
+                        text.classList.remove('d-none');
+                        loading.classList.add('d-none');
+                        btn.disabled = false;
+                    }
+                });
+
+                // Notificações
+                document.getElementById('markAllReadBtn').addEventListener('click', async () => {
+                    const response = await this.dataService.update('notifications', 'all', { read: true });
+                    if (response.success) {
+                        AppState.notifications = AppState.notifications.map(n => ({ ...n, read: true }));
+                        this.loadNotifications();
+                        toastr.success('Notificações marcadas como lidas');
+                    }
+                });
+
+                document.getElementById('clearAllNotificationsBtn').addEventListener('click', async () => {
+                    const response = await this.dataService.deleteAll('notifications');
+                    if (response.success) {
+                        AppState.notifications = [];
+                        this.loadNotifications();
+                        toastr.success('Notificações limpas');
+                    }
+                });
+
+                // Biblioteca
+                document.getElementById('librarySearchBtn').addEventListener('click', () => {
+                    AppState.librarySearchTerm = document.getElementById('librarySearch').value;
+                    this.loadLibrary();
+                });
+
+                document.getElementById('librarySearch').addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter') {
+                        AppState.librarySearchTerm = e.target.value;
+                        this.loadLibrary();
+                    }
+                });
+
+                // Chat
+                document.getElementById('sendChatMessageBtn').addEventListener('click', () => {
+                    this.sendChatMessage();
+                });
+                document.getElementById('chatMessageInput').addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter') {
+                        e.preventDefault();
+                        this.sendChatMessage();
+                    }
+                });
+
+                // Salvar Curso
+                document.getElementById('saveCourseBtn').addEventListener('click', async () => {
+                    const courseId = document.getElementById('courseSelect').value;
+                    if (!courseId) {
+                        toastr.error('Selecione um curso');
+                        return;
+                    }
+                    const courseData = {
+                        course_id: courseId,
+                        student_name: AppState.user?.name || '',
+                        student_email: AppState.user?.email || ''
+                    };
+                    const response = await this.dataService.add('courses', courseData);
+                    if (response.success) {
+                        const refreshed = await this.dataService.get('courses');
+                        AppState.courses = refreshed.data;
+                        this.loadCourses();
+                        bootstrap.Modal.getInstance(document.getElementById('addCourseModal')).hide();
+                        toastr.success('Inscrição enviada!');
+                    } else {
+                        toastr.warning(response.error || 'Não foi possível inscrever');
+                    }
+                });
+
+                // Salvar Material
+                document.getElementById('saveMaterialBtn').addEventListener('click', async () => {
+                    const materialId = document.getElementById('materialSelect').value;
+                    if (!materialId) {
+                        toastr.error('Selecione um material');
+                        return;
+                    }
+                    const response = await this.dataService.add('library', { material_id: materialId });
+                    if (response.success) {
+                        const refreshed = await this.dataService.get('library');
+                        AppState.library = refreshed.data;
+                        this.loadLibrary();
+                        bootstrap.Modal.getInstance(document.getElementById('addMaterialModal')).hide();
+                        toastr.success('Material guardado na sua biblioteca!');
+                    } else {
+                        toastr.warning(response.error || 'Funcionalidade indisponivel.');
+                    }
+                });
+
+                // Enviar Mensagem
+                document.getElementById('sendMessageBtn').addEventListener('click', async () => {
+                    const messageData = {
+                        to: document.getElementById('messageTo').value,
+                        subject: document.getElementById('messageSubject').value,
+                        content: document.getElementById('messageContent').value
+                    };
+                    if (!messageData.to || !messageData.subject || !messageData.content) {
+                        toastr.error('Preencha todos os campos');
+                        return;
+                    }
+                    const newMsg = {
+                        from: AppState.user.name,
+                        fromAvatar: AppState.user.avatar,
+                        subject: messageData.subject,
+                        content: messageData.content,
+                        time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
+                        date: "Agora",
+                        unread: false
+                    };
+                    const response = await this.dataService.add('messages', newMsg);
+                    if (response.success) {
+                        AppState.messages.unshift(response.data);
+                        this.loadMessages();
+                        bootstrap.Modal.getInstance(document.getElementById('newMessageModal')).hide();
+                        document.getElementById('newMessageForm').reset();
+                        toastr.success('Mensagem enviada!');
+                    } else {
+                        toastr.warning(response.error || 'Mensageria sem backend no momento.');
+                    }
+                });
+
+                // Solicitar Certificado
+                document.getElementById('saveCertificateBtn').addEventListener('click', async () => {
+                    const courseId = document.getElementById('certificateCourse').value;
+                    const reason = document.getElementById('certificateReason').value;
+                    if (!courseId) {
+                        toastr.error('Selecione o curso');
+                        return;
+                    }
+                        const response = await this.dataService.add('certificates', { course_id: courseId, reason });
+                        if (response.success) {
+                            const reqs = await this.dataService.get('certificateRequests');
+                            AppState.certificateRequests = reqs.data;
+                            this.loadCertificates();
+                        bootstrap.Modal.getInstance(document.getElementById('addCertificateModal')).hide();
+                        document.getElementById('addCertificateForm').reset();
+                        toastr.success('Pedido enviado!');
+                    } else {
+                        toastr.warning(response.error || 'Não foi possível solicitar.');
+                    }
+                });
+
+                // Excluir Conta
+                document.getElementById('confirmDelete').addEventListener('change', (e) => {
+                    document.getElementById('confirmDeleteAccountBtn').disabled = !e.target.checked;
+                });
+
+                document.getElementById('confirmDeleteAccountBtn').addEventListener('click', () => {
+                    toastr.warning('Funcionalidade em desenvolvimento');
+                    bootstrap.Modal.getInstance(document.getElementById('deleteAccountModal')).hide();
+                });
+
+                // Compartilhar Quiz
+                document.getElementById('shareResultsBtn').addEventListener('click', () => {
+                    const score = document.getElementById('finalScore').textContent;
+                    const text = `Consegui ${score} pontos no quiz de idiomas do LinguaPro!`;
+                    if (navigator.share) {
+                        navigator.share({ title: 'Meu resultado no Quiz', text, url: window.location.href });
+                    } else {
+                        navigator.clipboard.writeText(text);
+                        toastr.success('Resultado copiado!');
+                    }
+                });
+
+                // Delegar eventos
+                document.addEventListener('click', (e) => {
+                    if (e.target.closest('.notification-item')) {
+                        const id = parseInt(e.target.closest('.notification-item').dataset.id);
+                        this.markNotificationRead(id);
+                    }
+                    if (e.target.closest('.message-item')) {
+                        const id = parseInt(e.target.closest('.message-item').dataset.id);
+                        this.markMessageRead(id);
+                    }
+                });
+            },
+            setupQuiz() {
+                const quizData = [
+                    { question: "Traduza 'Hello' para português", options: ["Olá", "Adeus", "Bom dia", "Tchau"], correct: 0 },
+                    { question: "Traduza 'Thank you' para francês", options: ["Merci", "Gracias", "Danke", "Grazie"], correct: 0 },
+                    { question: "Qual ? a capital da França?", options: ["Londres", "Berlim", "Paris", "Madri"], correct: 2 },
+                    { question: "Como se diz 'água' em espanhol?", options: ["Acqua", "Water", "Agua", "Eau"], correct: 2 },
+                    { question: "Complete: I ___ to school every day", options: ["go", "going", "goes", "went"], correct: 0 }
+                ];
+
+                document.getElementById('startQuizBtn').addEventListener('click', () => this.startQuiz(quizData));
+                document.getElementById('nextQuestionBtn').addEventListener('click', () => this.nextQuestion(quizData));
+                document.getElementById('restartQuizBtn').addEventListener('click', () => this.startQuiz(quizData));
+            },
+            startQuiz(quizData) {
+                this.quiz = { currentQuestion: 0, score: 0, timeLeft: 30, timer: null, selectedAnswer: null };
+                document.querySelector('.quiz-intro').classList.add('d-none');
+                document.getElementById('quizArea').classList.remove('d-none');
+                document.getElementById('quizResults').classList.add('d-none');
+                this.loadQuizQuestion(quizData);
+                this.startQuizTimer();
+            },
+            loadQuizQuestion(quizData) {
+                const question = quizData[this.quiz.currentQuestion];
+                document.getElementById('quizQuestion').textContent = question.question;
+                document.getElementById('currentQuestion').textContent = this.quiz.currentQuestion + 1;
+                document.getElementById('totalQuestions').textContent = quizData.length;
+                
+                document.getElementById('quizOptions').innerHTML = question.options.map((option, index) => `
+                    <button class="btn btn-outline-primary w-100 mb-2 quiz-option" data-index="${index}">${option}</button>
+                `).join('');
+                
+                document.querySelectorAll('.quiz-option').forEach(btn => {
+                    btn.addEventListener('click', () => {
+                        if (this.quiz.selectedAnswer !== null) return;
+                        this.quiz.selectedAnswer = parseInt(btn.dataset.index);
+                        const isCorrect = this.quiz.selectedAnswer === question.correct;
+                        if (isCorrect) {
+                            this.quiz.score += 20;
+                            btn.classList.remove('btn-outline-primary');
+                            btn.classList.add('btn-success');
+                        } else {
+                            btn.classList.remove('btn-outline-primary');
+                            btn.classList.add('btn-danger');
+                            document.querySelectorAll('.quiz-option')[question.correct].classList.remove('btn-outline-primary');
+                            document.querySelectorAll('.quiz-option')[question.correct].classList.add('btn-success');
+                        }
+                        document.querySelectorAll('.quiz-option').forEach(opt => opt.disabled = true);
+                        document.getElementById('nextQuestionBtn').disabled = false;
+                        clearInterval(this.quiz.timer);
+                    });
+                });
+                
+                this.updateQuizProgress();
+                document.getElementById('nextQuestionBtn').disabled = true;
+            },
+            nextQuestion(quizData) {
+                this.quiz.currentQuestion++;
+                this.quiz.selectedAnswer = null;
+                if (this.quiz.currentQuestion < quizData.length) {
+                    this.resetQuizTimer();
+                    this.loadQuizQuestion(quizData);
+                } else {
+                    this.finishQuiz();
+                }
+            },
+            async finishQuiz() {
+                clearInterval(this.quiz.timer);
+                document.getElementById('quizArea').classList.add('d-none');
+                document.getElementById('quizResults').classList.remove('d-none');
+                document.getElementById('finalScore').textContent = this.quiz.score;
+                
+                // Atualizar ranking
+                AppState.quizRanking.push({ name: AppState.user.name, score: this.quiz.score });
+                AppState.quizRanking.sort((a, b) => b.score - a.score);
+                AppState.quizRanking = AppState.quizRanking.slice(0, 5);
+                this.loadQuizRanking();
+                
+                toastr.success(`Você ganhou ${this.quiz.score} pontos!`);
+            },
+            startQuizTimer() {
+                clearInterval(this.quiz.timer);
+                this.quiz.timeLeft = 30;
+                this.updateQuizTimer();
+                this.quiz.timer = setInterval(() => {
+                    this.quiz.timeLeft--;
+                    this.updateQuizTimer();
+                    if (this.quiz.timeLeft <= 0) {
+                        clearInterval(this.quiz.timer);
+                        this.nextQuestion();
+                    }
+                }, 1000);
+            },
+            resetQuizTimer() {
+                clearInterval(this.quiz.timer);
+                this.quiz.timeLeft = 30;
+                this.updateQuizTimer();
+                this.startQuizTimer();
+            },
+            updateQuizTimer() {
+                document.getElementById('quizTimer').textContent = this.quiz.timeLeft;
+            },
+            updateQuizProgress() {
+                const progress = ((this.quiz.currentQuestion + 1) / 5) * 100;
+                document.getElementById('quizProgress').style.width = `${progress}%`;
+                document.getElementById('quizScore').textContent = this.quiz.score;
+            },
+            setupResponsive() {
+                document.querySelector('.navbar-toggler').addEventListener('click', () => {
+                    document.getElementById('sidebar').classList.toggle('show');
+                });
+                document.addEventListener('click', (e) => {
+                    if (window.innerWidth < 992 && !e.target.closest('.sidebar') && !e.target.closest('.navbar-toggler')) {
+                        document.getElementById('sidebar').classList.remove('show');
+                    }
+                });
+            },
+            async markNotificationRead(id) {
+                const response = await this.dataService.update('notifications', id, { read: true });
+                if (response.success) {
+                    const notification = AppState.notifications.find(n => n.id === id);
+                    if (notification) notification.read = true;
+                    this.loadNotifications();
+                }
+            },
+            async markMessageRead(id) {
+                const response = await this.dataService.update('messages', id, { unread: false });
+                if (response.success) {
+                    const message = AppState.messages.find(m => m.id === id);
+                    if (message) message.unread = false;
+                    this.loadMessages();
+                }
+            }
+        };
+        window.Dashboard = Dashboard;
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+

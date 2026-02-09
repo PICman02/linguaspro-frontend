@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serviços EduPortal MZ- LinguaPro</title>
+    <meta name="description" content="Tradução profissional, treinamentos corporativos e consultoria educacional. Serviços premium para todos os perfis.">
+    <meta name="author" content="EduPortal MZ">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/services.css">
+    
+</head>
+<body>
+    <!-- Header -->
+    <header class="header sticky-top">
+        <nav class="navbar navbar-expand-lg">
+            <div class="container">
+                <a class="navbar-brand d-flex align-items-center" href="index.html">
+                    <i class="fas fa-language me-2"></i>
+                    <span class="fw-bold fs-4 text-primary">LinguaPro</span>
+                </a>
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto align-items-center gap-3">
+                        <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" href="courses.html">Cursos</a></li>
+                        <li class="nav-item"><a class="nav-link active" href="services.html">Serviços</a></li>
+                        <li class="nav-item"><a class="nav-link" href="library.html">Biblioteca</a></li>
+                        <li class="nav-item"><a class="nav-link" href="professors.html">Professores</a></li>
+                        <li class="nav-item"><a class="nav-link" href="mini-game.html">Mini-jogo</a></li>
+                        <li class="nav-item">
+                        <a href="login.html" class="btn btn-primary px-4">
+                            <i class="bi bi-person-circle me-2"></i>Login
+                        </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-services">
+        <div class="container">
+            <div class="row align-items-center min-vh-80">
+                <div class="col-lg-8 mx-auto text-center">
+                    <h1 class="display-4 fw-bold mb-4">Serviços Premium para Todos os Perfis</h1>
+                    <p class="lead mb-5">Tradução profissional, treinamentos corporativos e consultoria educacional. Soluções personalizadas para seus objetivos.</p>
+                    <div class="d-flex flex-wrap justify-content-center gap-3">
+                        <a href="#services" class="btn btn-primary btn-lg px-5">
+                            <i class="bi bi-arrow-down-circle me-2"></i>Ver Serviços
+                        </a>
+                        <a href="#contact" class="btn btn-outline-light btn-lg px-5" id="openServiceRequestBtn">
+                            <i class="bi bi-chat-dots me-2"></i>Solicitar Orçamento
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Serviços Destaque -->
+    <section id="services" class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold mb-3 service-section-title">Nossos Serviços Premium</h2>
+                <p class="text-muted">Soluções completas para suas necessidades de idiomas</p>
+            </div>
+
+            <div class="row g-4">
+                <!-- Card 1 -->
+                <div class="col-lg-4">
+                    <div class="card service-card h-100 border-0 shadow-lg position-relative">
+                        <div class="card-header position-absolute top-0 start-50 translate-middle">
+                            <span class="badge bg-danger px-3 py-2">Mais Popular</span>
+                        </div>
+                        <div class="card-body p-4">
+                            <div class="icon-wrapper mb-4">
+                                <i class="bi bi-translate text-primary fs-1"></i>
+                            </div>
+                            <h3 class="card-title h4 mb-3">Tradução Profissional</h3>
+                            <p class="card-text text-muted mb-4">Tradução certificada de documentos acadêmicos, comerciais e técnicos com garantia de qualidade.</p>
+                            <ul class="list-unstyled mb-4">
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Entrega em até 48h</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>+15 idiomas suportados</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Revisão por nativos</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Formatos diversos</li>
+                            </ul>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="h5 fw-bold text-primary mb-0">A partir de MZN 500</span>
+                                <span class="badge bg-light text-dark">Por página</span>
+                            </div>
+                            <button class="btn btn-primary w-100" onclick="solicitarOrcamento('Tradução Profissional')">
+                                <i class="bi bi-cart-plus me-2"></i>Solicitar Orçamento
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 2 -->
+                <div class="col-lg-4">
+                    <div class="card service-card h-100 border-0 shadow-lg">
+                        <div class="card-body p-4">
+                            <div class="icon-wrapper mb-4">
+                                <i class="bi bi-briefcase text-primary fs-1"></i>
+                            </div>
+                            <h3 class="card-title h4 mb-3">Treinamentos Corporativos</h3>
+                            <p class="card-text text-muted mb-4">Capacitação em idiomas para equipes com metodologia personalizada para seu negócio.</p>
+                            <ul class="list-unstyled mb-4">
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Material personalizado</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Presencial ou online</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Relatórios de progresso</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Certificação inclusa</li>
+                            </ul>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="h5 fw-bold text-primary mb-0">MZN 200/pessoa</span>
+                                <span class="badge bg-light text-dark">Workshop</span>
+                            </div>
+                            <button class="btn btn-primary w-100" onclick="solicitarOrcamento('Treinamento Corporativo')">
+                                <i class="bi bi-cart-plus me-2"></i>Solicitar Orçamento
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Card 3 -->
+                <div class="col-lg-4">
+                    <div class="card service-card h-100 border-0 shadow-lg">
+                        <div class="card-body p-4">
+                            <div class="icon-wrapper mb-4">
+                                <i class="bi bi-mortarboard text-primary fs-1"></i>
+                            </div>
+                            <h3 class="card-title h4 mb-3">Consultoria Educacional</h3>
+                            <p class="card-text text-muted mb-4">Orientação especializada para desenvolvimento de programas educacionais e curriculares.</p>
+                            <ul class="list-unstyled mb-4">
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Metodologia adaptada</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Acompanhamento 1:1</li>
+                                <li class="mb-2"><i class="bi bi-check-circle-fill text-success me-2"></i>Plano personalizado</li>
+                                <li><i class="bi bi-check-circle-fill text-success me-2"></i>Suporte contínuo</li>
+                            </ul>
+                            <div class="d-flex justify-content-between align-items-center mb-3">
+                                <span class="h5 fw-bold text-primary mb-0">MZN 100/hora</span>
+                                <span class="badge bg-light text-dark">Individual</span>
+                            </div>
+                            <button class="btn btn-primary w-100" onclick="solicitarOrcamento('Consultoria Educacional')">
+                                <i class="bi bi-cart-plus me-2"></i>Solicitar Orçamento
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefícios -->
+    <section class="py-5 bg-white">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold mb-3 service-section-title">Por que escolher a LinguaPro?</h2>
+                <p class="text-muted">Excelência e compromisso em cada serviço</p>
+            </div>
+
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-circle mb-3 mx-auto">
+                                <i class="bi bi-award text-primary fs-3"></i>
+                            </div>
+                            <h4 class="card-title h5 mb-3">Professores Certificados</h4>
+                            <p class="card-text text-muted">Instrutores com certificação internacional e experiência comprovada.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-circle mb-3 mx-auto">
+                                <i class="bi bi-person-badge text-primary fs-3"></i>
+                            </div>
+                            <h4 class="card-title h5 mb-3">Atendimento Personalizado</h4>
+                            <p class="card-text text-muted">Soluções adaptadas     às necessidades específicas de cada cliente.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-4">
+                    <div class="card border-0 shadow-sm h-100">
+                        <div class="card-body text-center p-4">
+                            <div class="icon-circle mb-3 mx-auto">
+                                <i class="bi bi-headset text-primary fs-3"></i>
+                            </div>
+                            <h4 class="card-title h5 mb-3">Suporte Multicanal</h4>
+                            <p class="card-text text-muted">Atendimento via chat, email, telefone e WhatsApp para seu conforto.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Depoimentos -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold mb-3 service-section-title">O que dizem nossos clientes</h2>
+                <p class="text-muted">Experiências reais de quem já contratou nossos serviços</p>
+            </div>
+
+            <div id="depoimentosCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="card border-0 shadow-sm">
+                                    <div class="card-body p-4">
+                                        <div class="d-flex align-items-center mb-4">
+                                            <img src="https://ui-avatars.com/api/?name=Ana+Carvalho&background=4A90E2&color=fff" 
+                                                 alt="Ana Carvalho" class="rounded-circle me-3" width="60">
+                                            <div>
+                                                <h5 class="mb-0">Ana Carvalho</h5>
+                                                <small class="text-muted">Gerente de Projetos</small>
+                                            </div>
+                                        </div>
+                                        <p class="card-text fs-5">"A tradução do nosso manual técnico foi impecável. Profissionalismo, pontualidade e qualidade excepcionais. Recomendo!"</p>
+                                        <div class="text-warning">
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="row justify-content-center">
+                            <div class="col-lg-8">
+                                <div class="card border-0 shadow-sm">
+                                    <div class="card-body p-4">
+                                        <div class="d-flex align-items-center mb-4">
+                                            <img src="https://ui-avatars.com/api/?name=Jorge+Silva&background=50E3C2&color=fff" 
+                                                 alt="Jorge Silva" class="rounded-circle me-3" width="60">
+                                            <div>
+                                                <h5 class="mb-0">Jorge Silva</h5>
+                                                <small class="text-muted">Diretor Comercial</small>
+                                            </div>
+                                        </div>
+                                        <p class="card-text fs-5">"Os treinamentos corporativos transformaram a comunicação internacional da nossa equipe. Resultados mensuráveis!"</p>
+                                        <div class="text-warning">
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-fill"></i>
+                                            <i class="bi bi-star-half"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#depoimentosCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon"></span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#depoimentosCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon"></span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="py-5 bg-white">
+        <div class="container">
+            <div class="text-center mb-5">
+                <h2 class="display-5 fw-bold mb-3 service-section-title">Perguntas Frequentes</h2>
+                <p class="text-muted">Tire suas dúvidas sobre nossos serviços</p>
+            </div>
+
+            <div class="accordion" id="faqAccordion">
+                <div class="accordion-item border-0 shadow-sm mb-3">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+                            Qual o prazo para tradução de documentos?
+                        </button>
+                    </h2>
+                    <div id="faq1" class="accordion-collapse collapse show" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Documentos simples: 24-48 horas. Documentos técnicos ou complexos: 3-5 dias úteis. Oferecemos serviço expresso com acréscimo de 30%.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item border-0 shadow-sm mb-3">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+                            Os cursos corporativos incluem certificado?
+                        </button>
+                    </h2>
+                    <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Sim, todos os participantes recebem certificado digital de conclusão com validade internacional.
+                        </div>
+                    </div>
+                </div>
+
+                <div class="accordion-item border-0 shadow-sm">
+                    <h2 class="accordion-header">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#faq3">
+                            Como funciona a consultoria educacional?
+                        </button>
+                    </h2>
+                    <div id="faq3" class="accordion-collapse collapse" data-bs-parent="#faqAccordion">
+                        <div class="accordion-body">
+                            Realizamos uma análise detalhada das suas necessidades, desenvolvemos um plano personalizado e acompanhamos a implementação com reuniões periódicas.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Contato -->
+    <section id="contact" class="py-5 bg-primary text-white">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-8">
+                    <h2 class="display-6 fw-bold mb-3">Pronto para transformar sua comunicação?</h2>
+                    <p class="lead mb-0">Solicite um orçamento sem compromisso e receba uma proposta personalizada.</p>
+                </div>
+                <div class="col-lg-4 text-lg-end mt-4 mt-lg-0">
+                    <a href="mailto:escoladelinguasdemaputo@gmail.com" class="btn btn-light btn-lg px-5">
+                        <i class="bi bi-envelope me-2"></i>Enviar Email
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark text-white py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6 mb-4 mb-lg-0">
+                    <div class="d-flex align-items-center mb-3">
+                        <img src="assets/images/logo.svg" alt="LinguaPro" height="50" class="me-3">
+                    </div>
+                    <p class="mb-4">Excelência no ensino de idiomas e serviços linguísticos desde 2010.</p>
+                    <div class="social-links">
+                        <a href="#" class="text-white me-3"><i class="bi bi-facebook fs-5"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bi bi-instagram fs-5"></i></a>
+                        <a href="#" class="text-white me-3"><i class="bi bi-linkedin fs-5"></i></a>
+                        <a href="#" class="text-white"><i class="bi bi-whatsapp fs-5"></i></a>
+                    </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-6 mb-4 mb-md-0">
+                    <h5 class="mb-4">Contato</h5>
+                    <p class="mb-2"><i class="bi bi-telephone me-2"></i>+258 83 495 7798</p>
+                    <p class="mb-2"><i class="bi bi-envelope me-2"></i>escoladelinguasdemaputo@gmail.com</p>
+                    <p><i class="bi bi-clock me-2"></i>Seg-Sex: 8h-18h</p>
+                </div>
+                
+                <div class="col-lg-3 col-md-6">
+                    <h5 class="mb-4">Links Rápidos</h5>
+                    <ul class="list-unstyled">
+                        <li class="mb-2"><a href="courses.html" class="text-white-50 text-decoration-none">Cursos</a></li>
+                        <li class="mb-2"><a href="services.html" class="text-white-50 text-decoration-none">Serviços</a></li>
+                        <li class="mb-2"><a href="professors.html" class="text-white-50 text-decoration-none">Professores</a></li>
+                        <li><a href="library.html" class="text-white-50 text-decoration-none">Biblioteca</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <hr class="my-4 opacity-25">
+            
+            <div class="text-center pt-3">
+                <p class="mb-0">&copy; 2025 LinguaPro. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- JavaScript Personalizado -->
+    <script src="js/config/api.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/services.js"></script>
+    <script src="js/session-nav.js"></script>
+    
+    <script>
+        // Modal Bootstrap
+        const loginBtn = document.getElementById('loginBtn');
+        const loginModalElement = document.getElementById('loginModal');
+        if (loginBtn && loginModalElement) {
+            const loginModal = new bootstrap.Modal(loginModalElement);
+            loginBtn.addEventListener('click', () => {
+                loginModal.show();
+            });
+        }
+        
+        // Inicializar tooltips
+        const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+        const tooltipList = [...tooltipTriggerList].map(tooltipTriggerEl => new bootstrap.Tooltip(tooltipTriggerEl));
+    </script>
+</body>
+</html>
+
+
+

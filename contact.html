@@ -1,0 +1,493 @@
+﻿<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacto - LinguaPro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --dark: #212529;
+            --light: #f8f9fa;
+            --gray: #6c757d;
+            --success: #4ade80;
+            --danger: #ef4444;
+            --whatsapp: #25D366;
+            --facebook: #1877F2;
+            --instagram: #E4405F;
+            --linkedin: #0A66C2;
+        }
+        
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: #f5f7ff; color: var(--dark); }
+        .container { max-width: 1200px; margin: 0 auto; padding: 0 15px; }
+        
+        /* Header */
+        header { background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1); padding: 1rem 0; }
+        .header-content { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-size: 1.8rem; font-weight: 700; color: var(--primary); text-decoration: none; }
+        .nav { display: flex; gap: 1.5rem; align-items: center; }
+        .nav a { color: var(--dark); text-decoration: none; font-weight: 500; }
+        .nav a.active { color: var(--primary); font-weight: 600; }
+        .btn { padding: 0.6rem 1.2rem; border-radius: 6px; font-weight: 600; cursor: pointer; border: none; }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-secondary { background: white; color: var(--primary); border: 2px solid var(--primary); }
+        .btn-whatsapp { background: var(--whatsapp); color: white; }
+        .btn-email { background: var(--primary); color: white; }
+        
+        /* Banner */
+        .banner { background: linear-gradient(135deg, var(--primary), #3f37c9); color: white; padding: 3rem 0; text-align: center; }
+        .banner h1 { font-size: 2.5rem; margin-bottom: 1rem; }
+        
+        /* Conteúdo Principal */
+        .contact-section { margin: 3rem 0; }
+        .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
+        .contact-card { background: white; border-radius: 10px; padding: 2rem; box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
+        .contact-card h2 { margin-bottom: 1.5rem; color: var(--primary); border-bottom: 2px solid #f0f0f0; padding-bottom: 0.5rem; }
+        
+        /* Formulários */
+        .form-group { margin-bottom: 1.5rem; }
+        .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
+        .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.8rem; border: 1px solid #ddd; border-radius: 6px; font-size: 1rem; }
+        .form-group textarea { min-height: 120px; resize: vertical; }
+        
+        /* Botões de Envio */
+        .send-buttons { display: flex; gap: 1rem; flex-wrap: wrap; }
+        .send-btn { display: flex; align-items: center; gap: 0.5rem; padding: 1rem 1.5rem; border-radius: 6px; font-weight: 600; cursor: pointer; border: none; transition: transform 0.2s, box-shadow 0.2s; }
+        .send-btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+        .send-btn i { font-size: 1.2rem; }
+        
+        /* Redes Sociais */
+        .social-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 1rem; margin-top: 1.5rem; }
+        .social-card { background: white; border-radius: 8px; padding: 1.5rem; text-align: center; box-shadow: 0 3px 10px rgba(0,0,0,0.08); transition: transform 0.2s; }
+        .social-card:hover { transform: translateY(-5px); }
+        .social-icon { font-size: 2rem; margin-bottom: 0.8rem; }
+        .social-whatsapp { color: var(--whatsapp); }
+        .social-email { color: var(--primary); }
+        .social-facebook { color: var(--facebook); }
+        .social-instagram { color: var(--instagram); }
+        .social-linkedin { color: var(--linkedin); }
+        .social-card p { margin-top: 0.5rem; font-size: 0.9rem; color: var(--gray); }
+        
+        /* Informações de Contato */
+        .info-card { display: flex; align-items: center; gap: 1rem; margin-bottom: 1.5rem; padding: 1rem; background: rgba(67, 97, 238, 0.05); border-radius: 8px; }
+        .info-card i { font-size: 1.5rem; color: var(--primary); }
+        .info-content h3 { margin-bottom: 0.3rem; }
+        .info-content p { color: var(--gray); }
+        
+        /* Horário */
+        .schedule { margin-top: 2rem; }
+        .schedule ul { list-style: none; margin-top: 1rem; }
+        .schedule li { padding: 0.5rem 0; border-bottom: 1px solid #f0f0f0; display: flex; justify-content: space-between; }
+        .schedule li:last-child { border-bottom: none; }
+        
+        /* Modal de Confirmação */
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.7); justify-content: center; align-items: center; z-index: 1000; }
+        .modal-content { background: white; border-radius: 10px; padding: 2rem; max-width: 500px; width: 90%; position: relative; text-align: center; }
+        .close { position: absolute; top: 1rem; right: 1rem; font-size: 1.5rem; cursor: pointer; color: var(--gray); }
+        .modal-icon { font-size: 3rem; color: var(--success); margin-bottom: 1rem; }
+        
+        /* Footer */
+        footer { background: var(--dark); color: white; padding: 2rem 0; margin-top: 3rem; }
+        .footer-content { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; }
+        
+        @media (max-width: 768px) {
+            .contact-grid { grid-template-columns: 1fr; }
+            .send-buttons { flex-direction: column; }
+            .social-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container header-content">
+            <a href="index.html" class="logo"><i class="fas fa-language"></i> LinguaPro</a>
+            <nav class="nav">
+                <a href="index.html">Home</a>
+                <a href="courses.html">Cursos</a>
+                <a href="live-classes.html">Aulas Ao Vivo</a>
+                <a href="contact.html" class="active">Contacto</a>
+                <button class="btn btn-primary" onclick="openModal('loginModal')">
+                    <i class="fas fa-user"></i> Login
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <section class="banner">
+        <div class="container">
+            <h1><i class="fas fa-envelope"></i> Entre em Contacto</h1>
+            <p>Estamos aqui para ajudar na sua jornada de aprendizagem</p>
+        </div>
+    </section>
+
+    <main class="container">
+        <section class="contact-section">
+            <div class="contact-grid">
+                <!-- Formulário de Contacto -->
+                <div class="contact-card">
+                    <h2><i class="fas fa-paper-plane"></i> Envie-nos uma Mensagem</h2>
+                    
+                    <div class="form-group">
+                        <label for="name">Seu Nome</label>
+                        <input type="text" id="name" placeholder="Digite seu nome">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="contactEmail">Seu Email</label>
+                        <input type="email" id="contactEmail" placeholder="seu@email.com">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="subject">Assunto</label>
+                        <select id="subject">
+                            <option value="">Selecione um assunto</option>
+                            <option value="info">Informações sobre cursos</option>
+                            <option value="support">Suporte técnico</option>
+                            <option value="payment">Pagamentos e matrículas</option>
+                            <option value="other">Outro assunto</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="message">Mensagem</label>
+                        <textarea id="message" placeholder="Escreva sua mensagem aqui..."></textarea>
+                    </div>
+                    
+                    <p style="margin-bottom: 1rem; color: var(--gray); font-size: 0.9rem;">
+                        <i class="fas fa-info-circle"></i> Escolha como deseja enviar sua mensagem:
+                    </p>
+                    
+                    <div class="send-buttons">
+                        <button class="send-btn btn-whatsapp" onclick="sendViaWhatsApp()">
+                            <i class="fab fa-whatsapp"></i> Enviar via WhatsApp
+                        </button>
+                        
+                        <button class="send-btn btn-email" onclick="sendViaEmail()">
+                            <i class="fas fa-envelope"></i> Enviar via Email
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Informações de Contacto -->
+                <div class="contact-card">
+                    <h2><i class="fas fa-address-book"></i> Informações de Contacto</h2>
+                    
+                    <div class="info-card">
+                        <i class="fas fa-phone-alt"></i>
+                        <div class="info-content">
+                            <h3>Telefone/WhatsApp</h3>
+                            <p>+258 83 495 7798</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <i class="fas fa-envelope"></i>
+                        <div class="info-content">
+                            <h3>Email</h3>
+                            <p>escoladelinguasdemaputo@gmail.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div class="info-content">
+                            <h3>Localização</h3>
+                            <p>Maputo, Moçambique</p>
+                        </div>
+                    </div>
+                    
+                    <div class="schedule">
+                        <h3><i class="fas fa-clock"></i> Horário de Atendimento</h3>
+                        <ul>
+                            <li><span>Segunda - Sexta</span> <span>08:00 - 18:00</span></li>
+                            <li><span>Sábado</span> <span>09:00 - 13:00</span></li>
+                            <li><span>Domingo</span> <span>Fechado</span></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Redes Sociais -->
+            <div style="margin-top: 3rem;">
+                <h2 style="text-align: center; margin-bottom: 1.5rem; color: var(--primary);">
+                    <i class="fas fa-share-alt"></i> Siga-nos nas Redes Sociais
+                </h2>
+                
+                <div class="social-grid">
+                    <a href="https://wa.me/258834957798" target="_blank" class="social-card" style="text-decoration: none; color: inherit;">
+                        <div class="social-icon social-whatsapp">
+                            <i class="fab fa-whatsapp"></i>
+                        </div>
+                        <h3>WhatsApp</h3>
+                        <p>Envie mensagem diretamente</p>
+                    </a>
+                    
+                    <a href="mailto:escoladelinguasdemaputo@gmail.com" class="social-card" style="text-decoration: none; color: inherit;">
+                        <div class="social-icon social-email">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <h3>Email</h3>
+                        <p>escoladelinguasdemaputo@gmail.com</p>
+                    </a>
+                    
+                    <a href="https://facebook.com" target="_blank" class="social-card" style="text-decoration: none; color: inherit;">
+                        <div class="social-icon social-facebook">
+                            <i class="fab fa-facebook"></i>
+                        </div>
+                        <h3>Facebook</h3>
+                        <p>Siga nossa página</p>
+                    </a>
+                    
+                    <a href="https://instagram.com" target="_blank" class="social-card" style="text-decoration: none; color: inherit;">
+                        <div class="social-icon social-instagram">
+                            <i class="fab fa-instagram"></i>
+                        </div>
+                        <h3>Instagram</h3>
+                        <p>@LinguaPro_mz</p>
+                    </a>
+                    
+                    <a href="https://linkedin.com" target="_blank" class="social-card" style="text-decoration: none; color: inherit;">
+                        <div class="social-icon social-linkedin">
+                            <i class="fab fa-linkedin"></i>
+                        </div>
+                        <h3>LinkedIn</h3>
+                        <p>Conecte-se connosco</p>
+                    </a>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- Modal Login (mantido da página original) -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('loginModal')">&times;</span>
+            <h2><i class="fas fa-sign-in-alt"></i> Login</h2>
+            <div style="margin: 1.5rem 0;">
+                <input type="email" id="email" placeholder="Email" style="width: 100%; padding: 0.8rem; margin-bottom: 1rem; border: 1px solid #ddd; border-radius: 6px;">
+                <input type="password" id="password" placeholder="Senha" style="width: 100%; padding: 0.8rem; margin-bottom: 1.5rem; border: 1px solid #ddd; border-radius: 6px;">
+                <button class="btn btn-primary" style="width: 100%;" onclick="login()">
+                    <i class="fas fa-sign-in-alt"></i> Entrar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Confirmação -->
+    <div class="modal" id="confirmationModal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal('confirmationModal')">&times;</span>
+            <div class="modal-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2 id="confirmationTitle">Mensagem Enviada!</h2>
+            <p id="confirmationMessage">Sua mensagem foi enviada com sucesso.</p>
+            <button class="btn btn-primary" style="margin-top: 1.5rem;" onclick="confirmRedirect()">
+                OK
+            </button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <h3>LinguaPro</h3>
+                    <p>Aprenda idiomas de forma interativa</p>
+                </div>
+                <div>
+                    <h3>Contato</h3>
+                    <p>+258 83 495 7798</p>
+                    <p>escoladelinguasdemaputo@gmail.com</p>
+                </div>
+                <div>
+                    <h3>Links</h3>
+                    <a href="courses.html" style="color: white; display: block;">Cursos</a>
+                    <a href="live-classes.html" style="color: white; display: block;">Aulas Ao Vivo</a>
+                    <a href="contact.html" style="color: white; display: block;">Contacto</a>
+                </div>
+            </div>
+            <div style="text-align: center; margin-top: 2rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                <p>&copy; 2025 LinguaPro</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const API = window.__API_URL__ || window.API_URL || "http://localhost:5001/api";
+        let currentUser = null;
+        let pendingRedirect = null;
+
+        const SUBJECT_LABELS = {
+            info: "Informações sobre cursos",
+            support: "Suporte técnico",
+            payment: "Pagamentos e matrículas",
+            other: "Outro assunto"
+        };
+
+        function loadUser() {
+            const saved = localStorage.getItem("user");
+            if (saved) {
+                try { currentUser = JSON.parse(saved); } catch { currentUser = null; }
+            }
+        }
+
+        function openModal(id) {
+            document.getElementById(id).style.display = "flex";
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).style.display = "none";
+        }
+
+        function validateEmail(email) {
+            const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            return re.test(email);
+        }
+
+        function getContactFormData() {
+            const name = document.getElementById("name").value.trim();
+            const email = document.getElementById("contactEmail").value.trim().toLowerCase();
+            const subject = document.getElementById("subject").value;
+            const message = document.getElementById("message").value.trim();
+
+            if (!name || !email || !subject || !message) {
+                alert("Por favor, preencha todos os campos do formulário.");
+                return null;
+            }
+            if (!validateEmail(email)) {
+                alert("Por favor, insira um email válido.");
+                return null;
+            }
+            return { name, email, subject, message };
+        }
+
+        async function persistContactMessage(channel, formData) {
+            const response = await fetch(`${API}/contact/messages`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    name: formData.name,
+                    email: formData.email,
+                    subject: formData.subject,
+                    message: formData.message,
+                    channel
+                })
+            });
+
+            const payload = await response.json().catch(() => ({}));
+            if (!response.ok) {
+                throw new Error(payload.error || "Falha ao enviar contacto.");
+            }
+            return payload;
+        }
+
+        function clearContactForm() {
+            document.getElementById("name").value = "";
+            document.getElementById("contactEmail").value = "";
+            document.getElementById("subject").value = "";
+            document.getElementById("message").value = "";
+        }
+
+        async function sendViaWhatsApp() {
+            const formData = getContactFormData();
+            if (!formData) return;
+
+            try {
+                await persistContactMessage("whatsapp", formData);
+                const subjectText = SUBJECT_LABELS[formData.subject] || "Assunto não especificado";
+                const phoneNumber = "258834957798";
+                const whatsappMessage =
+                    `Olá LinguaPro!\n\n*Nome:* ${formData.name}\n*Email:* ${formData.email}\n*Assunto:* ${subjectText}\n*Mensagem:*\n${formData.message}`;
+                const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(whatsappMessage)}`;
+                document.getElementById("confirmationTitle").textContent = "Mensagem registada e redirecionando!";
+                document.getElementById("confirmationMessage").textContent =
+                    "A sua mensagem foi guardada e o WhatsApp será aberto para envio.";
+                pendingRedirect = () => window.open(whatsappUrl, "_blank");
+                openModal("confirmationModal");
+                clearContactForm();
+            } catch (error) {
+                alert(error.message || "Erro ao enviar mensagem.");
+            }
+        }
+
+        async function sendViaEmail() {
+            const formData = getContactFormData();
+            if (!formData) return;
+
+            try {
+                await persistContactMessage("email", formData);
+                const subjectText = SUBJECT_LABELS[formData.subject] || "Assunto não especificado";
+                const companyEmail = "escoladelinguasdemaputo@gmail.com";
+                const emailSubject = `Contacto LinguaPro: ${subjectText}`;
+                const emailBody = `Olá LinguaPro,\n\nRecebi uma mensagem através do site:\n\nNome: ${formData.name}\nEmail: ${formData.email}\nAssunto: ${subjectText}\n\nMensagem:\n${formData.message}\n\n---\nEsta mensagem foi enviada através do site LinguaPro.`;
+                const mailtoUrl = `mailto:${companyEmail}?subject=${encodeURIComponent(emailSubject)}&body=${encodeURIComponent(emailBody)}`;
+                document.getElementById("confirmationTitle").textContent = "Mensagem registada e redirecionando!";
+                document.getElementById("confirmationMessage").textContent =
+                    "A sua mensagem foi guardada e o Email será aberto para envio.";
+                pendingRedirect = () => { window.location.href = mailtoUrl; };
+                openModal("confirmationModal");
+                clearContactForm();
+            } catch (error) {
+                alert(error.message || "Erro ao enviar mensagem.");
+            }
+        }
+
+        function confirmRedirect() {
+            closeModal("confirmationModal");
+            if (pendingRedirect) {
+                const action = pendingRedirect;
+                pendingRedirect = null;
+                action();
+            }
+        }
+
+        function login() {
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            if (!email || !password) {
+                alert("Preencha todos os campos");
+                return;
+            }
+
+            currentUser = { name: email.split("@")[0], email };
+            localStorage.setItem("user", JSON.stringify(currentUser));
+            closeModal("loginModal");
+            alert(`Bem-vindo(a), ${currentUser.name}!`);
+
+            if (!document.getElementById("name").value) {
+                document.getElementById("name").value = currentUser.name;
+            }
+            if (!document.getElementById("contactEmail").value) {
+                document.getElementById("contactEmail").value = currentUser.email;
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            loadUser();
+            if (currentUser) {
+                if (!document.getElementById("name").value) {
+                    document.getElementById("name").value = currentUser.name;
+                }
+                if (!document.getElementById("contactEmail").value) {
+                    document.getElementById("contactEmail").value = currentUser.email;
+                }
+            }
+        });
+
+        document.getElementById("contactEmail").addEventListener("blur", function () {
+            const email = this.value.trim();
+            if (email && !validateEmail(email)) {
+                alert("Por favor, insira um email válido.");
+                this.focus();
+            }
+        });
+    </script>
+</body>
+</html>
+
+
+
+

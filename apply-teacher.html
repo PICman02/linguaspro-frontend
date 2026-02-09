@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro Profissional | Sistema</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/css pages/teachers.css">
+
+</head>
+<body>
+    <div class="container">
+        <div class="left-panel">
+            <div class="logo">
+                <i class="fas fa-briefcase"></i>
+                <h1>Carreira Pro</h1>
+            </div>
+            
+            <h2>Cadastre-se gratuitamente</h2>
+            <p>Junte-se a milhares de profissionais que já utilizam nossa plataforma.</p>
+            
+            <ul class="benefits">
+                <li>
+                    <i class="fas fa-check-circle"></i>
+                    <div>
+                        <strong>Processo simplificado</strong>
+                        <p>Cadastro rápido em poucas etapas</p>
+                    </div>
+                </li>
+                <li>
+                    <i class="fas fa-shield-alt"></i>
+                    <div>
+                        <strong>Segurança garantida</strong>
+                        <p>Seus dados estão protegidos com criptografia</p>
+                    </div>
+                </li>
+                <li>
+                    <i class="fas fa-file-contract"></i>
+                    <div>
+                        <strong>Análise profissional</strong>
+                        <p>Nossa equipe analisaré suas qualificações</p>
+                    </div>
+                </li>
+                <li>
+                    <i class="fas fa-rocket"></i>
+                    <div>
+                        <strong>Oportunidades exclusivas</strong>
+                        <p>Acesso a vagas que combinam com seu perfil</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        
+        <div class="right-panel">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+            
+            <div class="steps-container">
+                <div class="step active" data-step="1">
+                    <div class="step-circle">1</div>
+                    <div class="step-text">Informações Pessoais</div>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-circle">2</div>
+                    <div class="step-text">Credenciais</div>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-circle">3</div>
+                    <div class="step-text">Profissional</div>
+                </div>
+                <div class="step" data-step="4">
+                    <div class="step-circle">4</div>
+                    <div class="step-text">Confirmação</div>
+                </div>
+            </div>
+            
+            <!-- Formulário Etapa 1: Informações Pessoais -->
+            <div id="formStep1" class="form-container active">
+                <div class="form-header">
+                    <h2>Informações Pessoais</h2>
+                    <p>Preencha seus dados básicos para começar</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="name" class="form-label">Nome Completo *</label>
+                    <input type="text" id="name" class="form-control" placeholder="Digite seu nome completo">
+                    <div id="nameValidation" class="validation-message"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email" class="form-label">E-mail *</label>
+                    <input type="email" id="email" class="form-control" placeholder="seu.email@exemplo.com">
+                    <div id="emailValidation" class="validation-message"></div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="phone" class="form-label">Telefone *</label>
+                        <input type="tel" id="phone" class="form-control" placeholder="(11) 99999-9999">
+                        <div id="phoneValidation" class="validation-message"></div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="birthdate" class="form-label">Data de Nascimento *</label>
+                        <input type="date" id="birthdate" class="form-control">
+                        <div id="birthdateValidation" class="validation-message"></div>
+                    </div>
+                </div>
+                
+                <div class="form-footer">
+                    <button class="btn btn-secondary" disabled>Voltar</button>
+                    <button id="nextStep1" class="btn btn-primary">Próxima Etapa</button>
+                </div>
+            </div>
+            
+            <!-- Formulário Etapa 2: Credenciais -->
+            <div id="formStep2" class="form-container">
+                <div class="form-header">
+                    <h2>Crie sua Conta</h2>
+                    <p>Escolha um nome de usuário e senha segura</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="username" class="form-label">Nome de Usuário *</label>
+                    <input type="text" id="username" class="form-control" placeholder="Escolha um nome de usuário">
+                    <div id="usernameValidation" class="validation-message"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="password" class="form-label">Senha *</label>
+                    <div class="password-toggle">
+                        <input type="password" id="password" class="form-control" placeholder="Crie uma senha segura">
+                        <i id="togglePassword" class="fas fa-eye"></i>
+                    </div>
+                    <div id="passwordValidation" class="validation-message"></div>
+                    <div class="validation-message">
+                        <small>A senha deve conter no mínimo 8 caracteres, incluindo letras maiúsculas, minúsculas, números e símbolos.</small>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="confirmPassword" class="form-label">Confirmar Senha *</label>
+                    <input type="password" id="confirmPassword" class="form-control" placeholder="Digite a senha novamente">
+                    <div id="confirmPasswordValidation" class="validation-message"></div>
+                </div>
+                
+                <div class="terms-checkbox">
+                    <input type="checkbox" id="terms">
+                    <label for="terms">
+                        Concordo com os <a href="#">Termos de Uso</a> e <a href="#">Política de Privacidade</a> do sistema *
+                    </label>
+                </div>
+                <div id="termsValidation" class="validation-message"></div>
+                
+                <div class="form-footer">
+                    <button id="backStep2" class="btn btn-secondary">Voltar</button>
+                    <button id="nextStep2" class="btn btn-primary">Próxima Etapa</button>
+                </div>
+            </div>
+            
+            <!-- Formulário Etapa 3: Informações Profissionais -->
+            <div id="formStep3" class="form-container">
+                <div class="form-header">
+                    <h2>Informações Profissionais</h2>
+                    <p>Preencha seus dados profissionais para análise do perfil</p>
+                </div>
+                
+                <div class="form-group">
+                    <label for="profession" class="form-label">área de Atuação *</label>
+                    <select id="profession" class="select-control">
+                        <option value="">Selecione sua área</option>
+                        <option value="ti">Tecnologia da Informação</option>
+                        <option value="saude">Saúde</option>
+                        <option value="engenharia">Engenharia</option>
+                        <option value="educacao">Educação</option>
+                        <option value="financas">Finanças</option>
+                        <option value="marketing">Marketing</option>
+                        <option value="juridico">Jurídico</option>
+                        <option value="outro">Outra</option>
+                    </select>
+                    <div id="professionValidation" class="validation-message"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="experience" class="form-label">Anos de Experiência *</label>
+                    <select id="experience" class="select-control">
+                        <option value="">Selecione</option>
+                        <option value="estagiario">Estagiário</option>
+                        <option value="junior">Até 2 anos (Júnior)</option>
+                        <option value="pleno">2-5 anos (Pleno)</option>
+                        <option value="senior">5-10 anos (Sênior)</option>
+                        <option value="especialista">Mais de 10 anos (Especialista)</option>
+                    </select>
+                    <div id="experienceValidation" class="validation-message"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="education" class="form-label">Nível de Escolaridade *</label>
+                    <select id="education" class="select-control">
+                        <option value="">Selecione</option>
+                        <option value="medio">Ensino Médio</option>
+                        <option value="tecnico">Técnico</option>
+                        <option value="superior_incompleto">Superior Incompleto</option>
+                        <option value="superior">Superior Completo</option>
+                        <option value="pos_graduacao">Pós-graduação</option>
+                        <option value="mestrado">Mestrado</option>
+                        <option value="doutorado">Doutorado</option>
+                    </select>
+                    <div id="educationValidation" class="validation-message"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Habilidades Técnicas *</label>
+                    <div class="checkbox-group">
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="skill1" value="gestao_projetos">
+                            <label for="skill1">Gestão de Projetos</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="skill2" value="ingles">
+                            <label for="skill2">inglês</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="skill3" value="programacao">
+                            <label for="skill3">Programação</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="skill4" value="design">
+                            <label for="skill4">Design</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="skill5" value="analise_dados">
+                            <label for="skill5">Análise de Dados</label>
+                        </div>
+                        <div class="checkbox-item">
+                            <input type="checkbox" id="skill6" value="comunicacao">
+                            <label for="skill6">Comunicação</label>
+                        </div>
+                    </div>
+                    <div id="skillsValidation" class="validation-message"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="objective" class="form-label">Objetivo Profissional *</label>
+                    <textarea id="objective" class="textarea-control" placeholder="Descreva brevemente seus objetivos profissionais (mínimo 50 caracteres)"></textarea>
+                    <div id="objectiveValidation" class="validation-message"></div>
+                    <div class="validation-message">
+                        <small id="charCount">0/200 caracteres</small>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Envio de Documentos</label>
+                    <div class="file-upload-area" id="fileUploadArea">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <p>Arraste e solte seu currículo e certificados aqui</p>
+                        <span>ou clique para selecionar os arquivos</span>
+                        <input type="file" id="fileInput" multiple accept=".pdf,.doc,.docx,.jpg,.jpeg,.png" style="display: none;">
+                    </div>
+                    <div class="validation-message">
+                        <small>Formatos aceitos: PDF, DOC, DOCX, JPG, PNG (máx. 5MB por arquivo)</small>
+                    </div>
+                    
+                    <ul class="file-list" id="fileList">
+                        <!-- Arquivos serão adicionados aqui dinamicamente -->
+                    </ul>
+                </div>
+                
+                <div class="form-footer">
+                    <button id="backStep3" class="btn btn-secondary">Voltar</button>
+                    <button id="nextStep3" class="btn btn-primary">Próxima Etapa</button>
+                </div>
+            </div>
+            
+            <!-- Formulário Etapa 4: Confirmação -->
+            <div id="formStep4" class="form-container">
+                <div class="form-header">
+                    <h2>Confirme seus Dados</h2>
+                    <p>Verifique se todas as informações estão corretas antes de finalizar</p>
+                </div>
+                
+                <div id="summaryContent">
+                    <!-- Os dados do resumo serão preenchidos pelo JavaScript -->
+                </div>
+                
+                <div class="form-footer">
+                    <button id="backStep4" class="btn btn-secondary">Voltar</button>
+                    <button id="submitForm" class="btn btn-primary">Enviar Cadastro</button>
+                </div>
+            </div>
+            
+            <!-- Mensagem de sucesso após o cadastro -->
+            <div id="pendingMessage" class="form-container">
+                <div class="pending-message">
+                    <i class="fas fa-hourglass-half"></i>
+                    <h2>Cadastro em Análise</h2>
+                    <p>Seu cadastro foi recebido com sucesso! Nossa equipe iré analisar suas informações profissionais e documentos.</p>
+                    <p><span class="email-highlight" id="registeredEmail"></span> em até 48 horas.</p>
+                    <p>Enquanto isso, você pode acessar sua conta para completar informações adicionais.</p>
+                    <div style="margin-top: 30px;">
+                        <button id="goToDashboard" class="btn btn-primary">Acessar Minha Conta</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/config/api.js"></script>
+    <script src="js/config/register.js"></script>
+</body>
+</html>
+

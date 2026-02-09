@@ -1,0 +1,528 @@
+﻿<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aulas Ao Vivo - LinguaPro</title>
+      <link rel="stylesheet" href="css/style.css">
+          <link rel="stylesheet" href="css/live.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    
+       
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container">
+            <a href="index.html" class="logo">
+                <i class="fas fa-language"></i>
+                <span>LinguaPro</span>
+            </a>
+            <nav class="nav-bar" id="navBar">
+                <a href="index.html"><i class="fas fa-home"></i> Home</a>
+                <a href="courses.html"><i class="fas fa-graduation-cap"></i> Cursos</a>
+                <a href="services.html"><i class="fas fa-concierge-bell"></i> Serviços</a>
+                <a href="library.html"><i class="fas fa-book"></i> Biblioteca</a>
+                <a href="live-classes.html" class="active"><i class="fas fa-video"></i> Aulas Ao Vivo</a>
+                <a href="professors.html"><i class="fas fa-chalkboard-teacher"></i> Professores</a>
+                <a href="mini-game.html"><i class="fas fa-gamepad"></i> Mini-Jogo</a>
+            </nav>
+            <div class="user-menu">
+                <div class="notification-icon" style="position: relative; cursor: pointer;">
+                    <i class="fas fa-bell" style="font-size: 1.2rem; color: var(--gray-color);"></i>
+                    <span class="notification-badge" id="notificationCount">3</span>
+                </div>
+                <div class="user-avatar-header" id="userAvatarHeader" title="Perfil do usuário">
+                    <span id="userAvatarInitial">V</span>
+                </div>
+                <button class="btn-login" id="openLoginModal">
+                    <i class="fas fa-user"></i> Login
+                </button>
+                <button class="btn-logout" id="logoutBtn" style="display: none;">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </button>
+                <button class="menu-toggle" id="menuToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Login Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeLoginModal">&times;</span>
+            <h2><i class="fas fa-sign-in-alt"></i> Login</h2>
+            <form id="loginForm">
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label for="email"><i class="fas fa-envelope"></i> Email:</label>
+                    <input type="email" id="email" placeholder="seu@email.com" required>
+                </div>
+                
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <label for="password"><i class="fas fa-lock"></i> Senha:</label>
+                    <input type="password" id="password" placeholder="Sua senha" required>
+                </div>
+                
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label for="userType"><i class="fas fa-users"></i> Tipo de Usuário:</label>
+                    <select id="userType">
+                        <option value="aluno">Aluno</option>
+                        <option value="professor">Professor</option>
+                        <option value="admin">Administrador</option>
+                    </select>
+                </div>
+                
+                <button type="submit" class="btn-primary" style="width: 100%;">
+                    <i class="fas fa-sign-in-alt"></i> Entrar
+                </button>
+                
+                <div class="form-toggle" style="text-align: center; margin-top: 1rem;">
+                    <span>Não tem uma conta?</span>
+                    <a href="#" id="toggleFormLink" style="color: var(--primary-color); text-decoration: none; font-weight: 600;">
+                        Cadastre-se
+                    </a>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Banner -->
+    <section class="banner">
+        <div class="container">
+            <div class="banner-content">
+                <h1><i class="fas fa-video"></i> Aulas Ao Vivo</h1>
+                <p>Participe das aulas ao vivo e interaja diretamente com os professores em tempo real. Aprenda idiomas de forma dinâmica e interativa.</p>
+                <div class="banner-stats">
+                    <div class="stat">
+                        <span class="stat-number" id="liveNow">0</span>
+                        <span class="stat-label">Aulas acontecendo agora</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number" id="upcoming">0</span>
+                        <span class="stat-label">Aulas agendadas</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number" id="teachers">0</span>
+                        <span class="stat-label">Professores online</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number" id="students">0</span>
+                        <span class="stat-label">Alunos ativos</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Filtros -->
+    <section class="live-filters">
+        <div class="container">
+            <h2><i class="fas fa-filter"></i> Encontre Aulas</h2>
+            <div class="filter-grid">
+                <div class="filter-group">
+                    <label for="filterCourse"><i class="fas fa-book"></i> Curso:</label>
+                    <select id="filterCourse">
+                        <option value="all">Todos os cursos</option>
+                        <option value="ingles">Inglês</option>
+                        <option value="portugues">Português</option>
+                        <option value="frances">Francês</option>
+                        <option value="espanhol">Espanhol</option>
+                        <option value="alemao">Alemão</option>
+                        <option value="italiano">Italiano</option>
+                        <option value="japones">Japonês</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="filterProfessor"><i class="fas fa-chalkboard-teacher"></i> Professor:</label>
+                    <select id="filterProfessor">
+                        <option value="all">Todos os professores</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="filterLevel"><i class="fas fa-chart-line"></i> Nível:</label>
+                    <select id="filterLevel">
+                        <option value="all">Todos</option>
+                        <option value="iniciante">Iniciante</option>
+                        <option value="intermediario">Intermediário</option>
+                        <option value="avancado">Avançado</option>
+                        <option value="conversacao">Conversação</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="filterDate"><i class="fas fa-calendar-alt"></i> Data:</label>
+                    <input type="text" id="filterDate" placeholder="Selecione uma data">
+                </div>
+                
+                <div class="filter-group">
+                    <label for="filterStatus"><i class="fas fa-circle"></i> Status:</label>
+                    <select id="filterStatus">
+                        <option value="all">Todas</option>
+                        <option value="live">Ao Vivo</option>
+                        <option value="upcoming">Agendadas</option>
+                        <option value="recorded">Gravadas</option>
+                    </select>
+                </div>
+                
+                <div class="filter-group">
+                    <label for="filterDuration"><i class="fas fa-clock"></i> Duração:</label>
+                    <select id="filterDuration">
+                        <option value="all">Qualquer duração</option>
+                        <option value="30">Até 30 min</option>
+                        <option value="60">30-60 min</option>
+                        <option value="90">60-90 min</option>
+                        <option value="120">Mais de 90 min</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="filter-actions">
+                <button id="applyFilters" class="btn-primary">
+                    <i class="fas fa-search"></i> Buscar Aulas
+                </button>
+                <button id="resetFilters" class="btn-secondary">
+                    <i class="fas fa-redo"></i> Limpar Filtros
+                </button>
+                <button id="scheduleClassBtn" class="btn-secondary" style="display: none;" onclick="openScheduleModal()">
+                    <i class="fas fa-plus"></i> Agendar Aula
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Lista de Aulas -->
+    <section class="live-classes-content">
+        <div class="container">
+            <div class="classes-header">
+                <h2><i class="fas fa-list"></i> Aulas Disponíveis</h2>
+                <div class="view-options">
+                    <button id="gridView" class="view-btn active">
+                        <i class="fas fa-th"></i>
+                    </button>
+                    <button id="listView" class="view-btn">
+                        <i class="fas fa-list"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="cards-grid" id="liveClassesContainer">
+                <!-- As aulas seráo carregadas via JavaScript -->
+            </div>
+            
+            <div class="empty-state" id="emptyState" style="display:none;">
+                <i class="fas fa-video-slash"></i>
+                <h3>Nenhuma aula encontrada</h3>
+                <p>Não há aulas disponíveis com os filtros selecionados. Tente ajustar os critérios de busca.</p>
+            </div>
+            
+            <div class="pagination" id="pagination" style="display: none;">
+                <button class="page-btn" id="prevPage" disabled>
+                    <i class="fas fa-chevron-left"></i> Anterior
+                </button>
+                <span class="page-info">Página <span id="currentPage">1</span> de <span id="totalPages">1</span></span>
+                <button class="page-btn" id="nextPage">
+                    Próxima <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal de Aula -->
+    <div class="modal" id="classModal">
+        <div class="modal-content class-modal">
+            <span class="close-modal" id="closeClassModal">&times;</span>
+            
+            <div class="class-modal-header">
+                <span class="class-modal-status" id="classStatus">AO VIVO</span>
+                <h2 id="classTitle">Inglês Básico: Conversação Inicial</h2>
+                <p id="classDescription">Aprenda as primeiras frases e cumprimentos em inglês em uma aula prática e interativa.</p>
+            </div>
+            
+            <div class="class-modal-info">
+                <div class="info-box">
+                    <i class="fas fa-book"></i>
+                    <div>
+                        <strong>Curso:</strong>
+                        <span id="classCourse">Inglês</span>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                    <div>
+                        <strong>Professor:</strong>
+                        <span id="classProfessor">Maria Silva</span>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <i class="fas fa-calendar-alt"></i>
+                    <div>
+                        <strong>Início:</strong>
+                        <span id="classStart">Hoje, 15:00</span>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <i class="fas fa-clock"></i>
+                    <div>
+                        <strong>Duração:</strong>
+                        <span id="classDuration">60 minutos</span>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <i class="fas fa-users"></i>
+                    <div>
+                        <strong>Vagas:</strong>
+                        <span id="classSpots">12/25 preenchidas</span>
+                    </div>
+                </div>
+                
+                <div class="info-box">
+                    <i class="fas fa-layer-group"></i>
+                    <div>
+                        <strong>Nível:</strong>
+                        <span id="classLevel">Iniciante</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="class-modal-body">
+                <h3><i class="fas fa-clipboard-list"></i> Conteúdo da Aula</h3>
+                <ul id="classContent">
+                    <li>Cumprimentos e apresentações</li>
+                    <li>Perguntas básicas em inglês</li>
+                    <li>Pronúncia de vogais e consoantes</li>
+                    <li>Exercícios de conversação guiada</li>
+                </ul>
+                
+                <h3><i class="fas fa-download"></i> Materiais de Apoio</h3>
+                <div class="materials-list" id="classMaterials">
+                    <a href="#" class="material-item">
+                        <i class="fas fa-file-pdf"></i> Apostila - Aula 1.pdf
+                    </a>
+                    <a href="#" class="material-item">
+                        <i class="fas fa-headphones"></i> Áudio - Pronúncia.mp3
+                    </a>
+                    <a href="#" class="material-item">
+                        <i class="fas fa-file-powerpoint"></i> Slides da Aula.pptx
+                    </a>
+                </div>
+                
+                <h3><i class="fas fa-chalkboard-teacher"></i> Sobre o Professor</h3>
+                <div class="teacher-info">
+                    <div class="teacher-avatar">
+                        <i class="fas fa-user-circle"></i>
+                    </div>
+                    <div class="teacher-details">
+                        <h4 id="teacherName">Maria Silva</h4>
+                        <p id="teacherBio">Professora de inglês com 10 anos de experiência, especializada em ensino para iniciantes. Formada em Letras pela Universidade de Lisboa.</p>
+                        <div class="teacher-rating">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span>4.7 (128 avaliações)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="class-actions">
+                <button id="joinClassBtn" class="btn-primary">
+                    <i class="fas fa-video"></i> Entrar na Aula
+                </button>
+                <button id="setReminderBtn" class="btn-secondary">
+                    <i class="fas fa-bell"></i> Definir Lembrete
+                </button>
+                <button id="shareClassBtn" class="btn-secondary">
+                    <i class="fas fa-share-alt"></i> Compartilhar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de Video (Simulação) -->
+    <div class="modal" id="videoModal">
+        <div class="modal-content" style="max-width: 900px; padding: 0; background: black;">
+            <span class="close-modal" id="closeVideoModal" style="color: white; z-index: 10;">&times;</span>
+            <div style="position: relative; padding-top: 56.25%;">
+                <div style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; display: flex; flex-direction: column; justify-content: center; align-items: center; color: white;">
+                    <i class="fas fa-video" style="font-size: 4rem; margin-bottom: 1rem;"></i>
+                    <h3>Simulação de Aula Ao Vivo</h3>
+                    <p>A aula ao vivo começará em breve...</p>
+                    <div class="btn-primary" style="margin-top: 2rem; background: var(--live-color);" onclick="startSimulatedClass()">
+                        <i class="fas fa-play"></i> Iniciar Simulação
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<!-- Modal de Agendamento de Aula -->
+<div class="modal" id="scheduleModal">
+    <div class="modal-content">
+        <span class="close-modal" id="closeScheduleModal">&times;</span>
+        <h2><i class="fas fa-plus"></i> Agendar Nova Aula</h2>
+        <form id="scheduleForm">
+            <div class="form-group">
+                <label for="classTitleInput">Título da Aula:</label>
+                <input type="text" id="classTitleInput" placeholder="Ex: Inglês Básico" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="classDescriptionInput">Descrição:</label>
+                <textarea id="classDescriptionInput" placeholder="Descrição da aula" required></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="classCourseInput">Curso:</label>
+                <select id="classCourseInput" required>
+                    <option value="ingles">Inglês</option>
+                    <option value="portugues">Português</option>
+                    <option value="frances">Francês</option>
+                    <option value="espanhol">Espanhol</option>
+                    <option value="alemao">Alemão</option>
+                    <option value="italiano">Italiano</option>
+                    <option value="japones">Japonês</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="classLevelInput">Nível:</label>
+                <select id="classLevelInput" required>
+                    <option value="iniciante">Iniciante</option>
+                    <option value="intermediario">Intermediário</option>
+                    <option value="avancado">Avançado</option>
+                    <option value="conversacao">Conversação</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="classDateInput">Data:</label>
+                <input type="text" id="classDateInput" placeholder="Selecione uma data" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="classTimeInput">Hora de Início:</label>
+                <input type="time" id="classTimeInput" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="classDurationInput">Duração (minutos):</label>
+                <input type="number" id="classDurationInput" min="10" max="180" value="60" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="classSpotsInput">Vagas:</label>
+                <input type="number" id="classSpotsInput" min="1" value="20" required>
+            </div>
+
+            <div class="form-group">
+                <label for="classContentInput">Conteúdo da Aula:</label>
+                <textarea id="classContentInput" placeholder="Uma linha por tópico" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="classMaterialsInput">Materiais de Apoio (opcional):</label>
+                <textarea id="classMaterialsInput" placeholder="Uma linha por material"></textarea>
+            </div>
+            
+            <div class="form-group">
+                <label for="classStatusInput">Status:</label>
+                <select id="classStatusInput" required>
+                    <option value="upcoming">Agendada</option>
+                    <option value="live">Ao Vivo</option>
+                    <option value="recorded">Gravada</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="classVisibilityInput">Disponibilidade:</label>
+                <select id="classVisibilityInput" required>
+                    <option value="public">Todos</option>
+                    <option value="enrolled">Somente inscritos</option>
+                </select>
+            </div>
+            
+            <button type="submit" class="btn-primary">
+                <i class="fas fa-save"></i> Agendar Aula
+            </button>
+        </form>
+    </div>
+</div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3><i class="fas fa-language"></i> LinguaPro</h3>
+                    <p>Aprenda idiomas de forma interativa com os melhores professores em aulas ao vivo.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Contato</h4>
+                    <p><i class="fas fa-phone"></i> +258 83 495 7798</p>
+                    <p><i class="fas fa-envelope"></i> escoladelinguasdemaputo@gmail.com</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Maputo, Moçambique</p>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Links Rápidos</h4>
+                    <a href="courses.html">Cursos</a>
+                    <a href="live-classes.html">Aulas Ao Vivo</a>
+                    <a href="professors.html">Professores</a>
+                    <a href="library.html">Biblioteca</a>
+                    <a href="mini-game.html">Mini-Jogo</a>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Horários de Suporte</h4>
+                    <p>Segunda a Sexta: 8h - 20h</p>
+                    <p>Sábado: 9h - 18h</p>
+                    <p>Domingo: 10h - 16h</p>
+                    <button class="btn-secondary" style="margin-top: 1rem; width: 100%;" onclick="openSupportChat()">
+                        <i class="fas fa-comments"></i> Suporte Online
+                    </button>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2025 LinguaPro. Todos os direitos reservados.</p>
+                <div class="footer-links">
+                    <a href="#">Política de Privacidade</a>
+                    <a href="#">Termos de Uso</a>
+                    <a href="#">FAQ</a>
+                    <a href="#">Suporte</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/pt.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+   <script src="js/config/api.js"></script>
+   <script src="js/session-nav.js"></script>
+   <script src="js/config/live-classes.js"></script>
+</body>
+</html>
+
+
+
+

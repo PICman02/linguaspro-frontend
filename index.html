@@ -1,0 +1,862 @@
+﻿<!DOCTYPE html>
+<html lang="pt-MZ">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="EduPortal MZ - Portal Educacional de Moçambique. Cursos, LinguaPro, professores qualificados e experiências transformadoras.">
+    <meta name="keywords" content="educação Moçambique, cursos idiomas, professores qualificados, LinguaPro, tradução, certificação">
+    <meta name="author" content="EduPortal MZ">
+    
+    <title>EduPortal MZ - Excelência em Educação Digital</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <!-- CSS Principal -->
+    <link rel="stylesheet" href="css/css pages/index.css">
+    
+    <!-- CSS específico da página inicial -->
+    
+</head>
+<body>
+    <!-- Header --> 
+    <header class="site-header" id="siteHeader">
+        <div class="container-xl">
+            <nav class="navbar navbar-expand-lg py-3">
+                <a href="index.html" class="brand d-flex align-items-center text-decoration-none" aria-label="EduPortal MZ - Excelência em Educação">
+                    <!-- Logo placeholder -->
+                    <div class="brand-icon bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                        <i class="bi bi-mortarboard-fill text-white fs-4"></i>
+                    </div>
+                    <div class="brand-text">
+                        <span class="brand-name fw-bold fs-4 text-dark">EduPortal MZ</span>
+                        <span class="brand-tagline d-block text-muted small">Excelência em Educação Digital</span>
+                    </div>
+                </a>
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+                        data-bs-target="#navbarNav" aria-controls="navbarNav" 
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="bi bi-list fs-3"></i>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto align-items-lg-center">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#home">
+                                <i class="bi bi-house-door me-2"></i>Início
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#features">
+                                <i class="bi bi-stars me-2"></i>Destaques
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#courses">
+                                <i class="bi bi-book me-2"></i>Cursos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#teachers">
+                                <i class="bi bi-people me-2"></i>Professores
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#testimonials">
+                                <i class="bi bi-chat-quote me-2"></i>Experiências
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#services">
+                                <i class="bi bi-gear me-2"></i>Serviços
+                            </a>
+                        </li>
+                        <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
+                            <a href="login.html" class="btn btn-primary w-100" id="headerLoginBtn">
+                                <i class="bi bi-person-circle me-2"></i>
+                                Login
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Banner -->
+    <section class="hero-banner" id="home">
+        <div class="container-xl">
+            <div class="hero-content" data-aos="fade-up" data-aos-duration="1000">
+                <h1 class="hero-title">
+                    Transforme seu Futuro com Educação de Excelência
+                </h1>
+                <p class="hero-subtitle">
+                    Na EduPortal MZ, combinamos tecnologia avançada com metodologias 
+                    inovadoras para oferecer a melhor experiência educacional em Moçambique.
+                </p>
+                
+                <div class="cta-buttons" data-aos="fade-up" data-aos-delay="200">
+                    <a href="#courses" class="btn btn-primary btn-lg">
+                        <i class="bi bi-search me-2"></i>
+                        Explorar Cursos
+                    </a>
+                    <a href="login.html?tab=register" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-person-plus me-2"></i>
+                        Cadastre-se Grátis
+                    </a>
+                    <a href="#services" class="btn btn-light btn-lg">
+                        <i class="bi bi-gear me-2"></i>
+                        Nossos Serviços
+                    </a>
+                </div>
+                
+                <div class="hero-stats" data-aos="fade-up" data-aos-delay="400">
+                    <div class="stat-item">
+                        <div class="stat-number" data-count="5000">0</div>
+                        <div class="stat-label">Alunos Formados</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-count="120">0</div>
+                        <div class="stat-label">Cursos Disponíveis</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-count="98">0</div>
+                        <div class="stat-label">% Satisfação</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-count="50">0</div>
+                        <div class="stat-label">Professores Especialistas</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Destaques -->
+    <section id="features" class="py-5">
+        <div class="container-xl">
+            <div class="section-header" data-aos="fade-up">
+                <h2 class="section-title">Por que Escolher a EduPortal MZ?</h2>
+                <p class="section-subtitle">
+                    Oferecemos uma experiência educacional completa e personalizada 
+                    para atender às suas necessidades específicas.
+                </p>
+            </div>
+            
+            <div class="feature-grid">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">
+                        <i class="bi bi-globe-americas"></i>
+                    </div>
+                    <h3>LinguaPro Premium</h3>
+                    <p>
+                        Plataforma interativa de idiomas com inteligência artificial, 
+                        reconhecimento de voz e certificação internacional.
+                    </p>
+                    <a href="services.html#linguapro" class="btn btn-outline-primary">
+                        Saiba Mais
+                    </a>
+                </div>
+                
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
+                        <i class="bi bi-person-video"></i>
+                    </div>
+                    <h3>Aulas ao Vivo</h3>
+                    <p>
+                        Sessões interativas com professores especializados, 
+                        em tempo real, para dúvidas e aprendizagem prática.
+                    </p>
+                    <a href="live-classes.html" class="btn btn-outline-primary">
+                        Ver Grade
+                    </a>
+                </div>
+                
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon">
+                        <i class="bi bi-briefcase"></i>
+                    </div>
+                    <h3>Consultoria Corporativa</h3>
+                    <p>
+                        Soluções personalizadas para empresas: treinamentos 
+                        in-company, desenvolvimento de equipes e assessoria.
+                    </p>
+                    <a href="services.html#corporate" class="btn btn-outline-primary">
+                        Para Empresas
+                    </a>
+                </div>
+                
+               
+                    
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cursos -->
+    <section id="courses" class="courses-section">
+        <div class="container-xl">
+            <div class="section-header" data-aos="fade-up">
+                <h2 class="section-title">Nossos Cursos em Destaque</h2>
+                <p class="section-subtitle">
+                    Programas cuidadosamente elaborados para seu desenvolvimento 
+                    profissional e pessoal.
+                </p>
+            </div>
+            
+            <div class="course-grid">
+                <div class="course-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="course-header">
+                        <h3>Inglês Corporativo Avançado</h3>
+                        <span class="course-category">Línguas</span>
+                        <div class="mt-3">
+                            <span class="badge bg-light text-dark me-2">
+                                <i class="bi bi-clock"></i> 6 meses
+                            </span>
+                            <span class="badge bg-light text-dark">
+                                <i class="bi bi-people"></i> 20 vagas
+                            </span>
+                        </div>
+                    </div>
+                    <div class="course-body">
+                        <p>
+                            Desenvolva fluência em contextos profissionais com foco 
+                            em negociações, apresentações e comunicação executiva.
+                        </p>
+                        <ul class="course-features">
+                            <li><i class="bi bi-check-circle text-success"></i> Certificação internacional</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Mentorias individuais</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Simulações reais</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Material exclusivo</li>
+                        </ul>
+                        <a href="courses.html?course=english" class="btn btn-primary w-100">
+                            Inscreva-se Agora
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="course-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="course-header">
+                        <h3>Tradução e Interpretação</h3>
+                        <span class="course-category">Profissional</span>
+                        <div class="mt-3">
+                            <span class="badge bg-light text-dark me-2">
+                                <i class="bi bi-clock"></i> 8 meses
+                            </span>
+                            <span class="badge bg-light text-dark">
+                                <i class="bi bi-people"></i> 15 vagas
+                            </span>
+                        </div>
+                    </div>
+                    <div class="course-body">
+                        <p>
+                            Formação completa para tradutores e intérpretes 
+                            profissionais com ênfase em mercado internacional.
+                        </p>
+                        <ul class="course-features">
+                            <li><i class="bi bi-check-circle text-success"></i> Software especializado</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Prática com clientes reais</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Especialização por área</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Rede de contatos</li>
+                        </ul>
+                        <a href="courses.html?course=translation" class="btn btn-primary w-100">
+                            Inscreva-se Agora
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="course-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="course-header">
+                        <h3>Português para Negócios</h3>
+                        <span class="course-category">Línguas</span>
+                        <div class="mt-3">
+                            <span class="badge bg-light text-dark me-2">
+                                <i class="bi bi-clock"></i> 4 meses
+                            </span>
+                            <span class="badge bg-light text-dark">
+                                <i class="bi bi-people"></i> 25 vagas
+                            </span>
+                        </div>
+                    </div>
+                    <div class="course-body">
+                        <p>
+                            Domine o português empresarial para reuniões, 
+                            relatórios e comunicação corporativa eficiente.
+                        </p>
+                        <ul class="course-features">
+                            <li><i class="bi bi-check-circle text-success"></i> Foco em terminologia</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Redação empresarial</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Pronúncia corporativa</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Cultura empresarial</li>
+                        </ul>
+                        <a href="courses.html?course=portuguese" class="btn btn-primary w-100">
+                            Inscreva-se Agora
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-5" data-aos="fade-up">
+                <a href="courses.html" class="btn btn-outline-primary btn-lg">
+                    <i class="bi bi-grid-3x3-gap me-2"></i>
+                    Ver Todos os Cursos
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Professores -->
+    <section id="teachers" class="teachers-section">
+        <div class="container-xl">
+            <div class="section-header" data-aos="fade-up">
+                <h2 class="section-title">Nossa Equipe de Especialistas</h2>
+                <p class="section-subtitle">
+                    Professores com experiência internacional e paixão pelo ensino.
+                </p>
+            </div>
+            
+            <div class="teacher-grid">
+                <div class="teacher-card" data-aos="fade-up" data-aos-delay="100">
+                    <!-- Placeholder image -->
+                    <div class="teacher-image bg-primary d-flex align-items-center justify-content-center">
+                        <i class="bi bi-person-circle text-white fs-1"></i>
+                    </div>
+                    <div class="teacher-info">
+                        <h3 class="teacher-name">Prof. Maria Santos</h3>
+                        <div class="teacher-title">Doutora em Linguística Aplicada</div>
+                        <div class="teacher-rating">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <span class="ms-2 text-muted">5.0 (320 avaliações)</span>
+                        </div>
+                        <p class="text-muted">
+                            15 anos de experiência em ensino de idiomas, 
+                            autora de 3 livros sobre metodologia de ensino.
+                        </p>
+                        <div class="teacher-skills">
+                            <span class="skill-tag">Inglês</span>
+                            <span class="skill-tag">Metodologia</span>
+                            <span class="skill-tag">Pronúncia</span>
+                        </div>
+                        <a href="professors.html?professor=maria" class="btn btn-outline-primary w-100 mt-3">
+                            Ver Portfólio
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="teacher-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="teacher-image bg-success d-flex align-items-center justify-content-center">
+                        <i class="bi bi-person-circle text-white fs-1"></i>
+                    </div>
+                    <div class="teacher-info">
+                        <h3 class="teacher-name">Prof. João Maputo</h3>
+                        <div class="teacher-title">Mestre em Tradução Simultânea</div>
+                        <div class="teacher-rating">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-half"></i>
+                            <span class="ms-2 text-muted">4.8 (275 avaliações)</span>
+                        </div>
+                        <p class="text-muted">
+                            Intérprete oficial da ONU por 8 anos, especialista 
+                            em tradução jurídica e empresarial.
+                        </p>
+                        <div class="teacher-skills">
+                            <span class="skill-tag">Tradução</span>
+                            <span class="skill-tag">Interpretação</span>
+                            <span class="skill-tag">Jurídico</span>
+                        </div>
+                        <a href="professors.html?professor=joao" class="btn btn-outline-primary w-100 mt-3">
+                            Ver Portfólio
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="teacher-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="teacher-image bg-warning d-flex align-items-center justify-content-center">
+                        <i class="bi bi-person-circle text-white fs-1"></i>
+                    </div>
+                    <div class="teacher-info">
+                        <h3 class="teacher-name">Prof. Ana Bela</h3>
+                        <div class="teacher-title">Especialista em Português Empresarial</div>
+                        <div class="teacher-rating">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <span class="ms-2 text-muted">5.0 (190 avaliações)</span>
+                        </div>
+                        <p class="text-muted">
+                            Consultora de comunicação para multinacionais, 
+                            desenvolvedora do método "Português Executivo".
+                        </p>
+                        <div class="teacher-skills">
+                            <span class="skill-tag">Português</span>
+                            <span class="skill-tag">Comunicação</span>
+                            <span class="skill-tag">Corporativo</span>
+                        </div>
+                        <a href="professors.html?professor=ana" class="btn btn-outline-primary w-100 mt-3">
+                            Ver Portfólio
+                        </a>
+                    </div>
+                </div>
+                
+                
+                </div>
+            </div>
+            
+            <div class="text-center mt-5" data-aos="fade-up">
+                <a href="professors.html" class="btn btn-outline-primary btn-lg">
+                    <i class="bi bi-people-fill me-2"></i>
+                    Conheça Todos os Professores
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Seção de Serviços -->
+    <section id="services" class="services-section py-5 bg-light">
+        <div class="container-xl">
+            <div class="section-header" data-aos="fade-up">
+                <h2 class="section-title">Nossos Serviços Especializados</h2>
+                <p class="section-subtitle">
+                    Oferecemos soluções educacionais completas e personalizadas para indivíduos, 
+                    empresas e instituições.
+                </p>
+            </div>
+
+            <div class="row row-cols-1 row-cols-md-2 g-4 mt-4">
+                <!-- Serviço 1 -->
+                <div class="col" data-aos="fade-up" data-aos-delay="100">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="bg-primary bg-opacity-10 rounded-circle p-3 me-3">
+                                    <i class="bi bi-translate text-primary fs-3"></i>
+                                </div>
+                                <h5 class="card-title mb-0">Tradução Profissional</h5>
+                            </div>
+                            <p class="card-text text-muted">
+                                Serviços de tradução técnica, jurídica, comercial e literária em mais de 20 idiomas.
+                            </p>
+                            <div class="mt-3">
+                                <span class="badge bg-light text-dark me-2 mb-2">Tradução Técnica</span>
+                                <span class="badge bg-light text-dark me-2 mb-2">Certificação Notarial</span>
+                                <span class="badge bg-light text-dark mb-2">Localização</span>
+                            </div>
+                            <div class="mt-4">
+                                <a href="services.html#translation" class="btn btn-primary">Solicitar Orçamento</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Serviço 2 -->
+                <div class="col" data-aos="fade-up" data-aos-delay="200">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="bg-info bg-opacity-10 rounded-circle p-3 me-3">
+                                    <i class="bi bi-headset text-info fs-3"></i>
+                                </div>
+                                <h5 class="card-title mb-0">Interpretação Simultânea</h5>
+                            </div>
+                            <p class="card-text text-muted">
+                                Serviços de interpretação para conferências, reuniões e eventos internacionais.
+                            </p>
+                            <div class="mt-3">
+                                <span class="badge bg-light text-dark me-2 mb-2">Simultânea</span>
+                                <span class="badge bg-light text-dark me-2 mb-2">Consecutiva</span>
+                                <span class="badge bg-light text-dark mb-2">Equipamentos</span>
+                            </div>
+                            <div class="mt-4">
+                                <a href="services.html#interpretation" class="btn btn-info text-white">Agendar Serviço</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Serviço 3 -->
+                <div class="col" data-aos="fade-up" data-aos-delay="300">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="bg-warning bg-opacity-10 rounded-circle p-3 me-3">
+                                    <i class="bi bi-briefcase-fill text-warning fs-3"></i>
+                                </div>
+                                <h5 class="card-title mb-0">Consultoria Empresarial</h5>
+                            </div>
+                            <p class="card-text text-muted">
+                                Programas de formação linguística personalizados para empresas e organizações.
+                            </p>
+                            <div class="mt-3">
+                                <span class="badge bg-light text-dark me-2 mb-2">Diagnóstico</span>
+                                <span class="badge bg-light text-dark me-2 mb-2">Programas In-Company</span>
+                                <span class="badge bg-light text-dark mb-2">Certificações</span>
+                            </div>
+                            <div class="mt-4">
+                                <a href="services.html#corporate" class="btn btn-warning text-white">Solicitar Consultoria</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Serviço 4 -->
+                <div class="col" data-aos="fade-up" data-aos-delay="400">
+                    <div class="card h-100 border-0 shadow-sm">
+                        <div class="card-body p-4">
+                            <div class="d-flex align-items-center mb-3">
+                                <div class="bg-success bg-opacity-10 rounded-circle p-3 me-3">
+                                    <i class="bi bi-award text-success fs-3"></i>
+                                </div>
+                                <h5 class="card-title mb-0">Certificação Linguística</h5>
+                            </div>
+                            <p class="card-text text-muted">
+                                Exames de proficiência e certificação oficial reconhecida internacionalmente.
+                            </p>
+                            <div class="mt-3">
+                                <span class="badge bg-light text-dark me-2 mb-2">CELPE-Bras</span>
+                                <span class="badge bg-light text-dark me-2 mb-2">TOEFL/IELTS</span>
+                                <span class="badge bg-light text-dark mb-2">DELF/DALF</span>
+                            </div>
+                            <div class="mt-4">
+                                <a href="certificates.html" class="btn btn-success">Agendar Exame</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-5" data-aos="fade-up">
+                <a href="services.html" class="btn btn-outline-primary btn-lg">
+                    <i class="bi bi-grid-3x3-gap me-2"></i>
+                    Ver Todos os Serviços
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experiências de Alunos -->
+    <section id="testimonials" class="testimonials-section py-5">
+        <div class="container-xl">
+            <div class="section-header" data-aos="fade-up">
+                <h2 class="section-title">Experiências que Transformam</h2>
+                <p class="section-subtitle">
+                    Histórias reais de alunos que alcançaram seus objetivos 
+                    através da nossa plataforma.
+                </p>
+            </div>
+            
+            <div id="testimonialCarousel" class="carousel slide mt-4" data-bs-ride="carousel" data-aos="fade-up">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <div class="testimonial-card mx-auto" style="max-width: 800px;">
+                            <div class="testimonial-content">
+                                "Após completar o curso de Inglês Corporativo, fui promovida 
+                                a Gerente de Exportação na minha empresa. A metodologia prática 
+                                e os casos reais foram decisivos para meu desenvolvimento."
+                            </div>
+                            <div class="testimonial-author mt-4">
+                                <div class="author-avatar bg-primary rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px;">
+                                    <i class="bi bi-person text-white fs-4"></i>
+                                </div>
+                                <div class="author-info">
+                                    <h5 class="mb-1">Isabela Mondlane</h5>
+                                    <p class="text-muted mb-1">Gerente de Exportação - Cimentos de Moçambique</p>
+                                    <small class="text-muted">Curso: Inglês Corporativo Avançado</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="carousel-item">
+                        <div class="testimonial-card mx-auto" style="max-width: 800px;">
+                            <div class="testimonial-content">
+                                "Como tradutor freelancer, o curso de Tradução e Interpretação 
+                                me deu as ferramentas necessárias para competir no mercado 
+                                internacional."
+                            </div>
+                            <div class="testimonial-author mt-4">
+                                <div class="author-avatar bg-success rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 60px; height: 60px;">
+                                    <i class="bi bi-person text-white fs-4"></i>
+                                </div>
+                                <div class="author-info">
+                                    <h5 class="mb-1">David Tembe</h5>
+                                    <p class="text-muted mb-1">Tradutor Freelancer</p>
+                                    <small class="text-muted">Curso: Tradução e Interpretação</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Anterior</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Próximo</span>
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Final -->
+    <section id="contact" class="cta-section py-5">
+        <div class="container-xl">
+            <div class="cta-content text-center" data-aos="fade-up">
+                <h2 class="cta-title mb-4">Pronto para Transformar sua Carreira?</h2>
+                <p class="hero-subtitle mb-4 mx-auto" style="max-width: 600px;">
+                    Entre em contato com nossos consultores educacionais e descubra 
+                    o plano perfeito para seus objetivos.
+                </p>
+                
+                <div class="cta-buttons justify-content-center">
+                    <a href="contact.html" class="btn btn-primary btn-lg me-2 mb-2">
+                        <i class="bi bi-whatsapp me-2"></i>
+                        WhatsApp +258 83 495 7798
+                    </a>
+                    <a href="login.html?tab=register" class="btn btn-outline-primary btn-lg mb-2">
+                        <i class="bi bi-person-plus me-2"></i>
+                        Cadastre-se Agora
+                    </a>
+                </div>
+                
+                <div class="mt-5 text-muted">
+                   <h5 class="mb-3">Horário de Atendimento</h5>
+                    <p class="mb-1">Segunda a Sexta: 8h00 - 18h00</p>
+                    <p>Sábado: 9h00 - 13h00</p>
+                </div>
+            e iv>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer py-5">
+        <div class="container-xl">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <a href="index.html" class="brand d-inline-flex mb-4 text-decoration-none">
+                        <div class="brand-icon bg-white rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                            <i class="bi bi-mortarboard-fill text-primary fs-4"></i>
+                        </div>
+                        <div class="brand-text">
+                            <span class="brand-name fw-bold fs-5 text-white">EduPortal MZ</span>
+                            <span class="brand-tagline d-block text-white-50 small">Excelência em Educação</span>
+                        </div>
+                    </a>
+                    <p class="text-white-50 mb-4">
+                        Líder em educação digital em Moçambique, transformando 
+                        vidas através do conhecimento e da inovação tecnológica.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="text-white text-decoration-none me-3" aria-label="Facebook">
+                            <i class="bi bi-facebook fs-5"></i>
+                        </a>
+                        <a href="#" class="text-white text-decoration-none me-3" aria-label="LinkedIn">
+                            <i class="bi bi-linkedin fs-5"></i>
+                        </a>
+                        <a href="#" class="text-white text-decoration-none me-3" aria-label="Instagram">
+                            <i class="bi bi-instagram fs-5"></i>
+                        </a>
+                        <a href="#" class="text-white text-decoration-none" aria-label="YouTube">
+                            <i class="bi bi-youtube fs-5"></i>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h5 class="text-white mb-3">Cursos</h5>
+                    <ul class="footer-links list-unstyled">
+                        <li class="mb-2"><a href="courses.html?category=languages" class="text-white-50 text-decoration-none">Inglês</a></li>
+                        <li class="mb-2"><a href="courses.html?category=languages" class="text-white-50 text-decoration-none">Português</a></li>
+                        <li class="mb-2"><a href="courses.html?category=professional" class="text-white-50 text-decoration-none">Tradução</a></li>
+                        <li class="mb-2"><a href="courses.html?category=corporate" class="text-white-50 text-decoration-none">Corporativos</a></li>
+                        <li><a href="courses.html?category=technical" class="text-white-50 text-decoration-none">Técnicos</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h5 class="text-white mb-3">Serviços</h5>
+                    <ul class="footer-links list-unstyled">
+                        <li class="mb-2"><a href="services.html#linguapro" class="text-white-50 text-decoration-none">LinguaPro</a></li>
+                        <li class="mb-2"><a href="library.html" class="text-white-50 text-decoration-none">Biblioteca Digital</a></li>
+                        <li class="mb-2"><a href="certificates.html" class="text-white-50 text-decoration-none">Certificados</a></li>
+                        <li><a href="contact.html" class="text-white-50 text-decoration-none">Suporte</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h5 class="text-white mb-3">Contactos</h5>
+                    <div class="contact-info">
+                        <p class="text-white-50 mb-2">
+                            <i class="bi bi-geo-alt me-2"></i> Av. 25 de Setembro, Maputo
+                        </p>
+                        <p class="text-white-50 mb-2">
+                            <i class="bi bi-telephone me-2"></i> +258 83 495 7798
+                        </p>
+                        <p class="text-white-50 mb-2">
+                            <i class="bi bi-whatsapp me-2"></i> +258 84 123 4567
+                        </p>
+                        <p class="text-white-50">
+                            <i class="bi bi-envelope me-2"></i> contato@eduportalmz.co.mz
+                        </p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright mt-5 pt-4 border-top border-white-10">
+                <p class="text-center text-white-50 mb-2">
+                    &copy; 2025 EduPortal MZ. Todos os direitos reservados.
+                </p>
+                <p class="text-center">
+                    <a href="privacy.html" class="text-white-50 text-decoration-none me-3">Política de Privacidade</a>
+                    <a href="terms.html" class="text-white-50 text-decoration-none">Termos de Uso</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- AOS Animation -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script>
+        // Inicializar AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('siteHeader');
+            if (window.scrollY > 50) {
+                header.classList.add('bg-white', 'shadow-sm');
+                header.classList.remove('bg-transparent');
+            } else {
+                header.classList.remove('bg-white', 'shadow-sm');
+                header.classList.add('bg-transparent');
+            }
+        });
+
+        // Smooth scroll para links internos
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                const href = this.getAttribute('href');
+                
+                // Se for # apenas, não fazer nada
+                if (href === '#') return;
+                
+                // Se for link interno (#section)
+                if (href.startsWith('#')) {
+                    e.preventDefault();
+                    const targetElement = document.querySelector(href);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+
+        // Animar estatísticas
+         function animateStats() {
+            const stats = document.querySelectorAll('.stat-number');
+            stats.forEach(stat => {
+                const target = parseInt(stat.getAttribute('data-count'));
+                let current = 0;
+                const increment = target / 50;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        stat.textContent = target + (stat.textContent.includes('%') ? '%' : '+');
+                        clearInterval(timer);
+                    } else {
+                        stat.textContent = Math.floor(current) + (stat.textContent.includes('%') ? '%' : '+');
+                    }
+                }, 30);
+            });
+        }
+
+        // Observar quando stats entram na viewport
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateStats();
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+        const statsSection = document.querySelector('.hero-stats');
+        if (statsSection) {
+            statsObserver.observe(statsSection);
+        }
+
+        // Auto-play carousel
+        const testimonialCarousel = new bootstrap.Carousel(document.getElementById('testimonialCarousel'), {
+            interval: 5000,
+            wrap: true
+        });
+        // Manter o mesmo botao visual, mas enviar para dashboard quando ja autenticado
+        (function syncHeaderLoginButton() {
+            const loginBtn = document.getElementById('headerLoginBtn');
+            if (!loginBtn) return;
+
+            const token = localStorage.getItem('token') || sessionStorage.getItem('token');
+            const adminToken = localStorage.getItem('admin_token');
+            if (!token && !adminToken) return;
+
+            let role = 'aluno';
+            try {
+                const rawUser = localStorage.getItem('user') || sessionStorage.getItem('user');
+                if (rawUser) {
+                    const parsed = JSON.parse(rawUser);
+                    role = parsed?.role || role;
+                } else if (adminToken) {
+                    role = 'Admin';
+                }
+            } catch {
+                if (adminToken) role = 'Admin';
+            }
+
+            const dashboard =
+                role === 'Admin'
+                    ? 'dashboard-admin.html'
+                    : role === 'professor'
+                        ? 'dashboard-professor.html'
+                        : 'dashboard-aluno.html';
+
+            loginBtn.setAttribute('href', dashboard);
+            loginBtn.innerHTML = '<i class="bi bi-columns-gap me-2"></i>Dashboard';
+        })();
+    </script>
+</body>
+</html>
+
+
+
+

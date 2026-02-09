@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EduPortal MZ — Portal Educacional</title>
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Bootstrap Icons -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <style>
+    :root {
+      --primary: #0b66ff;
+      --secondary: #00c6ff;
+      --accent: #2bd17b;
+      --muted: #6b7280;
+      --surface: #f6f7fb;
+      --radius: 12px;
+      --max-width: 1200px;
+      font-family: 'Poppins', 'Montserrat', sans-serif;
+    }
+
+    body {
+      background: #f8fbff;
+      color: #111827;
+    }
+
+    /* Header */
+    header.site-header {
+      background: #fff;
+      box-shadow: 0 6px 20px rgba(10,20,40,0.05);
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+    .brand { display: flex; align-items: center; gap: 0.75rem; font-weight: 700; color: var(--primary); }
+    .brand img { height: 44px; border-radius: 8px; }
+    nav .nav-link { color: #374151; font-weight: 500; }
+    nav .nav-link.active { color: var(--primary); }
+
+    /* Hero Banner */
+    #hero {
+      position: relative;
+      padding: 96px 0;
+      background: linear-gradient(135deg, rgba(11,102,255,0.1), rgba(0,198,255,0.05)), url('assets/images/banner-bg.jpg') no-repeat center/cover;
+      color: #081029;
+    }
+    .hero-content { max-width: 600px; }
+    .hero-title { font-size: clamp(2rem, 3vw, 3rem); font-weight: 700; margin-bottom: 1rem; }
+    .hero-sub { font-size: 1.125rem; color: var(--muted); margin-bottom: 1.5rem; }
+    .hero-btns a { margin-right: 1rem; }
+
+    /* Quicklinks */
+    .quicklinks { display: flex; flex-wrap: wrap; gap: 1rem; }
+    .quicklink {
+      flex: 1 1 240px;
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: transform 0.25s, box-shadow 0.25s;
+    }
+    .quicklink:hover { transform: translateY(-6px); box-shadow: 0 14px 30px rgba(0,0,0,0.07); }
+    .quicklink .icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      font-size: 1.4rem;
+      color: #fff;
+    }
+    .ql-edu { background: linear-gradient(135deg, var(--primary), var(--secondary)); }
+    .ql-services { background: linear-gradient(135deg, #ff8a00, #ff5e7a); }
+    .ql-corp { background: linear-gradient(135deg, #13c2a2, #35d1b4); }
+
+    /* Sections */
+    section { padding: 64px 0; }
+    .section-title { font-weight: 700; margin-bottom: 2rem; text-align: center; }
+    .muted { color: var(--muted); }
+
+    /* Cards */
+    .card-plain { border-radius: var(--radius); background: #fff; padding: 20px; box-shadow: 0 8px 30px rgba(0,0,0,0.05); }
+
+    /* Hero CTA button */
+    .btn-hero {
+      padding: 0.75rem 2rem;
+      border-radius: 50px;
+      font-weight: 600;
+    }
+
+    /* Footer */
+    footer.site-footer { background: #061224; color: #dbeafe; padding: 48px 0; }
+    footer a { color: inherit; text-decoration: none; }
+    footer .social a { margin-right: 0.6rem; font-size: 1.2rem; color: #cfeefe; }
+
+    /* Responsive tweaks */
+    @media(max-width: 767px) {
+      .hero-content { text-align: center; margin-bottom: 2rem; }
+      .hero-btns { justify-content: center; }
+      .quicklinks { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="site-header">
+    <div class="container-xl d-flex justify-content-between align-items-center py-3">
+      <a href="index.html" class="brand">
+        <img src="assets/images/logo.png" alt="EduPortal MZ">
+        <div>
+          <div style="font-size:.95rem;">EduPortal MZ</div>
+          <small class="muted" style="display:block;">Portal Educacional • Moçambique</small>
+        </div>
+      </a>
+      <nav>
+        <ul class="nav align-items-center">
+          <li class="nav-item"><a class="nav-link active" href="#hero">Início</a></li>
+          <li class="nav-item"><a class="nav-link" href="linguapro/index.html">LinguaPro</a></li>
+          <li class="nav-item"><a class="nav-link" href="courses.html">Cursos</a></li>
+          <li class="nav-item"><a class="nav-link" href="services.html">Serviços</a></li>
+          <li class="nav-item"><a class="nav-link" href="professors.html">Professores</a></li>
+          <li class="nav-item"><a class="nav-link" href="library.html">Biblioteca</a></li>
+          <li class="nav-item ms-3"><button id="openLogin" class="btn btn-outline-primary btn-sm">Entrar / Registar</button></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Hero Banner -->
+  <section id="hero">
+    <div class="container-xl">
+      <div class="row align-items-center">
+        <div class="col-lg-7 hero-content">
+          <h1 class="hero-title">Aprenda, treine e cresça com EduPortal MZ</h1>
+          <p class="hero-sub">Acesse a plataforma de línguas <strong>LinguaPro</strong>, explore cursos, serviços de tradução e treinamentos corporativos.</p>
+          <div class="d-flex hero-btns flex-wrap">
+            <a href="linguapro/index.html" class="btn btn-primary btn-hero">Entrar na LinguaPro</a>
+            <a href="contact.html" class="btn btn-outline-light btn-hero">Fale Conosco</a>
+          </div>
+          <div class="mt-3 text-muted"><small>Contato: +258 83 495 7798 • escoladelinguasdemaputo@gmail.com</small></div>
+        </div>
+        <div class="col-lg-5">
+          <div class="quicklinks">
+            <a class="quicklink" href="linguapro/index.html">
+              <div class="icon ql-edu"><i class="bi bi-globe2"></i></div>
+              <div>
+                <strong>LinguaPro</strong>
+                <div class="muted">Aulas ao vivo, quizzes e biblioteca</div>
+              </div>
+            </a>
+            <a class="quicklink" href="services.html">
+              <div class="icon ql-services"><i class="bi bi-briefcase"></i></div>
+              <div>
+                <strong>Serviços</strong>
+                <div class="muted">Traduções e consultoria</div>
+              </div>
+            </a>
+            <a class="quicklink" href="courses.html">
+              <div class="icon ql-corp"><i class="bi bi-journal-bookmark"></i></div>
+              <div>
+                <strong>Cursos</strong>
+                <div class="muted">Idiomas, técnicos e corporativos</div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section id="stats">
+    <div class="container-xl text-center">
+      <h2 class="section-title">Números que falam por nós</h2>
+      <div class="row g-4">
+        <div class="col-6 col-md-3">
+          <div class="card-plain">
+            <h3>+50</h3>
+            <small class="muted">Cursos</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="card-plain">
+            <h3>+2000</h3>
+            <small class="muted">Alunos</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="card-plain">
+            <h3>+30</h3>
+            <small class="muted">Professores</small>
+          </div>
+        </div>
+        <div class="col-6 col-md-3">
+          <div class="card-plain">
+            <h3>+100</h3>
+            <small class="muted">Empresas</small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container-xl">
+      <div class="row">
+        <div class="col-md-4">
+          <h5>EduPortal MZ</h5>
+          <p class="muted">Portal base com acesso a plataformas e serviços educativos em Moçambique.</p>
+          <p class="muted small">© 2025 EduPortal MZ</p>
+        </div>
+        <div class="col-md-4">
+          <h6>Links úteis</h6>
+          <ul class="list-unstyled muted">
+            <li><a href="linguapro/index.html">LinguaPro</a></li>
+            <li><a href="courses.html">Cursos</a></li>
+            <li><a href="services.html">Serviços</a></li>
+          </ul>
+        </div>
+        <div class="col-md-4">
+          <h6>Contato</h6>
+          <p class="muted">+258 83 495 7798<br>escoladelinguasdemaputo@gmail.com</p>
+          <div class="social">
+            <a href="#"><i class="bi bi-facebook"></i></a>
+            <a href="#"><i class="bi bi-instagram"></i></a>
+            <a href="#"><i class="bi bi-linkedin"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

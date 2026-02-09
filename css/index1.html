@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Plataforma Educacional - Página Oficial</title>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+  <!-- Bootstrap -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+
+  <!-- Ícones Bootstrap -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+
+  <style>
+    * { font-family: 'Montserrat', sans-serif; }
+
+    .navbar-brand span {
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -1px;
+      color: #0044aa;
+    }
+
+    /* HERO */
+    #hero {
+      background: linear-gradient(120deg, #003399df, #00a6ffa8), 
+                  url('assets/images/banner-bg.jpg') center/cover no-repeat;
+      color: #fff;
+      padding: 120px 0;
+    }
+
+    #hero h1 { font-size: 3rem; font-weight: 700; }
+    #hero p { font-size: 1.3rem; opacity: 0.9; }
+
+    .btn-main {
+      padding: 12px 28px;
+      font-size: 1rem;
+      border-radius: 10px;
+      transition: .3s;
+      background: #007bff;
+      color: #fff;
+    }
+
+    .btn-main:hover {
+      background: #0056c7;
+      transform: translateY(-3px);
+    }
+
+    /* FEATURE BLOCKS */
+    .feature-box {
+      text-align: center;
+      padding: 25px;
+      border-radius: 18px;
+      background: #fff;
+      transition: .3s;
+      box-shadow: 0 2px 15px rgba(0,0,0,0.08);
+    }
+
+    .feature-box:hover {
+      transform: translateY(-7px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    }
+
+    /* SECTION TITLES */
+    .section-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #003399;
+    }
+
+    /* FOOTER */
+    footer {
+      background: #0d1b2a;
+      color: #fff;
+      padding: 50px 0;
+    }
+
+    footer a { color: #fff; opacity: 0.7; text-decoration: none; }
+    footer a:hover { opacity: 1; }
+  </style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg bg-white shadow-sm py-3">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" href="#">
+      <img src="assets/images/logo.png" height="50">
+      <span class="ms-2">Plataforma Educacional</span>
+    </a>
+
+    <button class="navbar-toggler" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <i class="bi bi-list"></i>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto align-items-center gap-3">
+        <li class="nav-item"><a class="nav-link" href="#hero">Início</a></li>
+        <li class="nav-item"><a class="nav-link" href="#services">Serviços</a></li>
+        <li class="nav-item"><a class="nav-link" href="#about">Sobre</a></li>
+
+        <!-- Botão LinguasPro (subseção do domínio) -->
+        <li class="nav-item">
+          <a href="courses.html" class="btn btn-primary px-3">LinguasPro</a>
+        </li>
+
+        <li class="nav-item">
+          <button class="btn btn-outline-primary" id="loginBtn">Entrar</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+<!-- HERO SECTION -->
+<section id="hero" class="text-center">
+  <div class="container">
+    <h1>Formação, Idiomas e Serviços Profissionais</h1>
+    <p class="mt-3">
+      Uma plataforma completa para cursos, consultoria, serviços linguísticos e soluções educacionais.
+    </p>
+    <div class="mt-4 d-flex justify-content-center gap-3">
+      <a href="courses.html" class="btn-main">Aceder ao LinguasPro</a>
+      <a href="#services" class="btn btn-light px-4 py-2">Ver Serviços</a>
+    </div>
+  </div>
+</section>
+
+
+<!-- FEATURES (SERVIÇOS PRINCIPAIS DO DOMÍNIO) -->
+<section id="services" class="py-5 bg-light">
+  <div class="container">
+    <h2 class="section-title text-center mb-5">Serviços Disponíveis</h2>
+
+    <div class="row g-4">
+      <div class="col-md-4">
+        <div class="feature-box">
+          <i class="bi bi-translate fs-1 text-primary"></i>
+          <h5 class="mt-3">LinguasPro</h5>
+          <p>Cursos de idiomas online e presenciais, com certificação.</p>
+          <a href="courses.html" class="btn btn-outline-primary">Aceder</a>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="feature-box">
+          <i class="bi bi-people fs-1 text-primary"></i>
+          <h5 class="mt-3">Formações Profissionais</h5>
+          <p>Workshops, capacitações e consultoria educacional.</p>
+          <a href="#" class="btn btn-outline-primary">Ver mais</a>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="feature-box">
+          <i class="bi bi-briefcase fs-1 text-primary"></i>
+          <h5 class="mt-3">Serviços Corporativos</h5>
+          <p>Traduções, comunicação empresarial e eventos.</p>
+          <a href="#" class="btn btn-outline-primary">Explorar</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- ABOUT -->
+<section id="about" class="py-5">
+  <div class="container">
+    <div class="row g-5 align-items-center">
+      <div class="col-lg-6">
+        <h2 class="section-title">Sobre Nós</h2>
+        <p class="mt-3">
+          Somos uma plataforma moçambicana dedicada ao desenvolvimento educacional e profissional.
+        </p>
+        <p>
+          Oferecemos cursos, idiomas, consultorias e serviços especializados para empresas e estudantes.
+        </p>
+      </div>
+
+      <div class="col-lg-6">
+        <img src="assets/images/about.jpg" class="img-fluid rounded shadow" alt="">
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- FOOTER -->
+<footer>
+  <div class="container">
+    <div class="row g-4">
+
+      <div class="col-md-4">
+        <h5>Plataforma Educacional</h5>
+        <p>© 2025 - Todos direitos reservados.</p>
+        <p>Email: escoladelinguasdemaputo@gmail.com</p>
+      </div>
+
+      <div class="col-md-4">
+        <h5>Links</h5>
+        <a href="#hero">Início</a><br>
+        <a href="#services">Serviços</a><br>
+        <a href="courses.html">LinguasPro</a>
+      </div>
+
+      <div class="col-md-4">
+        <h5>Redes</h5>
+        <a href="#"><i class="bi bi-facebook fs-4"></i></a>
+        <a href="#" class="ms-3"><i class="bi bi-instagram fs-4"></i></a>
+      </div>
+
+    </div>
+  </div>
+</footer>
+
+
+<!-- Modal Login (somente estrutura; JS depois) -->
+<div class="modal fade" id="loginModal">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content p-3">
+      <div class="modal-header">
+        <h5 class="modal-title">Entrar</h5>
+        <button class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form>
+          <input type="email" class="form-control mb-3" placeholder="Email">
+          <input type="password" class="form-control mb-3" placeholder="Senha">
+          <button class="btn btn-primary w-100">Entrar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  document.getElementById("loginBtn").onclick = () => {
+    const modal = new bootstrap.Modal(document.getElementById('loginModal'));
+    modal.show();
+  }
+</script>
+
+</body>
+</html>

@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="pt-MZ">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="EduPortal MZ - Portal Educacional de Moçambique. Cursos, LinguaPro, professores qualificados e experiências transformadoras.">
+    <meta name="keywords" content="educação Moçambique, cursos idiomas, professores qualificados, LinguaPro, tradução, certificação">
+    <meta name="author" content="EduPortal MZ">
+    
+    <title>EduPortal MZ — Excelência em Educação Digital</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet">
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Cores principais refinadas */
+            --primary-blue: #0056D6;
+            --primary-dark: #003A8C;
+            --primary-light: #E8F4FF;
+            --accent-teal: #00B8A9;
+            --accent-orange: #FF6B35;
+            --accent-purple: #7B61FF;
+            
+            /* Cores neutras */
+            --neutral-900: #0F172A;
+            --neutral-800: #1E293B;
+            --neutral-700: #334155;
+            --neutral-600: #475569;
+            --neutral-500: #64748B;
+            --neutral-400: #94A3B8;
+            --neutral-300: #CBD5E1;
+            --neutral-200: #E2E8F0;
+            --neutral-100: #F1F5F9;
+            --neutral-50: #F8FAFC;
+            
+            /* Efeitos */
+            --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+            --shadow-md: 0 4px 20px rgba(0, 0, 0, 0.12);
+            --shadow-lg: 0 12px 40px rgba(0, 86, 214, 0.15);
+            --shadow-xl: 0 20px 60px rgba(0, 86, 214, 0.2);
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --radius-lg: 20px;
+            --radius-xl: 32px;
+            --transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+            scroll-padding-top: 100px;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--neutral-50);
+            color: var(--neutral-800);
+            line-height: 1.7;
+            overflow-x: hidden;
+            font-weight: 400;
+        }
+
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Playfair Display', serif;
+            font-weight: 600;
+            line-height: 1.2;
+            color: var(--neutral-900);
+        }
+
+        .container-xl {
+            max-width: 1280px;
+            padding-left: 24px;
+            padding-right: 24px;
+        }
+
+        /* Header Elegante */
+        .site-header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0, 86, 214, 0.1);
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 0;
+            transition: var(--transition);
+        }
+
+        .site-header.scrolled {
+            background: rgba(255, 255, 255, 0.98);
+            box-shadow: var(--shadow-md);
+            padding: 0;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            text-decoration: none;
+            transition: var(--transition);
+            padding: 8px 0;
+        }
+
+        .brand:hover {
+            transform: translateY(-1px);
+        }
+
+        .brand-logo {
+            height: 56px;
+            width: auto;
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-sm);
+        }
+
+        .brand-text {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .brand-name {
+            font-family: 'Playfair Display', serif;
+            font-size: 1.4rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+        }
+
+        .brand-tagline {
+            font-size: 0.8rem;
+            color: var(--neutral-600);
+            font-weight: 500;
+            letter-spacing: 0.5px;
+            margin-top: 2px;
+        }
+
+        /* Navegação */
+        .nav-link {
+            color: var(--neutral-700) !important;
+            font-weight: 500;
+            padding: 12px 20px !important;
+            border-radius: var(--radius-md);
+            transition: var(--transition) !important;
+            position: relative;
+            margin: 0 4px;
+        }
+
+        .nav-link::before {
+            content: '';
+            position: absolute;
+            bottom: 8px;
+            left: 50%;
+            transform: translateX(-50%) scaleX(0);
+            width: 24px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--accent-teal));
+            border-radius: 2px;
+            transition: var(--transition);
+        }
+
+        .nav-link:hover,
+        .nav-link:focus,
+        .nav-link.active {
+            color: var(--primary-blue) !important;
+            background: rgba(0, 86, 214, 0.05);
+        }
+
+        .nav-link:hover::before,
+        .nav-link.active::before {
+            transform: translateX(-50%) scaleX(1);
+        }
+
+        /* Banner Hero Profissional */
+        .hero-banner {
+            background: linear-gradient(135deg, 
+                var(--neutral-900) 0%,
+                var(--primary-dark) 30%,
+                var(--primary-blue) 70%,
+                var(--accent-teal) 100%);
+            min-height: 90vh;
+            display: flex;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            padding-top: 100px;
+            margin-bottom: 80px;
+        }
+
+        .hero-banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(0, 184, 169, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(123, 97, 255, 0.1) 0%, transparent 50%);
+        }
+
+        .hero-banner::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: linear-gradient(to top, var(--neutral-50), transparent);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            color: white;
+            text-align: center;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 80px 0;
+        }
+
+        .hero-title {
+            font-size: clamp(2.5rem, 5vw, 4.5rem);
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            line-height: 1.1;
+            background: linear-gradient(to right, #ffffff, #E8F4FF);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 2px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .hero-subtitle {
+            font-size: clamp(1.1rem, 2vw, 1.4rem);
+            opacity: 0.9;
+            margin-bottom: 2.5rem;
+            font-weight: 300;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-stats {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 60px;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: white;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.8;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* Botões */
+        .btn {
+            border-radius: var(--radius-md);
+            padding: 14px 32px;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            transition: var(--transition);
+            border: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.5);
+            opacity: 0;
+            border-radius: 100%;
+            transform: scale(1, 1) translate(-50%);
+            transform-origin: 50% 50%;
+        }
+
+        .btn:focus:not(:active)::after {
+            animation: ripple 1s ease-out;
+        }
+
+        @keyframes ripple {
+            0% {
+                transform: scale(0, 0);
+                opacity: 0.5;
+            }
+            100% {
+                transform: scale(20, 20);
+                opacity: 0;
+            }
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-blue), var(--accent-teal));
+            color: white;
+            box-shadow: 0 8px 25px rgba(0, 86, 214, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 86, 214, 0.4);
+        }
+
+        .btn-outline-light {
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            background: transparent;
+            color: white;
+        }
+
+        .btn-outline-light:hover {
+            background: rgba(255, 255, 255, 0.1);
+            border-color: white;
+            transform: translateY(-3px);
+        }
+
+        /* Seção Destaques */
+        .section-header {
+            text-align: center;
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            font-size: clamp(2rem, 3vw, 3rem);
+            margin-bottom: 20px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--accent-teal));
+            border-radius: 2px;
+        }
+
+        .section-subtitle {
+            color: var(--neutral-600);
+            font-size: 1.1rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Cards de Destaque */
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin: 60px 0;
+        }
+
+        .feature-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            padding: 40px 30px;
+            text-align: center;
+            transition: var(--transition);
+            border: 1px solid var(--neutral-200);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .feature-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--accent-teal));
+        }
+
+        .feature-card:hover {
+            transform: translateY(-10px);
+            box-shadow: var(--shadow-xl);
+            border-color: transparent;
+        }
+
+        .feature-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--primary-light), white);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+            font-size: 2rem;
+            color: var(--primary-blue);
+            box-shadow: var(--shadow-md);
+        }
+
+        .feature-card h3 {
+            margin-bottom: 15px;
+            font-size: 1.5rem;
+        }
+
+        .feature-card p {
+            color: var(--neutral-600);
+            margin-bottom: 20px;
+        }
+
+        /* Seção Professores */
+        .teachers-section {
+            background: linear-gradient(135deg, var(--neutral-50) 0%, white 100%);
+            padding: 100px 0;
+            position: relative;
+        }
+
+        .teachers-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--neutral-300), transparent);
+        }
+
+        .teacher-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .teacher-card {
+            background: white;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+        }
+
+        .teacher-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .teacher-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .teacher-info {
+            padding: 25px;
+        }
+
+        .teacher-name {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+
+        .teacher-title {
+            color: var(--primary-blue);
+            font-weight: 600;
+            margin-bottom: 10px;
+            font-size: 0.9rem;
+        }
+
+        .teacher-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 15px 0;
+        }
+
+        .skill-tag {
+            background: var(--neutral-100);
+            color: var(--neutral-700);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .teacher-rating {
+            color: #FFB400;
+            margin: 10px 0;
+        }
+
+        /* Seção Experiências */
+        .testimonials-section {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #f8fafc 0%, #ffffff 100%);
+        }
+
+        .testimonial-slider {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .testimonial-card {
+            background: white;
+            border-radius: var(--radius-xl);
+            padding: 50px;
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            margin: 20px;
+        }
+
+        .testimonial-card::before {
+            content: '"';
+            position: absolute;
+            top: 30px;
+            left: 30px;
+            font-size: 5rem;
+            color: var(--primary-light);
+            font-family: 'Playfair Display', serif;
+            line-height: 1;
+        }
+
+        .testimonial-content {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: var(--neutral-700);
+            margin-bottom: 30px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .testimonial-author {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .author-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary-light);
+        }
+
+        .author-info h4 {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        .author-role {
+            color: var(--neutral-600);
+            font-size: 0.9rem;
+        }
+
+        /* Seção Cursos */
+        .courses-section {
+            padding: 100px 0;
+            background: white;
+        }
+
+        .course-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .course-card {
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: var(--transition);
+            background: white;
+        }
+
+        .course-card:hover {
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .course-header {
+            padding: 25px;
+            background: linear-gradient(135deg, var(--primary-blue), var(--primary-dark));
+            color: white;
+            position: relative;
+        }
+
+        .course-category {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            backdrop-filter: blur(10px);
+        }
+
+        .course-body {
+            padding: 25px;
+        }
+
+        .course-features {
+            list-style: none;
+            padding: 0;
+            margin: 20px 0;
+        }
+
+        .course-features li {
+            padding: 8px 0;
+            border-bottom: 1px solid var(--neutral-200);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .course-features li:last-child {
+            border-bottom: none;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, var(--primary-dark), var(--neutral-900));
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 30% 30%, rgba(0, 184, 169, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 70%, rgba(123, 97, 255, 0.1) 0%, transparent 50%);
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-size: clamp(2rem, 3vw, 3rem);
+            margin-bottom: 20px;
+            color: white;
+        }
+
+        .cta-buttons {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 40px;
+        }
+
+        /* Footer */
+        .site-footer {
+            background: var(--neutral-900);
+            color: var(--neutral-300);
+            padding: 80px 0 30px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 60px;
+        }
+
+        .footer-section h4 {
+            color: white;
+            margin-bottom: 25px;
+            font-size: 1.2rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .footer-section h4::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 40px;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary-blue), var(--accent-teal));
+        }
+
+        .footer-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .footer-links li {
+            margin-bottom: 12px;
+        }
+
+        .footer-links a {
+            color: var(--neutral-400);
+            text-decoration: none;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .footer-links a:hover {
+            color: white;
+            transform: translateX(5px);
+        }
+
+        .contact-info {
+            margin-top: 20px;
+        }
+
+        .contact-info p {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 12px;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 44px;
+            height: 44px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 50%;
+            color: var(--neutral-300);
+            text-decoration: none;
+            transition: var(--transition);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .social-links a:hover {
+            background: var(--primary-blue);
+            color: white;
+            transform: translateY(-3px);
+            border-color: transparent;
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            color: var(--neutral-500);
+            font-size: 0.9rem;
+        }
+
+        /* Responsividade */
+        @media (max-width: 992px) {
+            .hero-banner {
+                min-height: 80vh;
+            }
+            
+            .nav-link {
+                padding: 10px 16px !important;
+                margin: 2px 0;
+            }
+            
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .teacher-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-banner {
+                min-height: 70vh;
+                padding-top: 80px;
+            }
+            
+            .hero-title {
+                font-size: 2.5rem;
+            }
+            
+            .hero-stats {
+                gap: 20px;
+            }
+            
+            .stat-number {
+                font-size: 2rem;
+            }
+            
+            .teacher-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .course-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .testimonial-card {
+                padding: 30px;
+                margin: 10px;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .brand-logo {
+                height: 48px;
+            }
+            
+            .brand-name {
+                font-size: 1.2rem;
+            }
+            
+            .hero-title {
+                font-size: 2rem;
+            }
+            
+            .section-title {
+                font-size: 1.8rem;
+            }
+            
+            .feature-card {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="site-header" id="siteHeader">
+        <div class="container-xl">
+            <nav class="navbar navbar-expand-lg py-3">
+                <a href="index.html" class="brand" aria-label="EduPortal MZ - Excelência em Educação">
+                    <img src="assets/images/logo.png" alt="Logo EduPortal MZ" class="brand-logo">
+                    <div class="brand-text">
+                        <span class="brand-name">EduPortal MZ</span>
+                        <span class="brand-tagline">Excelência em Educação Digital</span>
+                    </div>
+                </a>
+                
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+                        data-bs-target="#navbarNav" aria-controls="navbarNav" 
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <i class="bi bi-list"></i>
+                </button>
+                
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ms-auto align-items-lg-center">
+                        <li class="nav-item">
+                            <a class="nav-link active" href="#home">
+                                <i class="bi bi-house-door me-2"></i>Início
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#features">
+                                <i class="bi bi-stars me-2"></i>Destaques
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#courses">
+                                <i class="bi bi-book me-2"></i>Cursos
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#teachers">
+                                <i class="bi bi-people me-2"></i>Professores
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#testimonials">
+                                <i class="bi bi-chat-quote me-2"></i>Experiências
+                            </a>
+                        </li>
+                        <li class="nav-item ms-lg-3 mt-3 mt-lg-0">
+                            <button class="btn btn-primary w-100" id="openLogin">
+                                <i class="bi bi-person-circle me-2"></i>
+                                Área do Aluno
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Banner -->
+    <section class="hero-banner" id="home">
+        <div class="container-xl">
+            <div class="hero-content" data-aos="fade-up" data-aos-duration="1000">
+                <h1 class="hero-title">
+                    Transforme seu Futuro com Educação de Excelência
+                </h1>
+                <p class="hero-subtitle">
+                    Na EduPortal MZ, combinamos tecnologia avançada com metodologias 
+                    inovadoras para oferecer a melhor experiência educacional em Moçambique.
+                </p>
+                
+                <div class="cta-buttons" data-aos="fade-up" data-aos-delay="200">
+                    <a href="#courses" class="btn btn-primary btn-lg">
+                        <i class="bi bi-search me-2"></i>
+                        Explorar Cursos
+                    </a>
+                    <a href="#contact" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-chat-dots me-2"></i>
+                        Falar com Consultor
+                    </a>
+                </div>
+                
+                <div class="hero-stats" data-aos="fade-up" data-aos-delay="400">
+                    <div class="stat-item">
+                        <div class="stat-number">5000+</div>
+                        <div class="stat-label">Alunos Formados</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">120+</div>
+                        <div class="stat-label">Cursos Disponíveis</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">98%</div>
+                        <div class="stat-label">Satisfação</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">50+</div>
+                        <div class="stat-label">Professores Especialistas</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Destaques -->
+    <section id="features" class="py-5">
+        <div class="container-xl">
+            <div class="section-header" data-aos="fade-up">
+                <h2 class="section-title">Por que Escolher a EduPortal MZ?</h2>
+                <p class="section-subtitle">
+                    Oferecemos uma experiência educacional completa e personalizada 
+                    para atender às suas necessidades específicas.
+                </p>
+            </div>
+            
+            <div class="feature-grid">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">
+                        <i class="bi bi-globe-americas"></i>
+                    </div>
+                    <h3>LinguaPro Premium</h3>
+                    <p>
+                        Plataforma interativa de idiomas com inteligência artificial, 
+                        reconhecimento de voz e certificação internacional.
+                    </p>
+                    <a href="linguapro/courses.html" class="btn btn-outline-primary">
+                        Saiba Mais
+                    </a>
+                </div>
+                
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
+                        <i class="bi bi-person-video"></i>
+                    </div>
+                    <h3>Aulas ao Vivo</h3>
+                    <p>
+                        Sessões interativas com professores especializados, 
+                        em tempo real, para dúvidas e aprendizagem prática.
+                    </p>
+                    <a href="live-classes.html" class="btn btn-outline-primary">
+                        Ver Grade
+                    </a>
+                </div>
+                
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon">
+                        <i class="bi bi-briefcase"></i>
+                    </div>
+                    <h3>Consultoria Corporativa</h3>
+                    <p>
+                        Soluções personalizadas para empresas: treinamentos 
+                        in-company, desenvolvimento de equipes e assessoria.
+                    </p>
+                    <a href="corporate.html" class="btn btn-outline-primary">
+                        Para Empresas
+                    </a>
+                </div>
+                
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-icon">
+                        <i class="bi bi-award"></i>
+                    </div>
+                    <h3>Certificação Reconhecida</h3>
+                    <p>
+                        Certificados válidos internacionalmente, com selo de 
+                        qualidade e reconhecimento do mercado.
+                    </p>
+                    <a href="certification.html" class="btn btn-outline-primary">
+                        Ver Certificados
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Cursos -->
+    <section id="courses" class="courses-section">
+        <div class="container-xl">
+            <div class="section-header" data-aos="fade-up">
+                <h2 class="section-title">Nossos Cursos em Destaque</h2>
+                <p class="section-subtitle">
+                    Programas cuidadosamente elaborados para seu desenvolvimento 
+                    profissional e pessoal.
+                </p>
+            </div>
+            
+            <div class="course-grid">
+                <div class="course-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="course-header">
+                        <h3>Inglês Corporativo Avançado</h3>
+                        <span class="course-category">Línguas</span>
+                        <div class="mt-3">
+                            <span class="badge bg-light text-dark me-2">
+                                <i class="bi bi-clock"></i> 6 meses
+                            </span>
+                            <span class="badge bg-light text-dark">
+                                <i class="bi bi-people"></i> 20 vagas
+                            </span>
+                        </div>
+                    </div>
+                    <div class="course-body">
+                        <p>
+                            Desenvolva fluência em contextos profissionais com foco 
+                            em negociações, apresentações e comunicação executiva.
+                        </p>
+                        <ul class="course-features">
+                            <li><i class="bi bi-check-circle text-success"></i> Certificação internacional</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Mentorias individuais</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Simulações reais</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Material exclusivo</li>
+                        </ul>
+                        <a href="courses/english-advanced.html" class="btn btn-primary w-100">
+                            Inscreva-se Agora
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="course-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="course-header">
+                        <h3>Tradução e Interpretação</h3>
+                        <span class="course-category">Profissional</span>
+                        <div class="mt-3">
+                            <span class="badge bg-light text-dark me-2">
+                                <i class="bi bi-clock"></i> 8 meses
+                            </span>
+                            <span class="badge bg-light text-dark">
+                                <i class="bi bi-people"></i> 15 vagas
+                            </span>
+                        </div>
+                    </div>
+                    <div class="course-body">
+                        <p>
+                            Formação completa para tradutores e intérpretes 
+                            profissionais com ênfase em mercado internacional.
+                        </p>
+                        <ul class="course-features">
+                            <li><i class="bi bi-check-circle text-success"></i> Software especializado</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Prática com clientes reais</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Especialização por área</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Rede de contatos</li>
+                        </ul>
+                        <a href="courses/translation.html" class="btn btn-primary w-100">
+                            Inscreva-se Agora
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="course-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="course-header">
+                        <h3>Português para Negócios</h3>
+                        <span class="course-category">Línguas</span>
+                        <div class="mt-3">
+                            <span class="badge bg-light text-dark me-2">
+                                <i class="bi bi-clock"></i> 4 meses
+                            </span>
+                            <span class="badge bg-light text-dark">
+                                <i class="bi bi-people"></i> 25 vagas
+                            </span>
+                        </div>
+                    </div>
+                    <div class="course-body">
+                        <p>
+                            Domine o português empresarial para reuniões, 
+                            relatórios e comunicação corporativa eficiente.
+                        </p>
+                        <ul class="course-features">
+                            <li><i class="bi bi-check-circle text-success"></i> Foco em terminologia</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Redação empresarial</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Pronúncia corporativa</li>
+                            <li><i class="bi bi-check-circle text-success"></i> Cultura empresarial</li>
+                        </ul>
+                        <a href="courses/portuguese-business.html" class="btn btn-primary w-100">
+                            Inscreva-se Agora
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-5" data-aos="fade-up">
+                <a href="courses.html" class="btn btn-outline-primary btn-lg">
+                    <i class="bi bi-grid-3x3-gap me-2"></i>
+                    Ver Todos os Cursos
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Professores -->
+    <section id="teachers" class="teachers-section">
+        <div class="container-xl">
+            <div class="section-header" data-aos="fade-up">
+                <h2 class="section-title">Nossa Equipe de Especialistas</h2>
+                <p class="section-subtitle">
+                    Professores com experiência internacional e paixão pelo ensino.
+                </p>
+            </div>
+            
+            <div class="teacher-grid">
+                <div class="teacher-card" data-aos="fade-up" data-aos-delay="100">
+                    <img src="assets/images/professor1.jpg" alt="Prof. Maria Santos" class="teacher-image">
+                    <div class="teacher-info">
+                        <h3 class="teacher-name">Prof. Maria Santos</h3>
+                        <div class="teacher-title">Doutora em Linguística Aplicada</div>
+                        <div class="teacher-rating">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <span class="ms-2">5.0 (320 avaliações)</span>
+                        </div>
+                        <p>
+                            15 anos de experiência em ensino de idiomas, 
+                            autora de 3 livros sobre metodologia de ensino.
+                        </p>
+                        <div class="teacher-skills">
+                            <span class="skill-tag">Inglês</span>
+                            <span class="skill-tag">Metodologia</span>
+                            <span class="skill-tag">Pronúncia</span>
+                        </div>
+                        <a href="professors/maria-santos.html" class="btn btn-outline-primary w-100 mt-3">
+                            Ver Portfólio
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="teacher-card" data-aos="fade-up" data-aos-delay="200">
+                    <img src="assets/images/professor2.jpg" alt="Prof. João Maputo" class="teacher-image">
+                    <div class="teacher-info">
+                        <h3 class="teacher-name">Prof. João Maputo</h3>
+                        <div class="teacher-title">Mestre em Tradução Simultânea</div>
+                        <div class="teacher-rating">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-half"></i>
+                            <span class="ms-2">4.8 (275 avaliações)</span>
+                        </div>
+                        <p>
+                            Intérprete oficial da ONU por 8 anos, especialista 
+                            em tradução jurídica e empresarial.
+                        </p>
+                        <div class="teacher-skills">
+                            <span class="skill-tag">Tradução</span>
+                            <span class="skill-tag">Interpretação</span>
+                            <span class="skill-tag">Jurídico</span>
+                        </div>
+                        <a href="professors/joao-maputo.html" class="btn btn-outline-primary w-100 mt-3">
+                            Ver Portfólio
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="teacher-card" data-aos="fade-up" data-aos-delay="300">
+                    <img src="assets/images/professor3.jpg" alt="Prof. Ana Bela" class="teacher-image">
+                    <div class="teacher-info">
+                        <h3 class="teacher-name">Prof. Ana Bela</h3>
+                        <div class="teacher-title">Especialista em Português Empresarial</div>
+                        <div class="teacher-rating">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <span class="ms-2">5.0 (190 avaliações)</span>
+                        </div>
+                        <p>
+                            Consultora de comunicação para multinacionais, 
+                            desenvolvedora do método "Português Executivo".
+                        </p>
+                        <div class="teacher-skills">
+                            <span class="skill-tag">Português</span>
+                            <span class="skill-tag">Comunicação</span>
+                            <span class="skill-tag">Corporativo</span>
+                        </div>
+                        <a href="professors/ana-bela.html" class="btn btn-outline-primary w-100 mt-3">
+                            Ver Portfólio
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="teacher-card" data-aos="fade-up" data-aos-delay="400">
+                    <img src="assets/images/professor4.jpg" alt="Prof. Carlos Silva" class="teacher-image">
+                    <div class="teacher-info">
+                        <h3 class="teacher-name">Prof. Carlos Silva</h3>
+                        <div class="teacher-title">PhD em Educação Digital</div>
+                        <div class="teacher-rating">
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <i class="bi bi-star-fill"></i>
+                            <span class="ms-2">5.0 (410 avaliações)</span>
+                        </div>
+                        <p>
+                            Pioneiro em edtech na África, criador da plataforma 
+                            LinguaPro e 5 patentes em educação digital.
+                        </p>
+                        <div class="teacher-skills">
+                            <span class="skill-tag">Tecnologia</span>
+                            <span class="skill-tag">Inovação</span>
+                            <span class="skill-tag">Edtech</span>
+                        </div>
+                        <a href="professors/carlos-silva.html" class="btn btn-outline-primary w-100 mt-3">
+                            Ver Portfólio
+                        </a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-5" data-aos="fade-up">
+                <a href="professors.html" class="btn btn-outline-primary btn-lg">
+                    <i class="bi bi-people-fill me-2"></i>
+                    Conheça Todos os Professores
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Experiências de Alunos -->
+    <section id="testimonials" class="testimonials-section">
+        <div class="container-xl">
+            <div class="section-header" data-aos="fade-up">
+                <h2 class="section-title">Experiências que Transformam</h2>
+                <p class="section-subtitle">
+                    Histórias reais de alunos que alcançaram seus objetivos 
+                    através da nossa plataforma.
+                </p>
+            </div>
+            
+            <div class="testimonial-slider" data-aos="fade-up">
+                <div id="testimonialCarousel" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <div class="testimonial-card">
+                                <div class="testimonial-content">
+                                    "Após completar o curso de Inglês Corporativo, fui promovida 
+                                    a Gerente de Exportação na minha empresa. A metodologia prática 
+                                    e os casos reais foram decisivos para meu desenvolvimento. 
+                                    Hoje, conduzo negociações internacionais com confiança."
+                                </div>
+                                <div class="testimonial-author">
+                                    <img src="assets/images/student1.jpg" alt="Isabela Mondlane" class="author-avatar">
+                                    <div class="author-info">
+                                        <h4>Isabela Mondlane</h4>
+                                        <div class="author-role">Gerente de Exportação • Cimentos de Moçambique</div>
+                                        <small>Curso: Inglês Corporativo Avançado</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="carousel-item">
+                            <div class="testimonial-card">
+                                <div class="testimonial-content">
+                                    "Como tradutor freelancer, o curso de Tradução e Interpretação 
+                                    me deu as ferramentas necessárias para competir no mercado 
+                                    internacional. Em 6 meses, tripliquei meus clientes e agora 
+                                    trabalho para empresas na Europa e América."
+                                </div>
+                                <div class="testimonial-author">
+                                    <img src="assets/images/student2.jpg" alt="David Tembe" class="author-avatar">
+                                    <div class="author-info">
+                                        <h4>David Tembe</h4>
+                                        <div class="author-role">Tradutor Freelancer • Traduções Moçambique</div>
+                                        <small>Curso: Tradução e Interpretação</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="carousel-item">
+                            <div class="testimonial-card">
+                                <div class="testimonial-content">
+                                    "A plataforma LinguaPro revolucionou nosso treinamento corporativo. 
+                                    Implementamos para 120 funcionários e em 3 meses já vimos resultados 
+                                    concretos nas comunicações internacionais. A flexibilidade e a 
+                                    qualidade do conteúdo superaram nossas expectativas."
+                                </div>
+                                <div class="testimonial-author">
+                                    <img src="assets/images/student3.jpg" alt="Carlos Mahumane" class="author-avatar">
+                                    <div class="author-info">
+                                        <h4>Carlos Mahumane</h4>
+                                        <div class="author-role">Diretor de RH • Grupo Soares da Costa Moçambique</div>
+                                        <small>Produto: LinguaPro Corporate</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+                        <i class="bi bi-chevron-left"></i>
+                        <span class="visually-hidden">Anterior</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+                        <i class="bi bi-chevron-right"></i>
+                        <span class="visually-hidden">Próximo</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Final -->
+    <section id="contact" class="cta-section">
+        <div class="container-xl">
+            <div class="cta-content" data-aos="fade-up">
+                <h2 class="cta-title">Pronto para Transformar sua Carreira?</h2>
+                <p class="hero-subtitle">
+                    Entre em contato com nossos consultores educacionais e descubra 
+                    o plano perfeito para seus objetivos.
+                </p>
+                
+                <div class="cta-buttons">
+                    <a href="contact.html" class="btn btn-light btn-lg">
+                        <i class="bi bi-whatsapp me-2"></i>
+                        WhatsApp +258 83 495 7798
+                    </a>
+                    <a href="mailto:escoladelinguasdemaputo@gmail.com" class="btn btn-outline-light btn-lg">
+                        <i class="bi bi-envelope me-2"></i>
+                        Enviar Email
+                    </a>
+                </div>
+                
+                <div class="mt-5">
+                    <h4 class="mb-3">Horário de Atendimento</h4>
+                    <p>Segunda a Sexta: 8h00 - 18h00</p>
+                    <p>Sábado: 9h00 - 13h00</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="site-footer">
+        <div class="container-xl">
+            <div class="footer-grid">
+                <div class="footer-section">
+                    <a href="index.html" class="brand d-inline-flex mb-4">
+                        <img src="assets/images/logo.png" alt="Logo EduPortal MZ" class="brand-logo" style="filter: brightness(0) invert(1);">
+                        <div class="brand-text">
+                            <span class="brand-name">EduPortal MZ</span>
+                            <span class="brand-tagline">Excelência em Educação</span>
+                        </div>
+                    </a>
+                    <p class="mb-4">
+                        Líder em educação digital em Moçambique, transformando 
+                        vidas através do conhecimento e da inovação tecnológica.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" aria-label="Facebook"><i class="bi bi-facebook"></i></a>
+                        <a href="#" aria-label="LinkedIn"><i class="bi bi-linkedin"></i></a>
+                        <a href="#" aria-label="Instagram"><i class="bi bi-instagram"></i></a>
+                        <a href="#" aria-label="YouTube"><i class="bi bi-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Cursos</h4>
+                    <ul class="footer-links">
+                        <li><a href="courses/english.html"><i class="bi bi-chevron-right"></i> Inglês</a></li>
+                        <li><a href="courses/portuguese.html"><i class="bi bi-chevron-right"></i> Português</a></li>
+                        <li><a href="courses/translation.html"><i class="bi bi-chevron-right"></i> Tradução</a></li>
+                        <li><a href="courses/corporate.html"><i class="bi bi-chevron-right"></i> Corporativos</a></li>
+                        <li><a href="courses/technical.html"><i class="bi bi-chevron-right"></i> Técnicos</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>servicos</h4>
+                    <ul class="footer-links">
+                        <li><a href="linguapro/courses.html"><i class="bi bi-chevron-right"></i> LinguaPro</a></li>
+                        <li><a href="library.html"><i class="bi bi-chevron-right"></i> Biblioteca Digital</a></li>
+                        <li><a href="certificates.html"><i class="bi bi-chevron-right"></i> Certificados</a></li>
+                        <li><a href="blog.html"><i class="bi bi-chevron-right"></i> Blog Educacional</a></li>
+                        <li><a href="faq.html"><i class="bi bi-chevron-right"></i> FAQ & Suporte</a></li>
+                    </ul>
+                </div>
+                
+                <div class="footer-section">
+                    <h4>Contactos</h4>
+                    <div class="contact-info">
+                        <p><i class="bi bi-geo-alt"></i> Av. 25 de Setembro, Maputo</p>
+                        <p><i class="bi bi-telephone"></i> +258 83 495 7798</p>
+                        <p><i class="bi bi-whatsapp"></i> +258 84 123 4567</p>
+                        <p><i class="bi bi-envelope"></i> escoladelinguasdemaputo@gmail.com</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                <p>&copy; 2025 EduPortal MZ. Todos os direitos reservados.</p>
+                <p class="mt-2">
+                    <a href="privacy.html" class="text-decoration-none me-3">Política de Privacidade</a>
+                    <a href="terms.html" class="text-decoration-none">Termos de Uso</a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- AOS Animation -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <script>
+        // Inicializar AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Header scroll effect
+        window.addEventListener('scroll', function() {
+            const header = document.getElementById('siteHeader');
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scroll para links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 100,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+
+        // Abrir modal de login
+        document.getElementById('openLogin').addEventListener('click', function() {
+            // Aqui você pode adicionar o modal de login
+            window.location.href = 'login.html';
+        });
+
+        // Auto-play carousel
+        const testimonialCarousel = new bootstrap.Carousel(document.getElementById('testimonialCarousel'), {
+            interval: 5000,
+            wrap: true
+        });
+
+        // Animar stats no banner
+        function animateStats() {
+            const stats = document.querySelectorAll('.stat-number');
+            stats.forEach(stat => {
+                const target = parseInt(stat.textContent);
+                let current = 0;
+                const increment = target / 50;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= target) {
+                        stat.textContent = target + '+';
+                        clearInterval(timer);
+                    } else {
+                        stat.textContent = Math.floor(current) + '+';
+                    }
+                }, 30);
+            });
+        }
+
+        // Observar quando stats entram na viewport
+        const statsObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateStats();
+                    statsObserver.unobserve(entry.target);
+                }
+            });
+        });
+
+        const statsSection = document.querySelector('.hero-stats');
+        if (statsSection) {
+            statsObserver.observe(statsSection);
+        }
+    </script>
+</body>
+</html>

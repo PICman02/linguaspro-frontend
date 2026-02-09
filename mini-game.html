@@ -1,0 +1,2011 @@
+﻿<!DOCTYPE html>
+<html lang="pt">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quiz Interativo - LinguaPro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Estilos globais melhorados */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary-color: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary-color: #7209b7;
+            --accent-color: #4cc9f0;
+            --success-color: #4ade80;
+            --warning-color: #f59e0b;
+            --danger-color: #ef4444;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --gray-color: #6c757d;
+            --card-bg: #ffffff;
+            --border-radius: 16px;
+            --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            --box-shadow-hover: 0 15px 40px rgba(0, 0, 0, 0.12);
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            --gradient-primary: linear-gradient(135deg, #4361ee, #3a0ca3);
+            --gradient-secondary: linear-gradient(135deg, #7209b7, #4361ee);
+            --gradient-accent: linear-gradient(135deg, #4cc9f0, #4895ef);
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7ff 0%, #eef2ff 100%);
+            color: var(--dark-color);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header melhorado */
+        .main-header {
+            background-color: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            transition: var(--transition);
+        }
+
+        .main-header .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 2.2rem;
+            font-weight: 800;
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: var(--transition);
+        }
+
+        .logo:hover {
+            transform: translateY(-2px);
+        }
+
+        .logo i {
+            background: var(--gradient-accent);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5rem;
+        }
+
+        .nav-bar {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .nav-bar a {
+            text-decoration: none;
+            color: var(--dark-color);
+            font-weight: 500;
+            transition: var(--transition);
+            padding: 0.5rem 0;
+            position: relative;
+            font-size: 1.05rem;
+        }
+
+        .nav-bar a:hover {
+            color: var(--primary-color);
+        }
+
+        .nav-bar a.active {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        .nav-bar a.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--gradient-primary);
+            border-radius: 3px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+
+        .btn-login {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.8rem;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn-login:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.4);
+        }
+
+        /* Modal melhorado */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 3rem;
+            border-radius: var(--border-radius);
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            animation: modalAppear 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .modal-content::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient-primary);
+        }
+
+        @keyframes modalAppear {
+            from { opacity: 0; transform: translateY(-30px) scale(0.95); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 25px;
+            font-size: 2rem;
+            cursor: pointer;
+            color: var(--gray-color);
+            transition: var(--transition);
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+        }
+
+        .close-modal:hover {
+            color: var(--danger-color);
+            background-color: rgba(239, 68, 68, 0.1);
+        }
+
+        /* Banner com efeito visual */
+        .banner {
+            background: var(--gradient-secondary);
+            color: white;
+            text-align: center;
+            padding: 5rem 2rem;
+            margin-bottom: 3rem;
+            border-radius: 0 0 40px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .banner::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="M0,0 L100,0 L100,100 Z" fill="rgba(255,255,255,0.05)"/></svg>');
+            background-size: cover;
+        }
+
+        .banner h1 {
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+            position: relative;
+            z-index: 1;
+        }
+
+        .banner p {
+            font-size: 1.3rem;
+            max-width: 800px;
+            margin: 0 auto;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+        }
+
+        .language-icons {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 2rem;
+            position: relative;
+            z-index: 1;
+            flex-wrap: wrap;
+        }
+
+        .language-icon {
+            font-size: 2.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(5px);
+            transition: var(--transition);
+        }
+
+        .language-icon:hover {
+            transform: translateY(-5px) rotate(5deg);
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Conteúdo Principal do Quiz */
+        .mini-game-container {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2.5rem;
+            margin-bottom: 4rem;
+        }
+
+        @media (max-width: 1200px) {
+            .mini-game-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Painel do usuário com estilo moderno */
+        .user-panel {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            transition: var(--transition);
+            border-left: 5px solid var(--primary-color);
+        }
+
+        .user-panel:hover {
+            box-shadow: var(--box-shadow-hover);
+            transform: translateY(-5px);
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .user-avatar {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+            font-weight: bold;
+            box-shadow: 0 8px 20px rgba(67, 97, 238, 0.3);
+            transition: var(--transition);
+        }
+
+        .user-avatar:hover {
+            transform: scale(1.05) rotate(5deg);
+        }
+
+        .user-details h3 {
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+            font-size: 1.5rem;
+        }
+
+        .user-details p {
+            color: var(--gray-color);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stats {
+            display: flex;
+            gap: 2.5rem;
+            flex-wrap: wrap;
+        }
+
+        .stat-item {
+            text-align: center;
+            position: relative;
+            padding: 0 1rem;
+        }
+
+        .stat-item:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            height: 40px;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, #eee, transparent);
+        }
+
+        .stat-value {
+            font-size: 2.2rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            display: block;
+            line-height: 1;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: var(--gray-color);
+            font-weight: 500;
+        }
+
+        /* Container do Quiz melhorado */
+        .quiz-container {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .quiz-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: var(--gradient-primary);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid #eee;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .question-counter {
+            background: var(--gradient-accent);
+            color: white;
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 600;
+            box-shadow: 0 4px 10px rgba(76, 201, 240, 0.3);
+        }
+
+        .question-category {
+            background-color: rgba(67, 97, 238, 0.1);
+            color: var(--primary-color);
+            padding: 0.6rem 1.5rem;
+            border-radius: 50px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .question-category i {
+            font-size: 1.1rem;
+        }
+
+        .question-text {
+            font-size: 1.8rem;
+            margin-bottom: 2.5rem;
+            line-height: 1.4;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        .options-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+            margin-bottom: 2.5rem;
+        }
+
+        @media (max-width: 768px) {
+            .options-container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .option {
+            padding: 1.5rem;
+            border: 2px solid #eee;
+            border-radius: var(--border-radius);
+            cursor: pointer;
+            transition: var(--transition);
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            background-color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--gradient-primary);
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+
+        .option:hover {
+            border-color: var(--accent-color);
+            background-color: rgba(76, 201, 240, 0.05);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+        }
+
+        .option:hover::before {
+            transform: scaleY(1);
+        }
+
+        .option.selected {
+            border-color: var(--primary-color);
+            background-color: rgba(67, 97, 238, 0.1);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(67, 97, 238, 0.15);
+        }
+
+        .option.selected::before {
+            transform: scaleY(1);
+        }
+
+        .option.correct {
+            border-color: var(--success-color);
+            background-color: rgba(74, 222, 128, 0.15);
+            animation: pulse 0.5s ease;
+        }
+
+        .option.incorrect {
+            border-color: var(--danger-color);
+            background-color: rgba(239, 68, 68, 0.1);
+            animation: shake 0.5s ease;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.03); }
+            100% { transform: scale(1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .option-letter {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: var(--gradient-accent);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            flex-shrink: 0;
+            box-shadow: 0 4px 8px rgba(76, 201, 240, 0.3);
+        }
+
+        /* Barra de progresso melhorada */
+        .progress-container {
+            margin: 2.5rem 0;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.8rem;
+            font-weight: 600;
+        }
+
+        .progress-bar {
+            height: 14px;
+            background-color: #e9ecef;
+            border-radius: 7px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: var(--gradient-primary);
+            border-radius: 7px;
+            width: 0%;
+            transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                rgba(255,255,255,0) 0%, 
+                rgba(255,255,255,0.3) 50%, 
+                rgba(255,255,255,0) 100%);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Controles do Quiz */
+        .quiz-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 2.5rem;
+            gap: 1.2rem;
+            flex-wrap: wrap;
+        }
+
+        .quiz-btn {
+            padding: 1rem 2.2rem;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            font-size: 1.05rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .quiz-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .quiz-btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .quiz-btn-primary:hover {
+            background: linear-gradient(135deg, #3a56d4, #2a0ca3);
+        }
+
+        .quiz-btn-secondary {
+            background-color: white;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .quiz-btn-secondary:hover {
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+
+        .quiz-btn-accent {
+            background: var(--gradient-accent);
+            color: white;
+        }
+
+        .quiz-btn-accent:hover {
+            background: linear-gradient(135deg, #38b2d9, #3a7de8);
+        }
+
+        .hint-container {
+            margin-top: 1.5rem;
+            padding: 1.5rem;
+            background: linear-gradient(135deg, rgba(245, 158, 11, 0.1), rgba(245, 158, 11, 0.05));
+            border-left: 4px solid var(--warning-color);
+            border-radius: 0 var(--border-radius) var(--border-radius) 0;
+            display: none;
+            animation: slideInRight 0.5s ease;
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .hint-container.show {
+            display: block;
+        }
+
+        .hint-title {
+            font-weight: 700;
+            color: #92400e;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Feedback */
+        .feedback-container {
+            margin-top: 2rem;
+            padding: 1.8rem;
+            border-radius: var(--border-radius);
+            display: none;
+            animation: slideUp 0.5s ease;
+        }
+
+        .feedback-container.show {
+            display: block;
+        }
+
+        .feedback-title {
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+        }
+
+        /* Painel lateral */
+        .side-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .panel-card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 2rem;
+            box-shadow: var(--box-shadow);
+            transition: var(--transition);
+        }
+
+        .panel-card:hover {
+            box-shadow: var(--box-shadow-hover);
+            transform: translateY(-5px);
+        }
+
+        .panel-card h3 {
+            margin-bottom: 1.5rem;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.3rem;
+        }
+
+        /* Medalhas melhoradas */
+        .medals-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.2rem;
+            justify-content: center;
+        }
+
+        .medal {
+            width: 70px;
+            height: 70px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+            transition: var(--transition);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .medal:hover {
+            transform: scale(1.1) rotate(10deg);
+        }
+
+        .medal-gold {
+            background: radial-gradient(circle at 30% 30%, #FFD700, #FFA500);
+            color: #7a6000;
+        }
+
+        .medal-silver {
+            background: radial-gradient(circle at 30% 30%, #C0C0C0, #A9A9A9);
+            color: #555;
+        }
+
+        .medal-bronze {
+            background: radial-gradient(circle at 30% 30%, #CD7F32, #8B4513);
+            color: #fff;
+        }
+
+        .medal::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border-radius: 50%;
+            z-index: -1;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .medal-gold::after {
+            background: radial-gradient(circle at 30% 30%, rgba(255, 215, 0, 0.3), transparent);
+        }
+
+        .medal:hover::after {
+            opacity: 1;
+        }
+
+        /* Histórico */
+        .history-list {
+            list-style: none;
+        }
+
+        .history-item {
+            padding: 1.2rem;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+            border-radius: 8px;
+        }
+
+        .history-item:hover {
+            background-color: rgba(67, 97, 238, 0.05);
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-score {
+            font-weight: 700;
+            color: var(--primary-color);
+            font-size: 1.2rem;
+        }
+
+        .history-date {
+            font-size: 0.85rem;
+            color: var(--gray-color);
+        }
+
+        /* Ranking com efeito */
+        .quiz-ranking {
+            background: linear-gradient(135deg, rgba(67, 97, 238, 0.05) 0%, rgba(114, 9, 183, 0.05) 100%);
+            padding: 4rem 0;
+            border-radius: 40px 40px 0 0;
+            margin-top: 4rem;
+        }
+
+        .ranking-list {
+            list-style: none;
+            counter-reset: ranking-counter;
+        }
+
+        .ranking-item {
+            counter-increment: ranking-counter;
+            padding: 1.5rem 2rem;
+            margin-bottom: 1.2rem;
+            border-radius: var(--border-radius);
+            background-color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: var(--transition);
+            box-shadow: var(--box-shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ranking-item:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--box-shadow-hover);
+        }
+
+        .ranking-item::before {
+            content: counter(ranking-counter);
+            font-weight: 800;
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            min-width: 50px;
+            text-align: center;
+        }
+
+        .ranking-item:nth-child(1) {
+            background: linear-gradient(90deg, rgba(255, 215, 0, 0.1), rgba(255, 215, 0, 0.05));
+            border-left: 5px solid #FFD700;
+        }
+
+        .ranking-item:nth-child(2) {
+            background: linear-gradient(90deg, rgba(192, 192, 192, 0.1), rgba(192, 192, 192, 0.05));
+            border-left: 5px solid #C0C0C0;
+        }
+
+        .ranking-item:nth-child(3) {
+            background: linear-gradient(90deg, rgba(205, 127, 50, 0.1), rgba(205, 127, 50, 0.05));
+            border-left: 5px solid #CD7F32;
+        }
+
+        .ranking-user {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+            flex-grow: 1;
+            margin-left: 1.5rem;
+        }
+
+        .ranking-avatar {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
+        }
+
+        .ranking-score {
+            font-weight: 700;
+            font-size: 1.3rem;
+            color: var(--primary-color);
+            background: rgba(67, 97, 238, 0.1);
+            padding: 0.5rem 1.2rem;
+            border-radius: 50px;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--gradient-secondary);
+            color: white;
+            text-align: center;
+            padding: 3rem 2rem;
+            margin-top: 3rem;
+        }
+
+        footer p {
+            margin-bottom: 0.5rem;
+            opacity: 0.9;
+        }
+
+        /* Animações extras */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .floating {
+            animation: float 3s ease-in-out infinite;
+        }
+
+        /* Responsividade */
+        @media (max-width: 992px) {
+            .banner h1 {
+                font-size: 2.8rem;
+            }
+            
+            .nav-bar {
+                display: none; /* Em produção, seria um menu hamburguer */
+            }
+            
+            .user-panel {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .stats {
+                justify-content: space-between;
+                width: 100%;
+            }
+            
+            .stat-item:not(:last-child)::after {
+                display: none;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .banner h1 {
+                font-size: 2.3rem;
+            }
+            
+            .banner p {
+                font-size: 1.1rem;
+            }
+            
+            .quiz-controls {
+                flex-direction: column;
+            }
+            
+            .quiz-btn {
+                width: 100%;
+                justify-content: center;
+            }
+            
+            .question-text {
+                font-size: 1.5rem;
+            }
+        }
+
+        /* Toast notifications */
+        .toast {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            padding: 1.2rem 1.8rem;
+            border-radius: var(--border-radius);
+            color: white;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            z-index: 3000;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            animation: slideInRight 0.5s ease, fadeOut 0.5s ease 2.5s forwards;
+            max-width: 350px;
+        }
+
+        .toast-success {
+            background: linear-gradient(135deg, var(--success-color), #22c55e);
+        }
+
+        .toast-warning {
+            background: linear-gradient(135deg, var(--warning-color), #d97706);
+        }
+
+        .toast-info {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        }
+
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header class="main-header">
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-language floating"></i>
+                LinguaPro
+            </div>
+            <nav class="nav-bar">
+                <a href="index.html">Home</a>
+                <a href="courses.html">Cursos</a>
+                <a href="services.html">Serviços</a>
+                <a href="library.html">Biblioteca</a>
+                <a href="live-classes.html">Aulas Ao Vivo</a>
+                <a href="professors.html">Professores</a>
+                <a href="mini-game.html" class="active">Quiz Interativo</a>
+                <button class="btn-login" id="openLoginModal">
+                    <i class="fas fa-user"></i> Login / Cadastro
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Login / Cadastro Modal -->
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <span class="close-modal" id="closeLoginModal">&times;</span>
+            <h2 style="color: var(--primary-color); margin-bottom: 2rem; text-align: center; font-size: 2rem;">Acessar LinguaPro</h2>
+            <form id="loginForm">
+                <label for="email">Email:</label>
+                <input type="email" id="email" required placeholder="seu@email.com" style="margin-bottom: 1.5rem;">
+
+                <label for="password">Senha:</label>
+                <input type="password" id="password" required placeholder="Sua senha" style="margin-bottom: 1.5rem;">
+
+                <label for="userType">Tipo de Usuário:</label>
+                <select id="userType" style="margin-bottom: 2rem;">
+                    <option value="aluno">Aluno</option>
+                    <option value="professor">Professor</option>
+                    <option value="admin">Administrador</option>
+                </select>
+
+                <button type="submit" style="background: var(--gradient-primary); color: white; border: none; padding: 1rem; border-radius: 10px; font-weight: 600; font-size: 1.1rem; cursor: pointer; transition: var(--transition);">
+                    <i class="fas fa-sign-in-alt"></i> Entrar / Registrar
+                </button>
+                <p style="text-align: center; margin-top: 1.5rem; color: var(--gray-color); font-size: 0.9rem;">Ao entrar, você concorda com nossos Termos de Uso</p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Banner -->
+    <section class="banner">
+        <div class="container">
+            <h1>Desafie seu Conhecimento em Idiomas!</h1>
+            <p>Teste suas habilidades, ganhe pontos, conquiste medalhas e suba no ranking. Aprenda idiomas de forma divertida com nosso quiz interativo!</p>
+            
+            <div class="language-icons">
+                <div class="language-icon"><i class="fas fa-globe-americas"></i></div>
+                <div class="language-icon"><i class="fab fa-github-alt"></i></div>
+                <div class="language-icon"><i class="fas fa-comments"></i></div>
+                <div class="language-icon"><i class="fas fa-trophy"></i></div>
+                <div class="language-icon"><i class="fas fa-brain"></i></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Conteúdo Principal -->
+    <main class="container">
+        <!-- Painel do Usuário -->
+        <div class="user-panel">
+            <div class="user-info">
+                <div class="user-avatar" id="userAvatar">V</div>
+                <div class="user-details">
+                    <h3 id="userName">Visitante</h3>
+                    <p><i class="fas fa-chart-line"></i> Nível: <span id="userLevel" style="font-weight: 600;">1</span> | Tipo: <span id="userType" style="font-weight: 600;">Nenhum</span></p>
+                </div>
+            </div>
+            <div class="stats">
+                <div class="stat-item">
+                    <span class="stat-value" id="userScore">0</span>
+                    <span class="stat-label">Pontos</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="userMedals">0</span>
+                    <span class="stat-label">Medalhas</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="userStreak">0</span>
+                    <span class="stat-label">Sequência</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-value" id="userAccuracy">0%</span>
+                    <span class="stat-label">Precisão</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Container Principal do Quiz -->
+        <div class="mini-game-container">
+            <!-- Quiz -->
+            <div class="quiz-main">
+                <div class="quiz-container">
+                    <div class="question-header">
+                        <div class="question-counter" id="questionCounter">Pergunta 1 de 10</div>
+                        <div class="question-category" id="questionCategory">
+                            <i class="fas fa-flag"></i> Inglês Básico
+                        </div>
+                    </div>
+                    
+                    <div class="question-text" id="quizQuestion">
+                        Como se diz "Olá" em inglês?
+                    </div>
+                    
+                    <div class="options-container" id="quizOptions">
+                        <!-- As opções seráo geradas pelo JavaScript -->
+                    </div>
+                    
+                    <div class="progress-container">
+                        <div class="progress-header">
+                            <span>Progresso do Quiz</span>
+                            <span id="progressText">0%</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progressFill"></div>
+                        </div>
+                    </div>
+                    
+                    <div class="hint-container" id="hintContainer">
+                        <div class="hint-title">
+                            <i class="fas fa-lightbulb"></i> Dica
+                        </div>
+                        <div id="quizHint">É a forma mais comum de cumprimentar alguém em inglês.</div>
+                    </div>
+                    
+                    <div class="feedback-container" id="feedbackContainer">
+                        <div id="feedbackContent">
+                            <div class="feedback-title">
+                                <i class="fas fa-check-circle"></i> <span id="feedbackTitle">Correto!</span>
+                            </div>
+                            <div id="feedbackText">Você acertou! "Hello" é a tradução correta.</div>
+                        </div>
+                    </div>
+                    
+                    <div class="quiz-controls">
+                        <button class="quiz-btn quiz-btn-secondary" id="showHintBtn">
+                            <i class="fas fa-lightbulb"></i> Mostrar Dica
+                        </button>
+                        <div style="display: flex; gap: 1rem;">
+                            <button class="quiz-btn quiz-btn-primary" id="nextQuestionBtn" disabled>
+                                Próxima Pergunta <i class="fas fa-arrow-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <button class="quiz-btn quiz-btn-accent" id="endQuizBtn" style="width: 100%; margin-top: 1rem;">
+                    <i class="fas fa-flag-checkered"></i> Finalizar Quiz
+                </button>
+            </div>
+            
+            <!-- Painel Lateral -->
+            <div class="side-panel">
+                <!-- Medalhas -->
+                <div class="panel-card">
+                    <h3><i class="fas fa-medal"></i> Conquistas</h3>
+                    <div class="medals-container" id="medalsContainer">
+                        <!-- As medalhas seráo geradas pelo JavaScript -->
+                    </div>
+                    <p style="text-align: center; margin-top: 1.5rem; color: var(--gray-color); font-size: 0.9rem;">Ganhe medalhas ao progredir no quiz!</p>
+                </div>
+                
+                <!-- Histórico -->
+                <div class="panel-card">
+                    <h3><i class="fas fa-history"></i> Histórico Recente</h3>
+                    <ul class="history-list" id="historyList">
+                        <li class="history-item">
+                            <div>
+                                <div style="font-weight: 600;">Quiz de Inglês Básico</div>
+                                <div class="history-date">Hoje, 14:30</div>
+                            </div>
+                            <div class="history-score">85%</div>
+                        </li>
+                        <!-- Mais itens seráo gerados pelo JavaScript -->
+                    </ul>
+                </div>
+                
+                <!-- Estatísticas -->
+                <div class="panel-card">
+                    <h3><i class="fas fa-chart-bar"></i> Estatísticas</h3>
+                    <div class="stats-container">
+                        <div style="margin-bottom: 1.5rem;">
+                            <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-weight: 600;">
+                                <span>Taxa de acertos:</span>
+                                <span id="accuracyRate">0%</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="accuracyFill" style="width: 0%;"></div>
+                            </div>
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem;">
+                            <div style="text-align: center; padding: 1rem; background: rgba(67, 97, 238, 0.05); border-radius: 10px;">
+                                <div class="stat-value" id="totalQuizzes">0</div>
+                                <div class="stat-label">Quizzes Feitos</div>
+                            </div>
+                            <div style="text-align: center; padding: 1rem; background: rgba(67, 97, 238, 0.05); border-radius: 10px;">
+                                <div class="stat-value" id="totalQuestions">0</div>
+                                <div class="stat-label">Perguntas</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Ranking -->
+    <section class="quiz-ranking">
+        <div class="container">
+            <h2 style="text-align: center; margin-bottom: 3rem; color: var(--primary-color); font-size: 2.5rem;">
+                <i class="fas fa-trophy"></i> Ranking Semanal
+            </h2>
+            <ol class="ranking-list" id="rankingList">
+                <!-- O ranking será gerado pelo JavaScript -->
+            </ol>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p style="font-size: 1.1rem; margin-bottom: 1rem;">&copy; 2025 LinguaPro. Todos os direitos reservados.</p>
+            <p style="opacity: 0.9;">Contacto: +258 83 495 7798 | Email: escoladelinguasdemaputo@gmail.com</p>
+            <div style="display: flex; justify-content: center; gap: 1.5rem; margin-top: 2rem;">
+                <a href="#" style="color: white; font-size: 1.5rem;"><i class="fab fa-facebook"></i></a>
+                <a href="#" style="color: white; font-size: 1.5rem;"><i class="fab fa-instagram"></i></a>
+                <a href="#" style="color: white; font-size: 1.5rem;"><i class="fab fa-twitter"></i></a>
+                <a href="#" style="color: white; font-size: 1.5rem;"><i class="fab fa-linkedin"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript Melhorado -->
+    <script>
+        // Dados do jogo expandidos
+        const questions = [
+            {
+                question: "Como se diz 'Olá' em inglês?",
+                options: ["Hello", "Hola", "Bonjour", "Ciao"],
+                answer: "Hello",
+                hint: "É a forma mais comum de cumprimentar alguém em inglês.",
+                category: "Inglês Básico",
+                difficulty: "Fácil"
+            },
+            {
+                question: "Como se diz 'Obrigado' em francês?",
+                options: ["Merci", "Danke", "Gracias", "Grazie"],
+                answer: "Merci",
+                hint: "Começa com 'M' e é uma das primeiras palavras que se aprende em francês.",
+                category: "Francês Básico",
+                difficulty: "Fácil"
+            },
+            {
+                question: "Qual é a tradução de 'água' para espanhol?",
+                options: ["Agua", "Eau", "Wasser", "Acqua"],
+                answer: "Agua",
+                hint: "Pronuncia-se 'água' mas com sotaque espanhol.",
+                category: "Espanhol Básico",
+                difficulty: "Fácil"
+            },
+            {
+                question: "Como se diz 'amigo' em italiano?",
+                options: ["Amico", "Ami", "Amigo", "Freund"],
+                answer: "Amico",
+                hint: "Parecido com 'amigo' em português, mas termina com 'o'.",
+                category: "Italiano Básico",
+                difficulty: "Fácil"
+            },
+            {
+                question: "Qual É a forma correta de dizer 'eu gosto de você' em alemão?",
+                options: ["Ich mag dich", "Je t'aime", "I like you", "Me gustas"],
+                answer: "Ich mag dich",
+                hint: "Começa com 'Ich' que significa 'eu' em alemão.",
+                category: "Alemão Básico",
+                difficulty: "Médio"
+            },
+            {
+                question: "Como se diz 'por favor' em japonês?",
+                options: ["Onegaishimasu", "Por favor", "S'il vous plaît", "Bitte"],
+                answer: "Onegaishimasu",
+                hint: "Uma palavra longa que é muito usada no Japão.",
+                category: "Japonês Básico",
+                difficulty: "Médio"
+            },
+            {
+                question: "Qual é a tradução de 'livro' para russo?",
+                options: ["Книга", "Book", "Libro", "Livre"],
+                answer: "Книга",
+                hint: "Começa com uma letra cirílica que se parece com um 'K'.",
+                category: "Russo Básico",
+                difficulty: "Difícil"
+            },
+            {
+                question: "Como se diz 'bom dia' em mandarim?",
+                options: ["Zao shang hao", "Good morning", "Bonjour", "Buenos días"],
+                answer: "Zǎo shang hǎo",
+                hint: "Três palavras que significam literalmente 'manhã boa'.",
+                category: "Mandarim Básico",
+                difficulty: "Difícil"
+            },
+            {
+                question: "Qual É a forma correta de dizer 'até logo' em português?",
+                options: ["Até logo", "Au revoir", "Hasta luego", "Auf Wiedersehen"],
+                answer: "Até logo",
+                hint: "Expressão comum de despedida em português.",
+                category: "Português",
+                difficulty: "Fácil"
+            },
+            {
+                question: "Como se diz 'feliz' em coreano?",
+                options: ["?", "Feliz", "Heureux", "Glücklich"],
+                answer: "행복한",
+                hint: "Palavra coreana que começa com um caractere que parece uma janela.",
+                category: "Coreano Básico",
+                difficulty: "Difícil"
+            }
+        ];
+
+        // Estado do jogo
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let medals = 0;
+        let level = 1;
+        let correctAnswers = 0;
+        let totalQuestionsAnswered = 0;
+        let streak = 0;
+        let history = [];
+        let userType = "Visitante";
+        let userName = "Visitante";
+        let selectedOption = null;
+        let quizCompleted = false;
+        let timePerQuestion = 30;
+        let timeLeft = timePerQuestion;
+        let timerInterval = null;
+
+        // Elementos DOM
+        const loginModal = document.getElementById('loginModal');
+        const openLoginBtn = document.getElementById('openLoginModal');
+        const closeLoginBtn = document.getElementById('closeLoginModal');
+        const loginForm = document.getElementById('loginForm');
+        const quizQuestion = document.getElementById('quizQuestion');
+        const quizOptions = document.getElementById('quizOptions');
+        const questionCounter = document.getElementById('questionCounter');
+        const questionCategory = document.getElementById('questionCategory');
+        const progressFill = document.getElementById('progressFill');
+        const progressText = document.getElementById('progressText');
+        const hintContainer = document.getElementById('hintContainer');
+        const quizHint = document.getElementById('quizHint');
+        const feedbackContainer = document.getElementById('feedbackContainer');
+        const feedbackTitle = document.getElementById('feedbackTitle');
+        const feedbackText = document.getElementById('feedbackText');
+        const showHintBtn = document.getElementById('showHintBtn');
+        const nextQuestionBtn = document.getElementById('nextQuestionBtn');
+        const endQuizBtn = document.getElementById('endQuizBtn');
+        const userScore = document.getElementById('userScore');
+        const userMedals = document.getElementById('userMedals');
+        const userLevel = document.getElementById('userLevel');
+        const userStreak = document.getElementById('userStreak');
+        const userNameDisplay = document.getElementById('userName');
+        const userTypeDisplay = document.getElementById('userType');
+        const userAvatar = document.getElementById('userAvatar');
+        const userAccuracy = document.getElementById('userAccuracy');
+        const medalsContainer = document.getElementById('medalsContainer');
+        const historyList = document.getElementById('historyList');
+        const accuracyRate = document.getElementById('accuracyRate');
+        const accuracyFill = document.getElementById('accuracyFill');
+        const totalQuizzes = document.getElementById('totalQuizzes');
+        const totalQuestions = document.getElementById('totalQuestions');
+        const rankingList = document.getElementById('rankingList');
+
+        // Modal Login / Cadastro
+        openLoginBtn.addEventListener('click', () => {
+            loginModal.style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+        });
+
+        closeLoginBtn.addEventListener('click', () => {
+            loginModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+
+        window.addEventListener('click', e => {
+            if(e.target === loginModal) {
+                loginModal.style.display = 'none';
+                document.body.style.overflow = 'auto';
+            }
+        });
+
+        // Formulário de login
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value;
+            const userTypeSelect = document.getElementById('userType').value;
+            
+            // Simulação de login
+            userName = email.split('@')[0] || "Usuário";
+            userType = userTypeSelect;
+            
+            // Atualizar interface
+            userNameDisplay.textContent = userName;
+            userTypeDisplay.textContent = userType;
+            userAvatar.textContent = userName.charAt(0).toUpperCase();
+            
+            // Criar um avatar com cor baseada no nome
+            const colors = ['#4361ee', '#7209b7', '#4cc9f0', '#4ade80', '#f59e0b', '#ef4444'];
+            const colorIndex = userName.length % colors.length;
+            const nextColor = colors[(colorIndex + 2) % colors.length];
+            userAvatar.style.background = `linear-gradient(135deg, ${colors[colorIndex]}, ${nextColor})`;
+            
+            // Fechar modal
+            loginModal.style.display = 'none';
+            document.body.style.overflow = 'auto';
+            
+            // Mostrar mensagem de boas-vindas
+            showToast(`Bem-vindo(a), ${userName}!`, 'success');
+            
+            // Atualizar ranking
+            generateRanking();
+        });
+
+        // Inicializar o quiz
+        function initQuiz() {
+            loadQuestion();
+            updateStats();
+            generateMedals();
+            generateHistory();
+            generateRanking();
+            startTimer();
+        }
+
+        // Carregar pergunta
+        function loadQuestion() {
+            const question = questions[currentQuestionIndex];
+            
+            // Atualizar contador e categoria
+            questionCounter.textContent = `Pergunta ${currentQuestionIndex + 1} de ${questions.length}`;
+            questionCategory.innerHTML = `<i class="fas fa-flag"></i> ${question.category} <span style="background: ${getDifficultyColor(question.difficulty)}; color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem; margin-left: 8px;">${question.difficulty}</span>`;
+            
+            // Atualizar pergunta
+            quizQuestion.textContent = question.question;
+            
+            // Limpar opções anteriores
+            quizOptions.innerHTML = '';
+            
+            // Adicionar opções
+            const letters = ['A', 'B', 'C', 'D'];
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('div');
+                optionElement.className = 'option';
+                optionElement.innerHTML = `
+                    <div class="option-letter">${letters[index]}</div>
+                    <div class="option-text">${option}</div>
+                `;
+                
+                // Adicionar evento de clique
+                optionElement.addEventListener('click', () => selectOption(optionElement, option, question.answer));
+                
+                quizOptions.appendChild(optionElement);
+            });
+            
+            // Atualizar dica
+            quizHint.textContent = question.hint;
+            
+            // Esconder feedback e dica
+            hintContainer.classList.remove('show');
+            feedbackContainer.classList.remove('show');
+            
+            // Desabilitar botão de próxima pergunta
+            nextQuestionBtn.disabled = true;
+            selectedOption = null;
+            
+            // Atualizar progresso
+            updateProgress();
+            
+            // Reiniciar timer
+            resetTimer();
+        }
+
+        // Função auxiliar para cor da dificuldade
+        function getDifficultyColor(difficulty) {
+            switch(difficulty) {
+                case 'Fácil': return '#4ade80';
+                case 'Médio': return '#f59e0b';
+                case 'Difícil': return '#ef4444';
+                default: return '#6c757d';
+            }
+        }
+
+        // Timer
+        function startTimer() {
+            clearInterval(timerInterval);
+            resetTimer();
+        }
+
+        function resetTimer() {
+            timeLeft = timePerQuestion;
+            // Em uma implementação real, aqui teríamos um timer visual
+        }
+
+        // Selecionar opção
+        function selectOption(optionElement, selected, correctAnswer) {
+            // Se já selecionou uma opção, não faz nada
+            if (selectedOption !== null) return;
+            
+            selectedOption = selected;
+            
+            // Marcar opção selecionada
+            optionElement.classList.add('selected');
+            
+            // Encontrar a opção correta
+            const options = document.querySelectorAll('.option');
+            options.forEach(opt => {
+                const optText = opt.querySelector('.option-text').textContent;
+                if (optText === correctAnswer) {
+                    opt.classList.add('correct');
+                }
+                if (optText === selected && optText !== correctAnswer) {
+                    opt.classList.add('incorrect');
+                }
+            });
+            
+            // Verificar resposta
+            const isCorrect = selected === correctAnswer;
+            
+            // Atualizar pontuação com bônus de dificuldade
+            let pointsEarned = 10;
+            const question = questions[currentQuestionIndex];
+            
+            // Bônus por dificuldade
+            if (question.difficulty === 'Médio') pointsEarned = 15;
+            if (question.difficulty === 'Difícil') pointsEarned = 20;
+            
+            // Bônus por sequência
+            if (isCorrect) {
+                score += pointsEarned;
+                correctAnswers++;
+                streak++;
+                
+                // Verificar se ganhou medalha por sequência
+                if (streak % 5 === 0) {
+                    medals++;
+                    showMedalNotification(streak);
+                    generateMedals();
+                }
+                
+                // Bônus por tempo (se implementado)
+                // if (timeLeft > 20) score += 5;
+            } else {
+                streak = 0;
+            }
+            
+            totalQuestionsAnswered++;
+            
+            // Atualizar nível
+            if (score >= level * 100) {
+                level++;
+                showLevelUpNotification();
+            }
+            
+            // Mostrar feedback
+            showFeedback(isCorrect, correctAnswer, pointsEarned);
+            
+            // Atualizar estatísticas
+            updateStats();
+            
+            // Habilitar botão de próxima pergunta
+            nextQuestionBtn.disabled = false;
+        }
+
+        // Mostrar feedback melhorado
+        function showFeedback(isCorrect, correctAnswer, pointsEarned = 10) {
+            if (isCorrect) {
+                feedbackContainer.className = 'feedback-container show';
+                feedbackContainer.style.background = 'linear-gradient(135deg, rgba(74, 222, 128, 0.15), rgba(74, 222, 128, 0.05))';
+                feedbackContainer.style.borderLeft = '4px solid var(--success-color)';
+                feedbackTitle.textContent = 'Correto!';
+                feedbackTitle.innerHTML = '<i class="fas fa-check-circle" style="color: #4ade80;"></i> Correto!';
+                feedbackText.innerHTML = `Resposta correta! <strong>+${pointsEarned} pontos</strong><br>Sequência: ${streak} resposta${streak !== 1 ? 's' : ''} correta${streak !== 1 ? 's' : ''}`;
+                
+                // Efeito de confete para resposta correta
+                if (streak % 3 === 0) {
+                    createConfetti();
+                }
+            } else {
+                feedbackContainer.className = 'feedback-container show';
+                feedbackContainer.style.background = 'linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(239, 68, 68, 0.05))';
+                feedbackContainer.style.borderLeft = '4px solid var(--danger-color)';
+                feedbackTitle.textContent = 'Incorreto!';
+                feedbackTitle.innerHTML = '<i class="fas fa-times-circle" style="color: #ef4444;"></i> Incorreto!';
+                feedbackText.textContent = `Resposta incorreta. A resposta correta é: ${correctAnswer}`;
+            }
+        }
+
+        // Mostrar dica
+        showHintBtn.addEventListener('click', () => {
+            hintContainer.classList.add('show');
+            showHintBtn.disabled = true;
+            showHintBtn.innerHTML = '<i class="fas fa-lightbulb"></i> Dica Mostrada';
+            showHintBtn.style.opacity = '0.7';
+        });
+
+        // Próxima pergunta
+        nextQuestionBtn.addEventListener('click', () => {
+            if (currentQuestionIndex < questions.length - 1) {
+                currentQuestionIndex++;
+                loadQuestion();
+                showHintBtn.disabled = false;
+                showHintBtn.innerHTML = '<i class="fas fa-lightbulb"></i> Mostrar Dica';
+                showHintBtn.style.opacity = '1';
+            } else {
+                endQuiz();
+            }
+        });
+
+        // Finalizar quiz
+        endQuizBtn.addEventListener('click', () => {
+            if (!quizCompleted) {
+                endQuiz();
+            } else {
+                resetQuiz();
+            }
+        });
+
+        // Finalizar o quiz
+        function endQuiz() {
+            quizCompleted = true;
+            
+            // Calcular porcentagem de acertos
+            const accuracy = totalQuestionsAnswered > 0 ? Math.round((correctAnswers / totalQuestionsAnswered) * 100) : 0;
+            
+            // Adicionar ao histórico
+            const quizResult = {
+                date: new Date().toLocaleDateString('pt-PT'),
+                time: new Date().toLocaleTimeString('pt-PT', {hour: '2-digit', minute: '2-digit'}),
+                category: 'Multi-idiomas',
+                score: score,
+                accuracy: accuracy,
+                totalQuestions: questions.length,
+                correctAnswers: correctAnswers
+            };
+            
+            history.unshift(quizResult);
+            
+            // Atualizar histórico na interface
+            generateHistory();
+            
+            // Mostrar resultados com toast
+            showToast(`Quiz finalizado! Pontuação: ${score} | Acertos: ${correctAnswers}/${questions.length} (${accuracy}%)`, 'info');
+            
+            // Mudar texto do botão
+            endQuizBtn.innerHTML = '<i class="fas fa-redo"></i> Reiniciar Quiz';
+            
+            // Desabilitar seleção de opções
+            const options = document.querySelectorAll('.option');
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'none';
+            });
+            
+            // Atualizar progresso para 100%
+            progressFill.style.width = '100%';
+            progressText.textContent = '100%';
+            
+            // Atualizar ranking
+            generateRanking();
+        }
+
+        // Reiniciar quiz
+        function resetQuiz() {
+            currentQuestionIndex = 0;
+            score = 0;
+            correctAnswers = 0;
+            totalQuestionsAnswered = 0;
+            streak = 0;
+            quizCompleted = false;
+            
+            // Resetar botão
+            endQuizBtn.innerHTML = '<i class="fas fa-flag-checkered"></i> Finalizar Quiz';
+            
+            // Resetar botão de dica
+            showHintBtn.disabled = false;
+            showHintBtn.innerHTML = '<i class="fas fa-lightbulb"></i> Mostrar Dica';
+            showHintBtn.style.opacity = '1';
+            
+            // Reiniciar quiz
+            initQuiz();
+            
+            // Habilitar seleção de opções
+            const options = document.querySelectorAll('.option');
+            options.forEach(opt => {
+                opt.style.pointerEvents = 'auto';
+            });
+            
+            showToast('Quiz reiniciado! Boa sorte!', 'info');
+        }
+
+        // Atualizar progresso
+        function updateProgress() {
+            const progress = ((currentQuestionIndex) / questions.length) * 100;
+            progressFill.style.width = `${progress}%`;
+            progressText.textContent = `${Math.round(progress)}%`;
+        }
+
+        // Atualizar estatísticas
+        function updateStats() {
+            userScore.textContent = score;
+            userMedals.textContent = medals;
+            userLevel.textContent = level;
+            userStreak.textContent = streak;
+            
+            // Atualizar taxa de acertos
+            const accuracy = totalQuestionsAnswered > 0 ? Math.round((correctAnswers / totalQuestionsAnswered) * 100) : 0;
+            accuracyRate.textContent = `${accuracy}%`;
+            accuracyFill.style.width = `${accuracy}%`;
+            userAccuracy.textContent = `${accuracy}%`;
+            
+            // Atualizar totais
+            totalQuizzes.textContent = history.length;
+            totalQuestions.textContent = totalQuestionsAnswered;
+        }
+
+        // Gerar medalhas
+        function generateMedals() {
+            medalsContainer.innerHTML = '';
+            
+            // Medalhas baseadas no nível e conquistas
+            const medalTypes = [
+                { type: 'bronze', threshold: 1, icon: 'fas fa-star', title: 'Iniciante' },
+                { type: 'silver', threshold: 3, icon: 'fas fa-rocket', title: 'Intermediário' },
+                { type: 'gold', threshold: 5, icon: 'fas fa-crown', title: 'Avançado' },
+                { type: 'gold', threshold: 10, icon: 'fas fa-trophy', title: 'Mestre' }
+            ];
+            
+            medalTypes.forEach((medal, index) => {
+                if (level >= medal.threshold) {
+                    const medalElement = document.createElement('div');
+                    medalElement.className = `medal medal-${medal.type}`;
+                    medalElement.innerHTML = `<i class="${medal.icon}"></i>`;
+                    medalElement.title = `${medal.title} - Nível ${medal.threshold}`;
+                    medalElement.addEventListener('click', () => {
+                        showToast(`Conquista: ${medal.title}`, 'warning');
+                    });
+                    medalsContainer.appendChild(medalElement);
+                }
+            });
+        }
+
+        // Gerar histórico
+        function generateHistory() {
+            historyList.innerHTML = '';
+            
+            // Limitar a 5 itens no histórico
+            const recentHistory = history.slice(0, 5);
+            
+            if (recentHistory.length === 0) {
+                const li = document.createElement('li');
+                li.className = 'history-item';
+                li.innerHTML = '<div style="text-align: center; width: 100%; color: var(--gray-color);">Nenhum quiz concluído ainda</div>';
+                historyList.appendChild(li);
+                return;
+            }
+            
+            recentHistory.forEach(item => {
+                const li = document.createElement('li');
+                li.className = 'history-item';
+                li.innerHTML = `
+                    <div>
+                        <div style="font-weight: 600;">${item.category}</div>
+                        <div class="history-date">${item.date} ${item.time}</div>
+                    </div>
+                    <div class="history-score">${item.accuracy}%</div>
+                `;
+                historyList.appendChild(li);
+            });
+        }
+
+        // Gerar ranking
+        function generateRanking() {
+            rankingList.innerHTML = '';
+            
+            const rankingData = [
+                { name: "Maria Silva", score: 1250, level: 12 },
+                { name: "João Santos", score: 980, level: 9 },
+                { name: "Ana Costa", score: 850, level: 8 },
+                { name: "Pedro Alves", score: 720, level: 7 },
+                { name: "Carla Mendes", score: 680, level: 6 },
+                { name: "Rui Oliveira", score: 540, level: 5 },
+                { name: "Sofia Pereira", score: 420, level: 4 },
+                { name: "Miguel Rodrigues", score: 380, level: 4 }
+            ];
+            
+            // Adicionar usuário atual ao ranking (se tiver pontuação)
+            if (score > 0 && userName !== "Visitante") {
+                rankingData.push({ name: userName, score: score, level: level });
+            }
+            
+            // Ordenar por pontuação
+            rankingData.sort((a, b) => b.score - a.score);
+            
+            // Limitar a 8 posições
+            const topRanking = rankingData.slice(0, 8);
+            
+            topRanking.forEach((user, index) => {
+                const li = document.createElement('li');
+                li.className = 'ranking-item';
+                
+                // Destacar usuário atual
+                const isCurrentUser = user.name === userName;
+                if (isCurrentUser) {
+                    li.style.background = 'linear-gradient(90deg, rgba(76, 201, 240, 0.2), rgba(76, 201, 240, 0.1))';
+                    li.style.borderLeft = '5px solid var(--accent-color)';
+                }
+                
+                li.innerHTML = `
+                    <div class="ranking-user">
+                        <div class="ranking-avatar" style="${isCurrentUser ? 'background: var(--gradient-accent);' : ''}">${user.name.charAt(0)}</div>
+                        <div>
+                            <div style="font-weight: 600;">${user.name} ${isCurrentUser ? '<span style="background: var(--accent-color); color: white; padding: 2px 8px; border-radius: 10px; font-size: 0.8rem; margin-left: 8px;">Você</span>' : ''}</div>
+                            <div style="font-size: 0.85rem; color: var(--gray-color);">Nível ${user.level}</div>
+                        </div>
+                    </div>
+                    <div class="ranking-score">${user.score}</div>
+                `;
+                rankingList.appendChild(li);
+            });
+        }
+
+        // Mostrar notificação toast
+        function showToast(message, type = 'info') {
+            // Criar elemento de notificação
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                padding: 1.2rem 1.8rem;
+                border-radius: var(--border-radius);
+                color: white;
+                font-weight: 600;
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                z-index: 3000;
+                box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+                animation: slideInRight 0.5s ease, fadeOut 0.5s ease 3s forwards;
+                max-width: 350px;
+            `;
+            
+            const icons = {
+                success: 'fas fa-check-circle',
+                warning: 'fas fa-exclamation-triangle',
+                info: 'fas fa-info-circle'
+            };
+            
+            toast.innerHTML = `
+                <i class="${icons[type] || 'fas fa-info-circle'}" style="font-size: 1.5rem;"></i>
+                <div>${message}</div>
+            `;
+            
+            document.body.appendChild(toast);
+            
+            // Remover após 3.5 segundos
+            setTimeout(() => {
+                if (toast.parentNode) {
+                    toast.parentNode.removeChild(toast);
+                }
+            }, 3500);
+        }
+
+        // Mostrar notificação de medalha
+        function showMedalNotification(streakCount) {
+            showToast(`Nova Medalha! Sequência de ${streakCount} respostas corretas!`, 'warning');
+        }
+
+        // Mostrar notificação de subida de nível
+        function showLevelUpNotification() {
+            showToast(`é Subiu para o Nível ${level}! Continue assim!`, 'success');
+        }
+
+        // Efeito de confete
+        function createConfetti() {
+            const confettiCount = 50;
+            const colors = ['#4361ee', '#7209b7', '#4cc9f0', '#4ade80', '#f59e0b'];
+            
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.cssText = `
+                    position: fixed;
+                    width: 10px;
+                    height: 10px;
+                    background: ${colors[Math.floor(Math.random() * colors.length)]};
+                    border-radius: ${Math.random() > 0.5 ? '50%' : '0'};
+                    top: -20px;
+                    left: ${Math.random() * 100}vw;
+                    z-index: 9999;
+                    pointer-events: none;
+                    animation: fall ${Math.random() * 3 + 2}s linear forwards;
+                `;
+                
+                document.body.appendChild(confetti);
+                
+                // Remover após animação
+                setTimeout(() => {
+                    if (confetti.parentNode) {
+                        confetti.parentNode.removeChild(confetti);
+                    }
+                }, 5000);
+            }
+            
+            // Adicionar estilos de animação
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fall {
+                    to {
+                        transform: translateY(100vh) rotate(${Math.random() * 360}deg);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
+        // Efeito de digitação para título
+        function typeWriterEffect(element, text, speed = 50) {
+            let i = 0;
+            element.innerHTML = '';
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        // Inicializar o jogo
+        document.addEventListener('DOMContentLoaded', () => {
+            initQuiz();
+            
+            // Efeito de digitação no título do banner
+            const bannerTitle = document.querySelector('.banner h1');
+            const originalText = bannerTitle.textContent;
+            bannerTitle.textContent = '';
+            setTimeout(() => {
+                typeWriterEffect(bannerTitle, originalText, 70);
+            }, 500);
+        });
+    </script>
+</body>
+</html>
+
+
+
+
+

@@ -1,0 +1,63 @@
+.hero-services {
+  background: linear-gradient(135deg, #0f4c81, #1f78b4);
+  color: #fff;
+  padding: 4rem 0;
+}
+
+.min-vh-80 {
+  min-height: 80vh;
+}
+
+.service-card {
+  border-radius: 16px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.12);
+}
+
+.service-card .card-header {
+  border: 0;
+  background: transparent;
+}
+
+.icon-wrapper {
+  width: 64px;
+  height: 64px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(31, 120, 180, 0.1);
+}
+
+.icon-circle {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(31, 120, 180, 0.12);
+}
+
+#serviceRequestModal .modal-content {
+  border-radius: 14px;
+  border: 0;
+}
+
+#serviceRequestModal .modal-header {
+  border-bottom: 1px solid #e9ecef;
+}
+
+#serviceRequestModal .form-control:focus {
+  border-color: #1f78b4;
+  box-shadow: 0 0 0 0.2rem rgba(31, 120, 180, 0.18);
+}
+
+/* Titulos solicitados em azul */
+.service-section-title {
+  color: #1f78b4;
+}

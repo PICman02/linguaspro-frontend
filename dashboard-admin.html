@@ -1,0 +1,829 @@
+﻿<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel Admin - LinguaPro</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.min.css" rel="stylesheet">
+<style>
+:root {
+    --primary: #4361ee;
+    --secondary: #7209b7;
+    --success: #06d6a0;
+    --warning: #ff9e00;
+    --danger: #ef233c;
+    --dark: #2b2d42;
+    --light: #f8f9fa;
+    --gray: #8d99ae;
+    --border: #e9ecef;
+    --sidebar: 260px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: 'Inter', sans-serif; background: #f5f7ff; color: var(--dark); }
+
+/* Layout */
+.dashboard { display: grid; grid-template-columns: var(--sidebar) 1fr; min-height: 100vh; }
+
+/* Sidebar */
+.sidebar {
+    background: linear-gradient(180deg, var(--dark), #1a1c2f);
+    color: white;
+    padding: 1.5rem 0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+}
+
+.logo {
+    padding: 0 1.5rem 1.5rem;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.logo i {
+    background: var(--primary);
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.nav-menu { padding: 1rem 0; }
+.nav-item {
+    padding: 0.85rem 1.5rem;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    cursor: pointer;
+    transition: all 0.3s;
+    border-left: 4px solid transparent;
+    margin-bottom: 2px;
+}
+
+.nav-item:hover { background: rgba(255,255,255,0.05); padding-left: 1.8rem; }
+.nav-item.active { background: rgba(67,97,238,0.15); border-left-color: var(--primary); }
+.nav-badge {
+    margin-left: auto;
+    background: var(--primary);
+    padding: 0.2rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.75rem;
+}
+
+/* Header */
+.header {
+    background: white;
+    padding: 1rem 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    position: sticky;
+    top: 0;
+    z-index: 100;
+}
+
+.search-box { position: relative; }
+.search-box input {
+    padding: 0.7rem 1rem 0.7rem 2.5rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    width: 250px;
+    font-size: 0.9rem;
+}
+
+.search-box i {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--gray);
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+}
+
+.avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 600;
+}
+
+/* Main Content */
+.main-content { padding: 2rem; overflow-y: auto; max-height: 100vh; }
+
+/* Welcome Card */
+.welcome-card {
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    color: white;
+    padding: 2rem;
+    border-radius: 15px;
+    margin-bottom: 2rem;
+    box-shadow: 0 10px 30px rgba(67,97,238,0.2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.quick-stats { display: flex; gap: 2rem; }
+.stat-item { text-align: center; }
+.stat-item h3 { font-size: 2rem; margin-bottom: 0.2rem; }
+
+/* Stats Grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.stat-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: transform 0.3s;
+}
+
+.stat-card:hover { transform: translateY(-5px); }
+.stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    color: white;
+}
+
+/* Material Cards */
+.material-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
+.material-card {
+    background: white;
+    padding: 1.5rem;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    border-left: 4px solid var(--warning);
+}
+
+.material-card.approved { border-left-color: var(--success); }
+.material-card.rejected { border-left-color: var(--danger); }
+
+.material-actions { display: flex; gap: 0.5rem; margin-top: 1rem; }
+.material-actions .btn { padding: 0.5rem 1rem; font-size: 0.85rem; }
+.charts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 1.5rem;
+}
+.chart-wrap {
+    height: 260px;
+    padding: 1rem 1.5rem 1.5rem;
+}
+
+/* Messages */
+.messages-container { display: grid; grid-template-columns: 300px 1fr; gap: 1.5rem; }
+.conversations-list {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    overflow: hidden;
+}
+
+.conversation-item {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.conversation-item:hover { background: var(--light); }
+.conversation-item.active { background: rgba(67,97,238,0.1); }
+.conversation-item.unread { background: rgba(67,97,238,0.05); }
+
+.chat-area {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    display: flex;
+    flex-direction: column;
+    height: 600px;
+}
+
+.chat-header { padding: 1.5rem; border-bottom: 1px solid var(--border); }
+.chat-messages { flex: 1; padding: 1.5rem; overflow-y: auto; }
+.chat-input { padding: 1.5rem; border-top: 1px solid var(--border); display: flex; gap: 1rem; }
+
+.message {
+    margin-bottom: 1rem;
+    max-width: 70%;
+    padding: 0.8rem 1rem;
+    border-radius: 12px;
+    position: relative;
+}
+
+.message.sent { background: rgba(67,97,238,0.1); margin-left: auto; }
+.message.received { background: var(--light); }
+
+.message-time {
+    font-size: 0.75rem;
+    color: var(--gray);
+    margin-top: 0.25rem;
+    text-align: right;
+}
+
+/* Certificate Preview */
+.certificate-preview {
+    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    border: 2px solid #ddd;
+    border-radius: 15px;
+    padding: 2rem;
+    text-align: center;
+    margin: 2rem 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.certificate-preview::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--primary), var(--secondary));
+}
+
+.certificate-header {
+    margin-bottom: 2rem;
+    color: var(--dark);
+}
+
+.certificate-body {
+    padding: 2rem;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.certificate-seal {
+    width: 100px;
+    height: 100px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 50%;
+    margin: 2rem auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 3rem;
+}
+
+/* Tables */
+.table-container {
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    overflow: hidden;
+    margin-bottom: 2rem;
+}
+
+.table-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.btn {
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    border: none;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-primary { background: var(--primary); color: white; }
+.btn-primary:hover { background: #3a56d4; }
+.btn-secondary { background: var(--light); border: 1px solid var(--border); }
+.btn-success { background: var(--success); color: white; }
+.btn-danger { background: var(--danger); color: white; }
+.btn-warning { background: var(--warning); color: white; }
+
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: 1rem 1.5rem; text-align: left; border-bottom: 1px solid var(--border); }
+thead { background: var(--light); }
+
+.status-badge {
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.status-pending { background: rgba(255,158,0,0.1); color: #ff9e00; }
+.status-approved { background: rgba(6,214,160,0.1); color: #06d6a0; }
+.status-rejected { background: rgba(239,35,60,0.1); color: var(--danger); }
+
+.action-buttons { display: flex; gap: 0.5rem; }
+.action-btn {
+    width: 32px;
+    height: 32px;
+    border-radius: 6px;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+}
+
+/* Modal */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0,0,0,0.5);
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 500px;
+    animation: modalSlideIn 0.3s;
+}
+
+.modal-content.wide {
+    max-width: 680px;
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+}
+
+.form-grid .form-group {
+    margin-bottom: 0;
+}
+
+.form-group.full {
+    grid-column: 1 / -1;
+}
+
+@keyframes modalSlideIn {
+    from { opacity: 0; transform: translateY(-30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.modal-header {
+    padding: 1.5rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.form-group { margin-bottom: 1.5rem; }
+.form-control {
+    width: 100%;
+    padding: 0.8rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+textarea.form-control { min-height: 100px; resize: vertical; }
+
+.modal-footer {
+    padding: 1.5rem;
+    border-top: 1px solid var(--border);
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+}
+
+/* Toast */
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    background: white;
+    padding: 1rem 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transform: translateX(150%);
+    transition: transform 0.3s;
+    z-index: 1001;
+    border-left: 4px solid var(--primary);
+}
+
+.toast.show { transform: translateX(0); }
+.toast.success { border-left-color: var(--success); }
+.toast.error { border-left-color: var(--danger); }
+
+/* Responsive */
+@media (max-width: 1200px) {
+    .charts-grid { grid-template-columns: 1fr; }
+    .messages-container { grid-template-columns: 1fr; }
+    .chat-area { height: 500px; }
+}
+
+@media (max-width: 768px) {
+    .dashboard { grid-template-columns: 1fr; }
+    .sidebar { height: auto; position: static; }
+    .welcome-card { flex-direction: column; gap: 1.5rem; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    .material-grid { grid-template-columns: 1fr; }
+    .form-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 576px) {
+    .stats-grid { grid-template-columns: 1fr; }
+    .search-box input { width: 200px; }
+    .action-buttons { flex-wrap: wrap; }
+}
+</style>
+</head>
+<body>
+<div class="dashboard">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            <i class="fas fa-language"></i>
+            <span>LinguaPro Admin</span>
+        </div>
+        <nav class="nav-menu">
+            <a class="nav-item" href="index.html" title="Voltar para Home">
+                <i class="fas fa-house"></i>
+                <span>Home</span>
+            </a>
+            <div class="nav-item active" data-section="dashboard">
+                <i class="fas fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </div>
+            <div class="nav-item" data-section="materials">
+                <i class="fas fa-file-alt"></i>
+                <span>Materiais</span>
+                <span class="nav-badge" id="materialsBadge">0</span>
+            </div>
+            <div class="nav-item" data-section="live">
+                <i class="fas fa-video"></i>
+                <span>Aulas ao Vivo</span>
+                <span class="nav-badge" id="liveBadge">0</span>
+            </div>
+            <div class="nav-item" data-section="enrollments">
+                <i class="fas fa-user-check"></i>
+                <span>Inscrições</span>
+                <span class="nav-badge" id="enrollmentsBadge">0</span>
+            </div>
+            <div class="nav-item" data-section="messages">
+                <i class="fas fa-comments"></i>
+                <span>Mensagens</span>
+                <span class="nav-badge" id="messagesBadge">0</span>
+            </div>
+            <div class="nav-item" data-section="requests">
+                <i class="fas fa-inbox"></i>
+                <span>Solicitações</span>
+                <span class="nav-badge" id="requestsBadge">0</span>
+            </div>
+            <div class="nav-item" data-section="chat">
+                <i class="fas fa-users"></i>
+                <span>Grupos Chat</span>
+                <span class="nav-badge" id="chatBadge">0</span>
+            </div>
+            <div class="nav-item" data-section="users">
+                <i class="fas fa-users"></i>
+                <span>Usuários</span>
+            </div>
+            <div class="nav-item" data-section="courses">
+                <i class="fas fa-book"></i>
+                <span>Cursos</span>
+            </div>
+        </nav>
+    </aside>
+
+    <!-- Main Area -->
+    <div>
+        <!-- Header -->
+        <header class="header">
+            <div class="search-box">
+                <i class="fas fa-search"></i>
+                <input type="text" id="searchInput" placeholder="Pesquisar..." autocomplete="off">
+            </div>
+            <div class="user-profile">
+                <div class="avatar">CM</div>
+                <div>
+                    <h4>Administrador</h4>
+                    <p>Administrador</p>
+                </div>
+                <button class="btn btn-secondary btn-sm" onclick="logout()" style="margin-left:12px;">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                </button>
+            </div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content" id="mainContent">
+            <!-- Content will be loaded dynamically -->
+        </main>
+    </div>
+</div>
+
+<!-- Modals -->
+<div class="modal" id="userModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="modalTitle">Adicionar Usuário</h3>
+            <span class="close-modal" onclick="closeModal('userModal')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="userId">
+            <div class="form-group">
+                <label>Nome Completo</label>
+                <input type="text" id="userName" class="form-control" placeholder="Digite o nome">
+            </div>
+            <div class="form-group">
+                <label>Email</label>
+                <input type="email" id="userEmail" class="form-control" placeholder="Digite o email">
+            </div>
+            <div class="form-group">
+                <label>Tipo</label>
+                <select id="userType" class="form-control">
+                    <option value="aluno">Aluno</option>
+                    <option value="professor">Professor</option>
+                    <option value="Admin">Admin</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="userPassword" class="form-control" placeholder="Defina a password">
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal('userModal')">Cancelar</button>
+            <button class="btn btn-primary" onclick="saveUser()">Salvar</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="messageModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Nova Mensagem</h3>
+            <span class="close-modal" onclick="closeModal('messageModal')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label>Para</label>
+                <select id="messageTo" class="form-control">
+                    <option value="">Selecione o destinatário</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Assunto</label>
+                <input type="text" id="messageSubject" class="form-control" placeholder="Assunto da mensagem">
+            </div>
+            <div class="form-group">
+                <label>Mensagem</label>
+                <textarea id="messageContent" class="form-control" placeholder="Digite sua mensagem..."></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal('messageModal')">Cancelar</button>
+            <button class="btn btn-primary" onclick="sendNewMessage()">Enviar</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="detailsModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="detailsModalTitle">Detalhes</h3>
+            <span class="close-modal" onclick="closeModal('detailsModal')">&times;</span>
+        </div>
+        <div class="modal-body" id="detailsModalBody" style="white-space: pre-wrap;"></div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal('detailsModal')">Fechar</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="decisionModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="decisionModalTitle">Confirmar ação</h3>
+            <span class="close-modal" onclick="closeModal('decisionModal')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <p id="decisionModalText"></p>
+            <div class="form-group">
+                <label>Observações (opcional)</label>
+                <textarea id="decisionModalNotes" class="form-control" placeholder="Notas para esta ação"></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal('decisionModal')">Cancelar</button>
+            <button class="btn btn-primary" id="decisionModalSubmit">Confirmar</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="courseModal">
+    <div class="modal-content wide">
+        <div class="modal-header">
+            <h3 id="courseModalTitle">Curso</h3>
+            <span class="close-modal" onclick="closeModal('courseModal')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="courseIdInput">
+            <div class="form-grid">
+                <div class="form-group full">
+                    <label>Título</label>
+                    <input type="text" id="courseTitleInput" class="form-control" placeholder="Título do curso">
+                </div>
+                <div class="form-group full">
+                    <label>Descrição</label>
+                    <textarea id="courseDescriptionInput" class="form-control" placeholder="Descrição"></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Modo</label>
+                    <select id="courseModeInput" class="form-control">
+                        <option value="Online">Online</option>
+                        <option value="Presencial">Presencial</option>
+                        <option value="Hibrido">Hibrido</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Duração</label>
+                    <input type="text" id="courseDurationInput" class="form-control" placeholder="Ex: 3 meses">
+                </div>
+                <div class="form-group">
+                    <label>Preço (MZN)</label>
+                    <input type="number" id="coursePriceInput" class="form-control" min="0" value="0">
+                </div>
+                <div class="form-group">
+                    <label>Status</label>
+                    <select id="courseActiveInput" class="form-control">
+                        <option value="1">Ativo</option>
+                        <option value="0">Inativo</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal('courseModal')">Cancelar</button>
+            <button class="btn btn-primary" id="courseModalSubmit">Salvar</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="assignCourseModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3>Atribuir curso ao professor</h3>
+            <span class="close-modal" onclick="closeModal('assignCourseModal')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="assignCourseId">
+            <div class="form-group">
+                <label>Curso</label>
+                <input type="text" id="assignCourseTitle" class="form-control" disabled>
+            </div>
+            <div class="form-group">
+                <label>Professor</label>
+                <select id="assignCourseProfessor" class="form-control"></select>
+            </div>
+            <div class="form-group">
+                <label>Alunos (emails, opcional)</label>
+                <textarea id="assignCourseStudents" class="form-control" placeholder="um email por linha"></textarea>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal('assignCourseModal')">Cancelar</button>
+            <button class="btn btn-primary" onclick="saveAssignCourse()">Salvar</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="chatGroupModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="chatGroupModalTitle">Grupo de chat</h3>
+            <span class="close-modal" onclick="closeModal('chatGroupModal')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="chatGroupIdInput">
+            <div class="form-group">
+                <label>Nome do grupo</label>
+                <input type="text" id="chatGroupNameInput" class="form-control" placeholder="Ex: Sala Ingles Basico">
+            </div>
+            <div class="form-group">
+                <label>Curso</label>
+                <select id="chatGroupCourseInput" class="form-control">
+                    <option value="">Grupo livre (sem curso)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Status</label>
+                <select id="chatGroupStatusInput" class="form-control">
+                    <option value="approved">Aprovado</option>
+                    <option value="pending">Pendente</option>
+                    <option value="rejected">Rejeitado</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal('chatGroupModal')">Cancelar</button>
+            <button class="btn btn-primary" id="chatGroupModalSubmit">Salvar</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal" id="enrollmentProgressModal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3 id="enrollmentProgressTitle">Atualizar progresso</h3>
+            <span class="close-modal" onclick="closeModal('enrollmentProgressModal')">&times;</span>
+        </div>
+        <div class="modal-body">
+            <input type="hidden" id="enrollmentProgressId">
+            <div class="form-group">
+                <label>Progresso (%)</label>
+                <input type="number" id="enrollmentProgressValue" class="form-control" min="0" max="100">
+            </div>
+            <div class="form-group">
+                <label>Nível</label>
+                <select id="enrollmentProgressLevel" class="form-control">
+                    <option value="iniciante">Iniciante</option>
+                    <option value="intermediario">Intermediário</option>
+                    <option value="avancado">Avançado</option>
+                </select>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" onclick="closeModal('enrollmentProgressModal')">Cancelar</button>
+            <button class="btn btn-primary" id="enrollmentProgressSubmit">Salvar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div class="toast" id="toast">
+    <i class="fas fa-check-circle"></i>
+    <div>
+        <h4 id="toastTitle">Sucesso!</h4>
+        <p id="toastMessage">Operação realizada com sucesso.</p>
+    </div>
+    <i class="fas fa-times" onclick="hideToast()" style="cursor:pointer;"></i>
+</div>
+
+<script src="js/config/api.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script src="js/dashboard-admin.js"></script>
+</body>
+</html>
+
+
+
+
+
+
+
+

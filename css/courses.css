@@ -1,0 +1,89 @@
+ :root {
+      --primary-color: #0b66ff;
+      --secondary-color: #00c6ff;
+      --accent-color: #ff9f1c;
+      --text-color: #111827;
+      --bg-light: #f9f9f9;
+    }
+
+    body{font-family:'Poppins','Montserrat',sans-serif; color:var(--text-color);}
+    h2.section-title{color:var(--primary-color);}
+    .benefit-card, .professor-card, .course-card, .review-card{transition:all 0.35s ease;}
+    .benefit-card:hover, .professor-card:hover, .course-card:hover, .review-card:hover{
+      transform:translateY(-8px); box-shadow:0 18px 35px rgba(0,0,0,0.12);
+    }
+    .btn-primary{background:var(--primary-color); border:none;}
+    .btn-primary:hover{background:var(--secondary-color);}
+    .badge-primary{background:var(--accent-color);}
+    .carousel-control-prev-icon, .carousel-control-next-icon{background-color:var(--primary-color); border-radius:50%;}
+
+    .section-kicker{max-width:760px;margin-left:auto;margin-right:auto;}
+    #main-courses .course-card{
+      border:1px solid rgba(0,0,0,.06);
+      border-radius:14px;
+      box-shadow:0 8px 22px rgba(0,0,0,.06);
+    }
+    #main-courses .course-card h5{
+      min-height:48px;
+      margin-bottom:.5rem;
+    }
+    #main-courses .course-card p{
+      min-height:72px;
+      margin-bottom:.75rem;
+    }
+    .placeholder-box{
+      background:#fff;
+      border:1px dashed rgba(11,102,255,.35);
+      border-radius:12px;
+      padding:1rem;
+      color:#4b5563;
+    }
+.placeholder-box i{
+  font-size:1.5rem;
+  color:var(--primary-color);
+  margin-bottom:.35rem;
+  display:block;
+}
+
+/* Titulos solicitados em azul */
+.course-blue-title{
+  color: var(--primary-color);
+}
+
+    /* Contraste de texto no modo claro (somente pagina de cursos) */
+    #courses-benefits .text-muted,
+    #main-courses .text-muted,
+    #additional-courses .text-muted,
+    #courses-reviews .text-muted {
+      color: #4b5563 !important;
+    }
+
+    #additional-courses .accordion-button {
+      color: #1f2937;
+      background: #ffffff;
+    }
+
+    #additional-courses .accordion-button:not(.collapsed) {
+      color: var(--primary-color);
+      background: #eef6ff;
+    }
+
+    /* Footer em preto, azul e cinzento (somente pagina de cursos) */
+    .site-footer h5 {
+      color: #111827 !important; /* preto */
+    }
+
+    .site-footer .text-white-50,
+    .site-footer small.text-white-50 {
+      color: #6b7280 !important; /* cinzento */
+    }
+
+    .site-footer .footer-links a,
+    .site-footer small a {
+      color: #0b66ff !important; /* azul */
+    }
+
+    .site-footer .footer-links a:hover,
+    .site-footer small a:hover {
+      color: #084ec2 !important; /* azul escuro */
+    }

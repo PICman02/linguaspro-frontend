@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Professores Certificados - LinguaPro</title>
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/professors.css">
+</head>
+<body>
+
+<!-- Header -->
+<header class="header">
+    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <i class="fas fa-language me-2"></i>
+                <span class="fw-bold text-primary">LinguaPro</span>
+            </a>
+            
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center gap-3">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="courses.html">Cursos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="services.html">Serviços</a></li>
+                    <li class="nav-item"><a class="nav-link" href="library.html">Biblioteca</a></li>
+                    <li class="nav-item"><a class="nav-link" href="live-classes.html">Aulas ao vivo</a></li>
+                    <li class="nav-item"><a class="nav-link active fw-bold" href="professors.html">Professores</a></li>
+                    <li class="nav-item"><a class="nav-link" href="mini-game.html">Mini-jogo</a></li>
+                    <li class="nav-item">
+                        <a href="login.html" class="btn btn-primary px-4">
+                            <i class="bi bi-person-circle me-2"></i>Login
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- Hero Section -->
+<section class="hero-professors bg-primary text-white">
+    <div class="container py-5">
+        <div class="row align-items-center">
+            <div class="col-lg-8 mx-auto text-center">
+                <h1 class="display-4 fw-bold mb-3">Nossos Professores Certificados</h1>
+                <p class="lead mb-4">Instrutores qualificados, experientes e apaixonados por ensinar idiomas</p>
+                <div class="stats d-flex justify-content-center gap-4 flex-wrap">
+                    <div class="stat-item">
+                        <h3 class="fw-bold mb-0" id="professorsCountStat">0</h3>
+                        <p class="mb-0">Professores</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3 class="fw-bold mb-0" id="professorsLanguagesStat">0</h3>
+                        <p class="mb-0">Idiomas</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3 class="fw-bold mb-0" id="professorsExperienceStat">0</h3>
+                        <p class="mb-0">Exp. Média (anos)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Filtros -->
+<section class="filters-section py-4 bg-light">
+    <div class="container">
+        <div class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label fw-bold">Pesquisar professor</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <input type="text" class="form-control" id="searchInput" placeholder="Nome ou idioma...">
+                </div>
+            </div>
+            
+            <div class="col-md-3">
+                <label class="form-label fw-bold">Especialidade</label>
+                <select class="form-select" id="categoryFilter">
+                    <option value="all">Todos os idiomas</option>
+                    <option value="ingles">inglês</option>
+                    <option value="portugues">Português</option>
+                    <option value="espanhol">Espanhol</option>
+                    <option value="frances">francês</option>
+                    <option value="alemao">Alemão</option>
+                    <option value="mandarim">Mandarim</option>
+                </select>
+            </div>
+            
+            <div class="col-md-3">
+                <label class="form-label fw-bold">Avaliação mínima</label>
+                <select class="form-select" id="ratingFilter">
+                    <option value="0">Qualquer avaliação</option>
+                    <option value="4">é 4+ estrelas</option>
+                    <option value="4.5">é 4.5+ estrelas</option>
+                    <option value="5">é 5 estrelas</option>
+                </select>
+            </div>
+            
+            <div class="col-md-3">
+                <label class="form-label fw-bold">Disponibilidade</label>
+                <select class="form-select" id="availabilityFilter">
+                    <option value="all">Qualquer horário</option>
+                    <option value="manha">Manhã (7h-12h)</option>
+                    <option value="tarde">Tarde (13h-18h)</option>
+                    <option value="noite">Noite (19h-22h)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Lista de Professores -->
+<section class="professors-list py-5">
+    <div class="container">
+        <h2 class="text-center mb-5">Conheça Nossos Professores <span class="badge bg-primary" id="professorsCountBadge">0</span></h2>
+        <div class="row g-4" id="professorsContainer">
+            <!-- Cards dinâmicos serão inseridos pelo professors.js -->
+        </div>
+    </div>
+</section>
+
+<!-- Container para Modais -->
+<div id="professorsModals"></div>
+
+<!-- Seção Torne-se Professor -->
+<section class="become-teacher py-5 bg-light">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-6">
+                <h2 class="fw-bold mb-4">Torne-se um Professor LinguaPro</h2>
+                <p class="lead mb-4">Junte-se à nossa rede de professores certificados e ensine para alunos de todo o mundo.</p>
+                
+                <ul class="list-unstyled">
+                    <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>Certificação internacional</li>
+                    <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>Flexibilidade de horários</li>
+                    <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>Suporte pedagógico completo</li>
+                    <li class="mb-3"><i class="bi bi-check-circle-fill text-success me-2"></i>Ferramentas de ensino modernas</li>
+                    <li><i class="bi bi-check-circle-fill text-success me-2"></i>Comunidade de professores ativa</li>
+                </ul>
+                
+                <button class="btn btn-primary btn-lg mt-3" id="applyTeacherBtn">
+                    <i class="bi bi-person-plus me-2"></i>Candidatar-me Agora
+                </button>
+            </div>
+            <div class="col-lg-6">
+                <div class="card border-0 shadow">
+                    <div class="card-body p-4">
+                        <h5 class="card-title mb-4">Requisitos para Candidatura</h5>
+                        <div class="mb-3">
+                            <h6><i class="bi bi-mortarboard text-primary me-2"></i>Formação</h6>
+                            <p class="text-muted">Graduação em Letras, Linguística ou área relacionada (ou certificação equivalente)</p>
+                        </div>
+                        <div class="mb-3">
+                            <h6><i class="bi bi-award text-primary me-2"></i>Certificações</h6>
+                            <p class="text-muted">Certificação de proficiência no idioma que deseja ensinar</p>
+                        </div>
+                        <div class="mb-3">
+                            <h6><i class="bi bi-clock text-primary me-2"></i>Experiência</h6>
+                            <p class="text-muted">Mínimo de 2 anos de experiência no ensino (formal ou informal)</p>
+                        </div>
+                        <div class="mb-3">
+                            <h6><i class="bi bi-laptop text-primary me-2"></i>Tecnologia</h6>
+                            <p class="text-muted">Conhecimento básico de ferramentas de ensino online</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-dark text-white py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <div class="d-flex align-items-center mb-3">
+                    <img src="assets/images/logo.svg" alt="LinguaPro" height="40" class="me-3">
+                </div>
+                <p class="text-white-50">Excelência no ensino de idiomas desde 2010.</p>
+            </div>
+            
+            <div class="col-lg-4 mb-4">
+                <h5 class="mb-4">Contato</h5>
+                <p class="mb-2"><i class="bi bi-telephone me-2"></i>+258 83 495 7798</p>
+                <p class="mb-2"><i class="bi bi-envelope me-2"></i>escoladelinguasdemaputo@gmail.com</p>
+                <p><i class="bi bi-clock me-2"></i>Segunda a Sexta: 8h-18h</p>
+            </div>
+            
+            <div class="col-lg-4 mb-4">
+                <h5 class="mb-4">Siga-nos</h5>
+                <div class="social-links">
+                    <a href="#" class="text-white me-3"><i class="bi bi-facebook fs-5"></i></a>
+                    <a href="#" class="text-white me-3"><i class="bi bi-instagram fs-5"></i></a>
+                    <a href="#" class="text-white me-3"><i class="bi bi-linkedin fs-5"></i></a>
+                    <a href="#" class="text-white"><i class="bi bi-whatsapp fs-5"></i></a>
+                </div>
+            </div>
+        </div>
+        
+        <hr class="my-4 opacity-25">
+        
+        <div class="text-center pt-3">
+            <p class="mb-0">&copy; 2025 LinguaPro. Todos os direitos reservados.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- JavaScript Personalizado -->
+<script src="js/config/api.js"></script>
+<script src="js/session-nav.js"></script>
+<script type="module" src="js/professors.js"></script>
+<script type="module" src="js/guards.js"></script>
+
+</body>
+</html>
+

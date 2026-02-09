@@ -1,0 +1,292 @@
+﻿<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Biblioteca de Materiais - LinguaPro</title>
+    <meta name="description" content="Biblioteca digital com materiais de estudo, vídeos, PDFs e quizzes para aprendizado de idiomas.">
+    
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- CSS Personalizado -->
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/library.css">
+</head>
+<body class="bg-light">
+
+<!-- Header -->
+<header class="header">
+    <nav class="navbar navbar-expand-lg navbar-white bg-white shadow-sm">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="index.html">
+                <i class="fas fa-language me-2"></i>
+                <span class="fw-bold text-primary">LinguaPro</span>
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto align-items-center gap-3">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
+                    <li class="nav-item"><a class="nav-link" href="courses.html">Cursos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="services.html">Serviços</a></li>
+                    <li class="nav-item"><a class="nav-link active fw-bold" href="library.html">Biblioteca</a></li>
+                    <li class="nav-item"><a class="nav-link" href="live-classes.html">Aulas ao vivo</a></li>
+                    <li class="nav-item"><a class="nav-link" href="professors.html">Professores</a></li>
+                    <li class="nav-item"><a class="nav-link" href="mini-game.html">Mini-jogo</a></li>
+                    <li class="nav-item">
+                        <a href="login.html" class="btn btn-primary px-4">
+                            <i class="bi bi-person-circle me-2"></i>Login
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- Hero -->
+<section class="library-hero bg-primary text-white">
+    <div class="container py-5 text-center">
+        <h1 class="display-4 fw-bold mb-3">Biblioteca Digital</h1>
+        <p class="lead mb-4">Acesse materiais exclusivos, vídeos, PDFs e quizzes para acelerar seu aprendizado de idiomas</p>
+        <div class="stats d-flex justify-content-center gap-4 flex-wrap">
+            <div class="stat-item">
+                <h3 class="fw-bold mb-0" id="materialsStatTotal">0</h3>
+                <p class="mb-0">Materiais</p>
+            </div>
+            <div class="stat-item">
+                <h3 class="fw-bold mb-0" id="materialsStatVideo">0</h3>
+                <p class="mb-0">Vídeos</p>
+            </div>
+            <div class="stat-item">
+                <h3 class="fw-bold mb-0" id="materialsStatQuiz">0</h3>
+                <p class="mb-0">Quizzes</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Filtros -->
+<section class="filters-section py-4 bg-white sticky-top">
+    <div class="container">
+        <div class="row g-3 align-items-end">
+            <div class="col-md-3">
+                <label class="form-label fw-bold">Buscar material</label>
+                <div class="input-group">
+                    <span class="input-group-text"><i class="bi bi-search"></i></span>
+                    <input type="text" class="form-control" id="searchInput" placeholder="Digite palavras-chave...">
+                </div>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-bold">Tipo de material</label>
+                <select class="form-select" id="filterType">
+                    <option value="all">Todos os tipos</option>
+                    <option value="video">Vídeos</option>
+                    <option value="pdf">PDFs</option>
+                    <option value="slides">Slides</option>
+                    <option value="quiz">Quizzes</option>
+                    <option value="audio">Áudios</option>
+                    <option value="exercise">Exercícios</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-bold">Idioma</label>
+                <select class="form-select" id="filterLanguage">
+                    <option value="all">Todos os idiomas</option>
+                    <option value="ingles">Inglês</option>
+                    <option value="portugues">Português</option>
+                    <option value="espanhol">Espanhol</option>
+                    <option value="frances">Francês</option>
+                    <option value="alemao">Alemão</option>
+                    <option value="mandarim">Mandarim</option>
+                </select>
+            </div>
+            <div class="col-md-3">
+                <label class="form-label fw-bold">Nível</label>
+                <select class="form-select" id="filterLevel">
+                    <option value="all">Todos os níveis</option>
+                    <option value="iniciante">Iniciante (A1-A2)</option>
+                    <option value="intermediario">Intermediário (B1-B2)</option>
+                    <option value="avancado">Avançado (C1-C2)</option>
+                </select>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Biblioteca -->
+<section class="library-content py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0">Materiais Disponíveis</h2>
+            <span class="badge bg-primary" id="materialCount">0 materiais</span>
+        </div>
+
+        <div class="row g-4" id="libraryContainer">
+            <!-- Todos os cards seráo renderizados via JS -->
+        </div>
+    </div>
+</section>
+
+<!-- Enviar Material -->
+<section class="py-5 bg-light">
+    <div class="container text-center">
+        <h2 class="mb-4">É professor? Compartilhe seus materiais!</h2>
+        <p class="lead mb-4">Ajude a enriquecer nossa biblioteca compartilhando materiais educativos.</p>
+        <button id="btnEnviarMaterial" class="btn btn-primary btn-lg"><i class="bi bi-upload me-2"></i>Enviar Material</button>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-dark text-white py-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4 mb-4">
+                <div class="d-flex align-items-center mb-3">
+                    <img src="assets/images/logo.svg" alt="LinguaPro" height="40" class="me-3">
+                </div>
+                <p class="text-white-50">Excelência no ensino de idiomas desde 2010.</p>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <h5 class="mb-4">Contato</h5>
+                <p class="mb-2"><i class="bi bi-telephone me-2"></i>+258 83 495 7798</p>
+                <p class="mb-2"><i class="bi bi-envelope me-2"></i>escoladelinguasdemaputo@gmail.com</p>
+                <p><i class="bi bi-clock me-2"></i>Segunda a Sexta: 8h-18h</p>
+            </div>
+            <div class="col-lg-4 mb-4">
+                <h5 class="mb-4">Siga-nos</h5>
+                <div class="social-links">
+                    <a href="#" class="text-white me-3"><i class="bi bi-facebook fs-5"></i></a>
+                    <a href="#" class="text-white me-3"><i class="bi bi-instagram fs-5"></i></a>
+                    <a href="#" class="text-white me-3"><i class="bi bi-linkedin fs-5"></i></a>
+                    <a href="#" class="text-white"><i class="bi bi-whatsapp fs-5"></i></a>
+                </div>
+            </div>
+        </div>
+        <hr class="my-4 opacity-25">
+        <div class="text-center pt-3">
+            <p class="mb-0">&copy; 2025 LinguaPro. Todos os direitos reservados.</p>
+        </div>
+    </div>
+</footer>
+
+<!-- Modal Enviar Material -->
+<div class="modal fade" id="enviarMaterialModal" tabindex="-1" aria-labelledby="enviarMaterialModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="enviarMaterialModalLabel">Enviar Material</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formEnviarMaterial">
+          <div class="mb-3">
+            <label for="materialTitulo" class="form-label">Título</label>
+            <input type="text" class="form-control" id="materialTitulo" required>
+          </div>
+          <div class="mb-3">
+            <label for="materialDescrição" class="form-label">Descrição</label>
+            <textarea class="form-control" id="materialDescrição" rows="3" required></textarea>
+          </div>
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label for="materialTipo" class="form-label">Tipo</label>
+              <select class="form-select" id="materialTipo" required>
+                <option value="video">Vídeo</option>
+                <option value="pdf">PDF</option>
+                <option value="slides">Slides</option>
+                <option value="quiz">Quiz</option>
+                <option value="audio">Áudio</option>
+                <option value="exercise">Exercício</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label for="materialIdioma" class="form-label">Idioma</label>
+              <select class="form-select" id="materialIdioma" required>
+                <option value="ingles">Inglês</option>
+                <option value="portugues">Português</option>
+                <option value="espanhol">Espanhol</option>
+                <option value="frances">Francês</option>
+                <option value="alemao">Alemão</option>
+                <option value="mandarim">Mandarim</option>
+              </select>
+            </div>
+            <div class="col-md-4">
+              <label for="materialNivel" class="form-label">Nível</label>
+              <select class="form-select" id="materialNivel" required>
+                <option value="iniciante">Iniciante (A1-A2)</option>
+                <option value="intermediario">Intermediário (B1-B2)</option>
+                <option value="avancado">Avançado (C1-C2)</option>
+              </select>
+            </div>
+          </div>
+          <div class="mb-3 mt-3">
+            <label for="materialArquivo" class="form-label">Arquivo (simulado)</label>
+            <input type="file" class="form-control" id="materialArquivo">
+          </div>
+          <div class="mb-3">
+            <label for="materialVisibility" class="form-label">Disponibilidade</label>
+            <select class="form-select" id="materialVisibility">
+              <option value="public">Todos</option>
+              <option value="enrolled">Somente inscritos</option>
+            </select>
+          </div>
+          <button type="submit" class="btn btn-primary">Enviar Material</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Detalhes -->
+<div class="modal fade" id="materialDetailModal" tabindex="-1" aria-labelledby="materialDetailModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">
+        <h5 class="modal-title" id="materialDetailModalLabel">Detalhes do Material</h5>
+        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fechar"></button>
+      </div>
+      <div class="modal-body">
+        <p><strong>Tipo:</strong> <span id="detailTipo"></span></p>
+        <p><strong>Título:</strong> <span id="detailTitulo"></span></p>
+        <p><strong>Descrição:</strong> <span id="detailDescrição"></span></p>
+        <p><strong>Idioma:</strong> <span id="detailIdioma"></span></p>
+        <p><strong>Nível:</strong> <span id="detailNivel"></span></p>
+        <p><strong>Professor:</strong> <span id="detailProfessor"></span></p>
+        <p><strong>Duração:</strong> <span id="detailDuração"></span></p>
+        <p><strong>Disponibilidade:</strong> <span id="detailVisibility"></span></p>
+      </div>
+      <div class="modal-footer">
+        <button id="downloadButton" type="button" class="btn btn-success">
+          <i class="bi bi-download me-1"></i>Download
+        </button>
+        <button id="quizButton" type="button" class="btn btn-warning">
+          <i class="bi bi-question-circle me-1"></i>Iniciar Quiz
+        </button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/config/api.js"></script>
+<script src="js/session-nav.js"></script>
+<!-- Library JS -->
+<script src="js/config/library.js"></script>
+
+</body>
+</html>
+
+
+
+
+
+
+
+

@@ -315,10 +315,12 @@
         </div>
     </footer>
 
+    <script src="js/config/api.js?v=20260211c"></script>
     <script>
         const API = window.__API_URL__ || window.API_URL || "http://localhost:5001/api";
         let currentUser = null;
         let pendingRedirect = null;
+        let sendingInProgress = false;
 
         const SUBJECT_LABELS = {
             info: "Informações sobre cursos",
@@ -392,8 +394,10 @@
         }
 
         async function sendViaWhatsApp() {
+            if (sendingInProgress) return;
             const formData = getContactFormData();
             if (!formData) return;
+            sendingInProgress = true;
 
             try {
                 await persistContactMessage("whatsapp", formData);
@@ -410,12 +414,16 @@
                 clearContactForm();
             } catch (error) {
                 alert(error.message || "Erro ao enviar mensagem.");
+            } finally {
+                sendingInProgress = false;
             }
         }
 
         async function sendViaEmail() {
+            if (sendingInProgress) return;
             const formData = getContactFormData();
             if (!formData) return;
+            sendingInProgress = true;
 
             try {
                 await persistContactMessage("email", formData);
@@ -432,6 +440,8 @@
                 clearContactForm();
             } catch (error) {
                 alert(error.message || "Erro ao enviar mensagem.");
+            } finally {
+                sendingInProgress = false;
             }
         }
 

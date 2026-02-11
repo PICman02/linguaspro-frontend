@@ -618,6 +618,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+    <script src="js/config/api.js?v=20260211c"></script>
     
     <script>
         // Configurações
@@ -665,6 +666,9 @@
                 try {
                     const res = await fetch(`${this.apiBase}${path}`, { ...options, headers, signal: controller.signal });
                     const data = await res.json().catch(() => ({}));
+                    if (res.status === 401) {
+                        throw new Error("Sessao invalida ou expirada. Faca login novamente.");
+                    }
                     if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
                     return data;
                 } catch (error) {
@@ -1124,44 +1128,64 @@
                 this.knownMessageIds = currentMsgIds;
             },
             async loadData() {
+                const loadBlock = async (name, fallback) => {
+                    try {
+                        const result = await this.dataService.get(name);
+                        return result?.data ?? fallback;
+                    } catch (error) {
+                        console.warn('[Aluno] Falha ao carregar', name, error?.message || error);
+                        return fallback;
+                    }
+                };
+
                 try {
                     const [user, courses, availableCourses, library, notifications, messages, certificates, certificateRequests, badges, activities, ranking, liveClasses, chatGroups] = await Promise.all([
-                        this.dataService.get('user'),
-                        this.dataService.get('courses'),
-                        this.dataService.get('availableCourses'),
-                        this.dataService.get('library'),
-                        this.dataService.get('notifications'),
-                        this.dataService.get('messages'),
-                        this.dataService.get('certificates'),
-                        this.dataService.get('certificateRequests'),
-                        this.dataService.get('badges'),
-                        this.dataService.get('activities'),
-                        this.dataService.get('quizRanking'),
-                        this.dataService.get('liveClasses'),
-                        this.dataService.get('chatGroups')
+                        loadBlock('user', null),
+                        loadBlock('courses', []),
+                        loadBlock('availableCourses', []),
+                        loadBlock('library', []),
+                        loadBlock('notifications', []),
+                        loadBlock('messages', []),
+                        loadBlock('certificates', []),
+                        loadBlock('certificateRequests', []),
+                        loadBlock('badges', []),
+                        loadBlock('activities', []),
+                        loadBlock('quizRanking', []),
+                        loadBlock('liveClasses', []),
+                        loadBlock('chatGroups', [])
                     ]);
-                    
-                    AppState.user = user.data;
-                    AppState.courses = courses.data;
-                    AppState.availableCourses = availableCourses.data;
-                    AppState.library = library.data;
-                    AppState.notifications = notifications.data;
-                    AppState.messages = messages.data;
-                    AppState.certificates = certificates.data;
-                    AppState.certificateRequests = certificateRequests.data;
-                    AppState.badges = badges.data;
-                    AppState.activities = activities.data;
-                    AppState.quizRanking = ranking.data;
-                    AppState.liveClasses = liveClasses.data;
-                    AppState.chatGroups = chatGroups.data;
-                    
+
+                    if (!user) {
+                        throw new Error('Sessao invalida ou expirada. Faca login novamente.');
+                    }
+
+                    AppState.user = user;
+                    AppState.courses = courses;
+                    AppState.availableCourses = availableCourses;
+                    AppState.library = library;
+                    AppState.notifications = notifications;
+                    AppState.messages = messages;
+                    AppState.certificates = certificates;
+                    AppState.certificateRequests = certificateRequests;
+                    AppState.badges = badges;
+                    AppState.activities = activities;
+                    AppState.quizRanking = ranking;
+                    AppState.liveClasses = liveClasses;
+                    AppState.chatGroups = chatGroups;
+
                     this.updateUI();
-                    toastr.success('Dashboard carregado!');
                 } catch (error) {
                     console.error('Erro ao carregar dados:', error);
                     toastr.error(error.message || 'Erro ao carregar dados');
-                    if (/autenticado|acesso/i.test(String(error.message || ''))) {
-                        setTimeout(() => { window.location.href = 'login.html'; }, 900);
+                    if (/sessao|autenticado|acesso|token/i.test(String(error.message || ''))) {
+                        try {
+                            localStorage.removeItem('token');
+                            sessionStorage.removeItem('token');
+                            localStorage.removeItem('user');
+                            sessionStorage.removeItem('user');
+                            localStorage.removeItem('admin_token');
+                        } catch {}
+                        setTimeout(() => { window.location.href = 'login.html?reason=expired'; }, 900);
                     }
                 }
             },

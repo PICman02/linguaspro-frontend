@@ -958,6 +958,7 @@
             startRealtimeUpdates() {
                 if (this.refreshTimer) clearInterval(this.refreshTimer);
                 this.refreshTimer = setInterval(async () => {
+                    if (document.hidden) return;
                     try {
                         const [notifications, messages, liveClasses, chatGroups] = await Promise.all([
                             this.dataService.get("notifications"),
@@ -975,7 +976,7 @@
                         this.loadUpcomingClasses();
                         this.loadChatGroups();
                     } catch (_) {}
-                }, 10000);
+                }, 15000);
             },
             raiseRealtimePopups() {
                 const currentNotifIds = new Set((AppState.notifications || []).map((item) => String(item.id)));
@@ -1369,10 +1370,11 @@
             startChatPolling() {
                 if (this.chatTimer) clearInterval(this.chatTimer);
                 this.chatTimer = setInterval(() => {
+                    if (document.hidden) return;
                     if (AppState.currentChatGroupId) {
                         this.loadChatMessages();
                     }
-                }, 8000);
+                }, 12000);
             },
             loadCertificates() {
                 const container = document.getElementById('certificatesList');
@@ -1947,6 +1949,8 @@
     </script>
 </body>
 </html>
+
+
 
 
 

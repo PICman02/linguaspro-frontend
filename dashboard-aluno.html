@@ -66,6 +66,9 @@
             .sidebar { position: fixed; left: -280px; top: 73px; width: 280px; z-index: 999; transition: left 0.3s; }
             .sidebar.show { left: 0; }
             .main-content { padding: 15px; }
+            .main-content .input-group { width: 100% !important; max-width: 100%; }
+            .tab-header { flex-wrap: wrap; gap: 0.75rem; }
+            .chat-messages { max-height: 260px; }
         }
         .bg-primary-light { background-color: rgba(74, 144, 226, 0.1); }
         .bg-success-light { background-color: rgba(80, 227, 194, 0.1); }
@@ -630,6 +633,9 @@
                 this.savedMaterials = new Set(JSON.parse(localStorage.getItem("aluno_saved_materials") || "[]"));
                 this.readNotifications = new Set(JSON.parse(localStorage.getItem("aluno_read_notifications") || "[]"));
                 this.readMessages = new Set(JSON.parse(localStorage.getItem("aluno_read_messages") || "[]"));
+                this.enrollmentsCache = null;
+                this.inboxCache = null;
+                this.local.outbox = JSON.parse(localStorage.getItem("aluno_outbox_messages") || "[]");
             }
 
             saveReadState() {
@@ -641,6 +647,10 @@
                 localStorage.setItem("aluno_saved_materials", JSON.stringify(Array.from(this.savedMaterials)));
             }
 
+            saveOutbox() {
+                localStorage.setItem("aluno_outbox_messages", JSON.stringify(this.local.outbox || []));
+            }
+
             getToken() {
                 return localStorage.getItem("token") || sessionStorage.getItem("token") || null;
             }
@@ -650,10 +660,44 @@
                 const token = this.getToken();
                 if (token) headers.Authorization = `Bearer ${token}`;
 
-                const res = await fetch(`${this.apiBase}${path}`, { ...options, headers });
-                const data = await res.json().catch(() => ({}));
-                if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
-                return data;
+                const controller = new AbortController();
+                const timeout = setTimeout(() => controller.abort(), 15000);
+                try {
+                    const res = await fetch(`${this.apiBase}${path}`, { ...options, headers, signal: controller.signal });
+                    const data = await res.json().catch(() => ({}));
+                    if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+                    return data;
+                } catch (error) {
+                    if (error?.name === "AbortError") throw new Error("Tempo de resposta excedido. Tente novamente.");
+                    throw error;
+                } finally {
+                    clearTimeout(timeout);
+                }
+            }
+
+            getUserFromStorage() {
+                try {
+                    return JSON.parse(localStorage.getItem("user") || sessionStorage.getItem("user") || "null");
+                } catch {
+                    return null;
+                }
+            }
+
+            async getMyEnrollments() {
+                const now = Date.now();
+                if (this.enrollmentsCache && (now - this.enrollmentsCache.ts) < 8000) return this.enrollmentsCache.data;
+                const enroll = await this.request("/enrollments/my");
+                const rows = enroll.enrollments || [];
+                this.enrollmentsCache = { ts: now, data: rows };
+                return rows;
+            }
+
+            async getInboxData() {
+                const now = Date.now();
+                if (this.inboxCache && (now - this.inboxCache.ts) < 5000) return this.inboxCache.data;
+                const inbox = await this.request("/notifications/my");
+                this.inboxCache = { ts: now, data: inbox };
+                return inbox;
             }
 
             mapEnrollmentsToCourses(enrollments) {
@@ -722,8 +766,8 @@
                     const me = await this.request("/auth/me");
                     if (me.user?.role !== "aluno") throw new Error("Acesso apenas para aluno");
 
-                    const enroll = await this.request("/enrollments/my");
-                    const courses = this.mapEnrollmentsToCourses(enroll.enrollments || []);
+                    const enrollments = await this.getMyEnrollments();
+                    const courses = this.mapEnrollmentsToCourses(enrollments);
                     const points = courses.reduce((acc, item) => acc + Number(item.progress || 0), 0);
 
                     return {
@@ -746,8 +790,8 @@
                 }
 
                 if (collection === "courses") {
-                    const enroll = await this.request("/enrollments/my");
-                    return { success: true, data: this.mapEnrollmentsToCourses(enroll.enrollments || []) };
+                    const enrollments = await this.getMyEnrollments();
+                    return { success: true, data: this.mapEnrollmentsToCourses(enrollments) };
                 }
 
                 if (collection === "availableCourses") {
@@ -757,7 +801,7 @@
                 }
 
                 if (collection === "notifications") {
-                    const inbox = await this.request("/notifications/my");
+                    const inbox = await this.getInboxData();
                     const notifications = (inbox.notifications || []).map((n) => ({
                         id: n.id,
                         message: n.message || n.title || "Nova notificação",
@@ -770,8 +814,8 @@
                 }
 
                 if (collection === "certificates") {
-                    const enroll = await this.request("/enrollments/my");
-                    const certs = (enroll.enrollments || [])
+                    const enrollments = await this.getMyEnrollments();
+                    const certs = (enrollments || [])
                         .filter((e) => e.status === "approved" && Number(e.progress || 0) >= 100)
                         .map((e) => ({
                             id: e.id,
@@ -796,8 +840,8 @@
                 }
 
                 if (collection === "activities") {
-                    const enroll = await this.request("/enrollments/my");
-                    const activities = (enroll.enrollments || []).slice(0, 10).map((e) => ({
+                    const enrollments = await this.getMyEnrollments();
+                    const activities = (enrollments || []).slice(0, 10).map((e) => ({
                         icon: "bi-check-circle-fill",
                         color: e.status === "approved" ? "success" : "warning",
                         text: `Curso ${e.course_title || e.course_id}: ${e.status}`,
@@ -807,8 +851,8 @@
                 }
 
                 if (collection === "messages") {
-                    const inbox = await this.request("/notifications/my");
-                    const messages = (inbox.messages || []).map((m) => ({
+                    const inbox = await this.getInboxData();
+                    const inboxMessages = (inbox.messages || []).map((m) => ({
                         id: m.id,
                         from: m.from || "Sistema",
                         fromAvatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(m.from || "Sistema")}&background=4A90E2&color=fff`,
@@ -818,8 +862,19 @@
                         time: m.created_at ? new Date(m.created_at).toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" }) : "-",
                         unread: !this.readMessages.has(String(m.id))
                     }));
-                    this.local.messages = messages;
-                    return { success: true, data: messages };
+                    const outboxMessages = (this.local.outbox || []).map((m) => ({
+                        id: m.id,
+                        from: "Você",
+                        fromAvatar: m.fromAvatar,
+                        subject: m.subject,
+                        content: m.content,
+                        date: m.date,
+                        time: m.time,
+                        unread: false
+                    }));
+                    const allMessages = [...outboxMessages, ...inboxMessages];
+                    this.local.messages = allMessages;
+                    return { success: true, data: allMessages };
                 }
 
                 if (collection === "library") {
@@ -860,6 +915,7 @@
                         method: "POST",
                         body: JSON.stringify(item)
                     });
+                    this.enrollmentsCache = null;
                     return { success: true, data: enrollment.enrollment };
                 }
                 if (collection === "library") {
@@ -875,6 +931,33 @@
                         body: JSON.stringify({ course_id: item.course_id, reason: item.reason || "" })
                     });
                     return { success: true, data: req.request };
+                }
+                if (collection === "messages") {
+                    const user = this.getUserFromStorage();
+                    const name = user?.name || "Aluno";
+                    const email = user?.email;
+                    if (!email) return { success: false, error: "Sessão inválida para enviar mensagem." };
+                    await this.request("/contact/messages", {
+                        method: "POST",
+                        body: JSON.stringify({
+                            name,
+                            email,
+                            subject: "support",
+                            message: `[Dashboard Aluno] ${item.subject}\n\n${item.content}`,
+                            channel: "site"
+                        })
+                    });
+                    const sent = {
+                        id: `local-${Date.now()}`,
+                        fromAvatar: `https://ui-avatars.com/api/?name=${encodeURIComponent(name)}&background=4A90E2&color=fff`,
+                        subject: item.subject,
+                        content: item.content,
+                        date: new Date().toLocaleDateString("pt-BR"),
+                        time: new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit" })
+                    };
+                    this.local.outbox = [sent, ...(this.local.outbox || [])].slice(0, 30);
+                    this.saveOutbox();
+                    return { success: true, data: sent };
                 }
                 return { success: false, error: "Funcionalidade sem backend nesta secao." };
             }
@@ -943,6 +1026,10 @@
             quiz: { currentQuestion: 0, score: 0, timeLeft: 30, timer: null, selectedAnswer: null },
             refreshTimer: null,
             chatTimer: null,
+            refreshBusy: false,
+            chatBusy: false,
+            progressChart: null,
+            currentTab: 'tab-overview',
             realtimeInitialized: false,
             knownNotificationIds: new Set(),
             knownMessageIds: new Set(),
@@ -954,29 +1041,55 @@
                 this.setupQuiz();
                 this.setupResponsive();
                 this.startRealtimeUpdates();
+                window.addEventListener('beforeunload', () => this.stopRealtimeUpdates());
+            },
+            stopRealtimeUpdates() {
+                if (this.refreshTimer) {
+                    clearInterval(this.refreshTimer);
+                    this.refreshTimer = null;
+                }
+                if (this.chatTimer) {
+                    clearInterval(this.chatTimer);
+                    this.chatTimer = null;
+                }
+                if (this.quiz?.timer) {
+                    clearInterval(this.quiz.timer);
+                    this.quiz.timer = null;
+                }
             },
             startRealtimeUpdates() {
                 if (this.refreshTimer) clearInterval(this.refreshTimer);
                 this.refreshTimer = setInterval(async () => {
-                    if (document.hidden) return;
+                    if (document.hidden || this.refreshBusy) return;
+                    if (document.querySelector('.modal.show')) return;
+                    this.refreshBusy = true;
                     try {
-                        const [notifications, messages, liveClasses, chatGroups] = await Promise.all([
+                        const [notifications, messages] = await Promise.all([
                             this.dataService.get("notifications"),
-                            this.dataService.get("messages"),
-                            this.dataService.get("liveClasses"),
-                            this.dataService.get("chatGroups")
+                            this.dataService.get("messages")
                         ]);
                         AppState.notifications = notifications.data;
                         AppState.messages = messages.data;
-                        AppState.liveClasses = liveClasses.data;
-                        AppState.chatGroups = chatGroups.data;
+
+                        if (this.currentTab === 'tab-overview' || this.currentTab === 'tab-live') {
+                            const liveClasses = await this.dataService.get("liveClasses");
+                            AppState.liveClasses = liveClasses.data;
+                            this.loadUpcomingClasses();
+                        }
+                        if (this.currentTab === 'tab-overview' || this.currentTab === 'tab-messages') {
+                            const chatGroups = await this.dataService.get("chatGroups");
+                            AppState.chatGroups = chatGroups.data;
+                            this.loadChatGroups();
+                        }
+
                         this.raiseRealtimePopups();
                         this.loadNotifications();
                         this.loadMessages();
-                        this.loadUpcomingClasses();
-                        this.loadChatGroups();
-                    } catch (_) {}
-                }, 15000);
+                    } catch (_) {
+                    } finally {
+                        this.refreshBusy = false;
+                    }
+                }, 30000);
             },
             raiseRealtimePopups() {
                 const currentNotifIds = new Set((AppState.notifications || []).map((item) => String(item.id)));
@@ -1335,11 +1448,15 @@
             async loadChatMessages() {
                 const area = document.getElementById('chatMessagesArea');
                 if (!area || !AppState.currentChatGroupId) return;
+                if (this.chatBusy) return;
+                this.chatBusy = true;
                 try {
                     const messages = await this.dataService.getChatMessages(AppState.currentChatGroupId);
                     AppState.chatMessages = messages || [];
                 } catch {
                     AppState.chatMessages = [];
+                } finally {
+                    this.chatBusy = false;
                 }
                 const me = AppState.user?.id;
                 area.innerHTML = AppState.chatMessages.length ? AppState.chatMessages.map(m => `
@@ -1370,11 +1487,11 @@
             startChatPolling() {
                 if (this.chatTimer) clearInterval(this.chatTimer);
                 this.chatTimer = setInterval(() => {
-                    if (document.hidden) return;
+                    if (document.hidden || this.chatBusy) return;
                     if (AppState.currentChatGroupId) {
                         this.loadChatMessages();
                     }
-                }, 12000);
+                }, 20000);
             },
             loadCertificates() {
                 const container = document.getElementById('certificatesList');
@@ -1559,8 +1676,12 @@
             initCharts() {
                 const ctx = document.getElementById('progressChart');
                 if (!ctx || AppState.courses.length === 0) return;
+                if (this.progressChart) {
+                    this.progressChart.destroy();
+                    this.progressChart = null;
+                }
                 
-                new Chart(ctx.getContext('2d'), {
+                this.progressChart = new Chart(ctx.getContext('2d'), {
                     type: 'bar',
                     data: {
                         labels: AppState.courses.map(c => c.name),
@@ -1590,6 +1711,7 @@
                         document.querySelectorAll('.sidebar-link').forEach(l => l.classList.remove('active'));
                         document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
                         link.classList.add('active');
+                        this.currentTab = link.dataset.tab;
                         document.getElementById(link.dataset.tab).classList.add('active');
                         if (window.innerWidth < 992) document.getElementById('sidebar').classList.remove('show');
                     });
@@ -1816,7 +1938,7 @@
                 const quizData = [
                     { question: "Traduza 'Hello' para português", options: ["Olá", "Adeus", "Bom dia", "Tchau"], correct: 0 },
                     { question: "Traduza 'Thank you' para francês", options: ["Merci", "Gracias", "Danke", "Grazie"], correct: 0 },
-                    { question: "Qual ? a capital da França?", options: ["Londres", "Berlim", "Paris", "Madri"], correct: 2 },
+                    { question: "Qual é a capital da França?", options: ["Londres", "Berlim", "Paris", "Madri"], correct: 2 },
                     { question: "Como se diz 'água' em espanhol?", options: ["Acqua", "Water", "Agua", "Eau"], correct: 2 },
                     { question: "Complete: I ___ to school every day", options: ["go", "going", "goes", "went"], correct: 0 }
                 ];
@@ -1826,7 +1948,7 @@
                 document.getElementById('restartQuizBtn').addEventListener('click', () => this.startQuiz(quizData));
             },
             startQuiz(quizData) {
-                this.quiz = { currentQuestion: 0, score: 0, timeLeft: 30, timer: null, selectedAnswer: null };
+                this.quiz = { currentQuestion: 0, score: 0, timeLeft: 30, timer: null, selectedAnswer: null, questions: quizData };
                 document.querySelector('.quiz-intro').classList.add('d-none');
                 document.getElementById('quizArea').classList.remove('d-none');
                 document.getElementById('quizResults').classList.add('d-none');
@@ -1868,11 +1990,12 @@
                 document.getElementById('nextQuestionBtn').disabled = true;
             },
             nextQuestion(quizData) {
+                const questions = quizData || this.quiz.questions || [];
                 this.quiz.currentQuestion++;
                 this.quiz.selectedAnswer = null;
-                if (this.quiz.currentQuestion < quizData.length) {
+                if (this.quiz.currentQuestion < questions.length) {
                     this.resetQuizTimer();
-                    this.loadQuizQuestion(quizData);
+                    this.loadQuizQuestion(questions);
                 } else {
                     this.finishQuiz();
                 }
@@ -1900,7 +2023,7 @@
                     this.updateQuizTimer();
                     if (this.quiz.timeLeft <= 0) {
                         clearInterval(this.quiz.timer);
-                        this.nextQuestion();
+                        this.nextQuestion(this.quiz.questions);
                     }
                 }, 1000);
             },
@@ -1919,9 +2042,12 @@
                 document.getElementById('quizScore').textContent = this.quiz.score;
             },
             setupResponsive() {
-                document.querySelector('.navbar-toggler').addEventListener('click', () => {
-                    document.getElementById('sidebar').classList.toggle('show');
-                });
+                const toggler = document.querySelector('.navbar-toggler');
+                if (toggler) {
+                    toggler.addEventListener('click', () => {
+                        document.getElementById('sidebar').classList.toggle('show');
+                    });
+                }
                 document.addEventListener('click', (e) => {
                     if (window.innerWidth < 992 && !e.target.closest('.sidebar') && !e.target.closest('.navbar-toggler')) {
                         document.getElementById('sidebar').classList.remove('show');

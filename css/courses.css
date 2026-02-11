@@ -83,7 +83,32 @@
       color: #0b66ff !important; /* azul */
     }
 
-    .site-footer .footer-links a:hover,
-    .site-footer small a:hover {
-      color: #084ec2 !important; /* azul escuro */
-    }
+.site-footer .footer-links a:hover,
+.site-footer small a:hover {
+  color: #084ec2 !important; /* azul escuro */
+}
+
+/* Melhor ajuste em mobile sem mudar identidade visual */
+@media (max-width: 992px) {
+  .site-header .container {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+
+  .site-header nav {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .site-header nav .nav {
+    flex-wrap: nowrap;
+    white-space: nowrap;
+    gap: 0.25rem !important;
+    padding-bottom: 0.25rem;
+  }
+
+  .site-header nav .nav-item {
+    flex: 0 0 auto;
+  }
+}

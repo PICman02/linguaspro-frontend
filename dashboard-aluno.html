@@ -618,13 +618,13 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-    <script src="js/config/api.js?v=20260211c"></script>
+    <script src="js/config/api.js?v=20260212a"></script>
     
     <script>
         // Configurações
         toastr.options = { "closeButton": true, "progressBar": true, "positionClass": "toast-top-right", "timeOut": "3000" };
         const API_CONFIG = { useLocalStorage: true };
-        const AppState = { user: null, courses: [], availableCourses: [], library: [], notifications: [], messages: [], certificates: [], certificateRequests: [], badges: [], quizRanking: [], activities: [], librarySearchTerm: '', liveClasses: [], chatGroups: [], chatMessages: [], currentChatGroupId: null };
+        const AppState = { user: null, courses: [], availableCourses: [], library: [], notifications: [], messages: [], messageRecipients: [], certificates: [], certificateRequests: [], badges: [], quizRanking: [], activities: [], librarySearchTerm: '', liveClasses: [], chatGroups: [], chatMessages: [], currentChatGroupId: null };
 
         // Serviço de Dados
         class DataService {
@@ -673,6 +673,9 @@
                     return data;
                 } catch (error) {
                     if (error?.name === "AbortError") throw new Error("Tempo de resposta excedido. Tente novamente.");
+                    if (error instanceof TypeError || String(error?.message || "").toLowerCase().includes("failed to fetch")) {
+                        throw new Error("Falha de ligacao com o servidor.");
+                    }
                     throw error;
                 } finally {
                     clearTimeout(timeout);
@@ -689,7 +692,7 @@
 
             async getMyEnrollments() {
                 const now = Date.now();
-                if (this.enrollmentsCache && (now - this.enrollmentsCache.ts) < 8000) return this.enrollmentsCache.data;
+                if (this.enrollmentsCache && (now - this.enrollmentsCache.ts) < 2000) return this.enrollmentsCache.data;
                 const enroll = await this.request("/enrollments/my");
                 const rows = enroll.enrollments || [];
                 this.enrollmentsCache = { ts: now, data: rows };
@@ -698,7 +701,7 @@
 
             async getInboxData() {
                 const now = Date.now();
-                if (this.inboxCache && (now - this.inboxCache.ts) < 5000) return this.inboxCache.data;
+                if (this.inboxCache && (now - this.inboxCache.ts) < 2000) return this.inboxCache.data;
                 const inbox = await this.request("/notifications/my");
                 this.inboxCache = { ts: now, data: inbox };
                 return inbox;
@@ -707,8 +710,8 @@
             mapEnrollmentsToCourses(enrollments) {
                 return (enrollments || []).map((e) => {
                     const rawProgress = Number(e.progress);
-                    const baseProgress = Number.isNaN(rawProgress) ? 10 : rawProgress;
-                    const progress = Math.max(10, Math.min(100, baseProgress));
+                    const baseProgress = Number.isNaN(rawProgress) ? 0 : rawProgress;
+                    const progress = Math.max(0, Math.min(100, baseProgress));
                     const status = e.status || "pending";
                     const statusLabel = status === "approved" ? "Aprovado" : status === "pending" ? "Pendente" : "Cancelado";
                     const nextClass =
@@ -881,6 +884,11 @@
                     return { success: true, data: allMessages };
                 }
 
+                if (collection === "messageRecipients") {
+                    const payload = await this.request("/chat/direct/recipients");
+                    return { success: true, data: payload.recipients || [] };
+                }
+
                 if (collection === "library") {
                     const lib = await this.request("/library/materials");
                     const materials = this.mapMaterials(lib.materials || []);
@@ -941,6 +949,19 @@
                     const name = user?.name || "Aluno";
                     const email = user?.email;
                     if (!email) return { success: false, error: "Sessão inválida para enviar mensagem." };
+                    if (String(item.to || "").startsWith("direct:")) {
+                        const toUserId = String(item.to || "").replace("direct:", "");
+                        const sent = await this.request("/chat/direct/messages", {
+                            method: "POST",
+                            body: JSON.stringify({
+                                to_user_id: toUserId,
+                                subject: item.subject,
+                                content: item.content
+                            })
+                        });
+                        this.inboxCache = null;
+                        return { success: true, data: sent.message };
+                    }
                     await this.request("/contact/messages", {
                         method: "POST",
                         body: JSON.stringify({
@@ -1068,12 +1089,14 @@
                     if (document.querySelector('.modal.show')) return;
                     this.refreshBusy = true;
                     try {
-                        const [notifications, messages] = await Promise.all([
+                        const [notifications, messages, courses] = await Promise.all([
                             this.dataService.get("notifications"),
-                            this.dataService.get("messages")
+                            this.dataService.get("messages"),
+                            this.dataService.get("courses")
                         ]);
                         AppState.notifications = notifications.data;
                         AppState.messages = messages.data;
+                        AppState.courses = courses.data;
 
                         if (this.currentTab === 'tab-overview' || this.currentTab === 'tab-live') {
                             const liveClasses = await this.dataService.get("liveClasses");
@@ -1085,15 +1108,34 @@
                             AppState.chatGroups = chatGroups.data;
                             this.loadChatGroups();
                         }
+                        if (this.currentTab === 'tab-messages') {
+                            const recipients = await this.dataService.get("messageRecipients");
+                            AppState.messageRecipients = recipients.data;
+                            this.loadMessageTargets();
+                        }
+                        if (this.currentTab === 'tab-messages' && AppState.currentChatGroupId) {
+                            await this.loadChatMessages();
+                        }
+                        if (this.currentTab === 'tab-certificates') {
+                            const [certificates, certificateRequests] = await Promise.all([
+                                this.dataService.get("certificates"),
+                                this.dataService.get("certificateRequests")
+                            ]);
+                            AppState.certificates = certificates.data;
+                            AppState.certificateRequests = certificateRequests.data;
+                            this.loadCertificates();
+                        }
 
                         this.raiseRealtimePopups();
                         this.loadNotifications();
                         this.loadMessages();
+                        this.loadCourses();
+                        this.loadStatsCards();
                     } catch (_) {
                     } finally {
                         this.refreshBusy = false;
                     }
-                }, 30000);
+                }, 5000);
             },
             raiseRealtimePopups() {
                 const currentNotifIds = new Set((AppState.notifications || []).map((item) => String(item.id)));
@@ -1139,13 +1181,14 @@
                 };
 
                 try {
-                    const [user, courses, availableCourses, library, notifications, messages, certificates, certificateRequests, badges, activities, ranking, liveClasses, chatGroups] = await Promise.all([
+                    const [user, courses, availableCourses, library, notifications, messages, messageRecipients, certificates, certificateRequests, badges, activities, ranking, liveClasses, chatGroups] = await Promise.all([
                         loadBlock('user', null),
                         loadBlock('courses', []),
                         loadBlock('availableCourses', []),
                         loadBlock('library', []),
                         loadBlock('notifications', []),
                         loadBlock('messages', []),
+                        loadBlock('messageRecipients', []),
                         loadBlock('certificates', []),
                         loadBlock('certificateRequests', []),
                         loadBlock('badges', []),
@@ -1165,6 +1208,7 @@
                     AppState.library = library;
                     AppState.notifications = notifications;
                     AppState.messages = messages;
+                    AppState.messageRecipients = messageRecipients;
                     AppState.certificates = certificates;
                     AppState.certificateRequests = certificateRequests;
                     AppState.badges = badges;
@@ -1208,6 +1252,7 @@
                 this.loadAvailableMaterials();
                 this.loadNotifications();
                 this.loadMessages();
+                this.loadMessageTargets();
                 this.loadChatGroups();
                 this.loadCertificates();
                 this.loadBadges();
@@ -1283,6 +1328,29 @@
                 };
                 select.onchange = updatePreview;
                 updatePreview();
+            },
+            loadMessageTargets() {
+                const select = document.getElementById('messageTo');
+                if (!select) return;
+                const recipients = AppState.messageRecipients || [];
+                const groups = {
+                    professor: recipients.filter((r) => r.role === "professor"),
+                    aluno: recipients.filter((r) => r.role === "aluno"),
+                };
+                const renderOptions = (list) =>
+                    list
+                        .map((r) => {
+                            const shared = (r.shared_courses || []).map((c) => c.title).join(", ");
+                            const suffix = shared ? ` - ${shared}` : "";
+                            return `<option value="direct:${r.id}">${r.name} (${r.email})${suffix}</option>`;
+                        })
+                        .join("");
+                select.innerHTML = `
+                    <option value="">Selecione</option>
+                    <option value="suporte">Suporte</option>
+                    ${groups.professor.length ? `<optgroup label="Professores do mesmo curso">${renderOptions(groups.professor)}</optgroup>` : ""}
+                    ${groups.aluno.length ? `<optgroup label="Alunos do mesmo curso">${renderOptions(groups.aluno)}</optgroup>` : ""}
+                `;
             },
             loadLibrary() {
                 const container = document.getElementById('libraryContainer');
@@ -1400,7 +1468,7 @@
                 }
                 
                 container.innerHTML = AppState.notifications.map(notif => `
-                    <li class="list-group-item ${!notif.read ? 'bg-light' : ''}" onclick="Dashboard.markNotificationRead(${notif.id})">
+                    <li class="list-group-item ${!notif.read ? 'bg-light' : ''}" onclick="Dashboard.markNotificationRead('${String(notif.id).replace(/'/g, "\\'")}')">
                         <div class="d-flex align-items-center">
                             <div class="flex-1">
                                 <p class="mb-1">${notif.message}</p>
@@ -1428,7 +1496,7 @@
                 }
                 
                 container.innerHTML = AppState.messages.map(msg => `
-                    <div class="message-item ${msg.unread ? 'unread' : ''}" onclick="Dashboard.markMessageRead(${msg.id})">
+                    <div class="message-item ${msg.unread ? 'unread' : ''}" onclick="Dashboard.markMessageRead('${String(msg.id).replace(/'/g, "\\'")}')">
                         <div class="d-flex">
                             <img src="${msg.fromAvatar}" alt="${msg.from}" class="rounded-circle me-3" width="40" height="40">
                             <div class="flex-1">
@@ -1451,8 +1519,12 @@
                 const groups = AppState.chatGroups || [];
                 if (count) count.textContent = `${groups.length} grupos`;
                 if (!groups.length) {
+                    AppState.currentChatGroupId = null;
                     list.innerHTML = `<div class="text-center text-muted py-3">Nenhum grupo disponível</div>`;
                     return;
+                }
+                if (!AppState.currentChatGroupId || !groups.some(g => String(g.id) === String(AppState.currentChatGroupId))) {
+                    AppState.currentChatGroupId = groups[0].id;
                 }
                 list.innerHTML = groups.map(g => `
                     <button type="button" class="list-group-item list-group-item-action ${String(AppState.currentChatGroupId)===String(g.id) ? 'active' : ''}" onclick="Dashboard.openChatGroup('${g.id}')">
@@ -1460,6 +1532,8 @@
                         <small>${g.course_title || 'Grupo livre'}</small>
                     </button>
                 `).join('');
+                this.startChatPolling();
+                this.loadChatMessages();
             },
             async openChatGroup(groupId) {
                 AppState.currentChatGroupId = groupId;
@@ -1515,7 +1589,7 @@
                     if (AppState.currentChatGroupId) {
                         this.loadChatMessages();
                     }
-                }, 20000);
+                }, 5000);
             },
             loadCertificates() {
                 const container = document.getElementById('certificatesList');
@@ -1737,6 +1811,10 @@
                         link.classList.add('active');
                         this.currentTab = link.dataset.tab;
                         document.getElementById(link.dataset.tab).classList.add('active');
+                        if (this.currentTab === 'tab-messages') {
+                            this.loadMessageTargets();
+                            this.loadChatGroups();
+                        }
                         if (window.innerWidth < 992) document.getElementById('sidebar').classList.remove('show');
                     });
                 });
@@ -1882,18 +1960,10 @@
                         toastr.error('Preencha todos os campos');
                         return;
                     }
-                    const newMsg = {
-                        from: AppState.user.name,
-                        fromAvatar: AppState.user.avatar,
-                        subject: messageData.subject,
-                        content: messageData.content,
-                        time: new Date().toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }),
-                        date: "Agora",
-                        unread: false
-                    };
-                    const response = await this.dataService.add('messages', newMsg);
+                    const response = await this.dataService.add('messages', messageData);
                     if (response.success) {
-                        AppState.messages.unshift(response.data);
+                        const refreshed = await this.dataService.get('messages');
+                        AppState.messages = refreshed.data;
                         this.loadMessages();
                         bootstrap.Modal.getInstance(document.getElementById('newMessageModal')).hide();
                         document.getElementById('newMessageForm').reset();
@@ -1949,11 +2019,11 @@
                 // Delegar eventos
                 document.addEventListener('click', (e) => {
                     if (e.target.closest('.notification-item')) {
-                        const id = parseInt(e.target.closest('.notification-item').dataset.id);
+                        const id = String(e.target.closest('.notification-item').dataset.id || "");
                         this.markNotificationRead(id);
                     }
                     if (e.target.closest('.message-item')) {
-                        const id = parseInt(e.target.closest('.message-item').dataset.id);
+                        const id = String(e.target.closest('.message-item').dataset.id || "");
                         this.markMessageRead(id);
                     }
                 });
@@ -2081,7 +2151,7 @@
             async markNotificationRead(id) {
                 const response = await this.dataService.update('notifications', id, { read: true });
                 if (response.success) {
-                    const notification = AppState.notifications.find(n => n.id === id);
+                    const notification = AppState.notifications.find(n => String(n.id) === String(id));
                     if (notification) notification.read = true;
                     this.loadNotifications();
                 }
@@ -2089,7 +2159,7 @@
             async markMessageRead(id) {
                 const response = await this.dataService.update('messages', id, { unread: false });
                 if (response.success) {
-                    const message = AppState.messages.find(m => m.id === id);
+                    const message = AppState.messages.find(m => String(m.id) === String(id));
                     if (message) message.unread = false;
                     this.loadMessages();
                 }

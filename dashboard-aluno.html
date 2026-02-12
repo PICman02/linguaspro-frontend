@@ -1089,20 +1089,17 @@
                     if (document.querySelector('.modal.show')) return;
                     this.refreshBusy = true;
                     try {
-                        const [notifications, messages, courses] = await Promise.all([
+                        const [notifications, messages, courses, liveClasses] = await Promise.all([
                             this.dataService.get("notifications"),
                             this.dataService.get("messages"),
-                            this.dataService.get("courses")
+                            this.dataService.get("courses"),
+                            this.dataService.get("liveClasses")
                         ]);
                         AppState.notifications = notifications.data;
                         AppState.messages = messages.data;
                         AppState.courses = courses.data;
-
-                        if (this.currentTab === 'tab-overview' || this.currentTab === 'tab-live') {
-                            const liveClasses = await this.dataService.get("liveClasses");
-                            AppState.liveClasses = liveClasses.data;
-                            this.loadUpcomingClasses();
-                        }
+                        AppState.liveClasses = liveClasses.data;
+                        this.loadUpcomingClasses();
                         if (this.currentTab === 'tab-overview' || this.currentTab === 'tab-messages') {
                             const chatGroups = await this.dataService.get("chatGroups");
                             AppState.chatGroups = chatGroups.data;
@@ -1703,11 +1700,16 @@
                 `).join('');
             },
             loadUpcomingClasses() {
-                const enrolledCourseIds = new Set((AppState.courses || []).map(c => c.courseId));
+                const now = Date.now();
                 const upcoming = (AppState.liveClasses || [])
-                    .filter(c => !c.course_id || enrolledCourseIds.has(c.course_id))
-                    .sort((a, b) => new Date(a.scheduled_at || a.created_at) - new Date(b.scheduled_at || b.created_at))
-                    .slice(0, 2);
+                    .filter(cls => String(cls.status || "scheduled").toLowerCase() !== "cancelled")
+                    .map(cls => {
+                        const when = Date.parse(cls.scheduled_at || cls.created_at || "");
+                        return { ...cls, _when: Number.isFinite(when) ? when : Number.MAX_SAFE_INTEGER };
+                    })
+                    .filter(cls => cls._when >= now - 60000)
+                    .sort((a, b) => a._when - b._when)
+                    .slice(0, 3);
                 if (!upcoming.length) {
                     document.getElementById('upcomingClasses').innerHTML = `<div class="text-center py-3"><p class="text-muted mb-0">Sem aulas agendadas</p></div>`;
                     return;
